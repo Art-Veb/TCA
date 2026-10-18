@@ -1,7 +1,7 @@
 import java.util.Scanner;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
-i
+
 public class Funcoes {
     public final static Scanner TECLADO = new Scanner(System.in);
 
