@@ -19,7 +19,7 @@ import com.sun.jna.Library;
 import com.sun.jna.Native;
 
 // =====================================================================
-// BIBLIOTECA DO TCA
+// BIBLIOTECA DO TCAx
 //   1. TELA      -> limpar a tela, escrever numa posição, cores, cursor
 //   2. TEMPO     -> esperar, cronômetro
 //   3. TECLADO   -> ler teclas sem precisar apertar ENTER
