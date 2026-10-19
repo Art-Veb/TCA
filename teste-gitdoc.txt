@@ -1,2 +1,4 @@
 Teste de envio automático do GitDoc - trabalho-arthurkaleb
 Segundo teste automático
+Teste automatico numero 2
+Teste automatico numero 3
