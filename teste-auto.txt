@@ -1,1 +1,2 @@
 Teste de automacao do Git
+Teste auto
