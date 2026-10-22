@@ -1,6 +1,7 @@
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "c:\\Users\\Windows\\Desktop\\Pasta pro TCA\\Exemplos TCA\\lib\\jna-5.17.0.jar"
+        "c:\\Users\\Windows\\Desktop\\Pasta pro TCA\\Exemplos TCA\\lib\\jna-5.17.0.jar",
+        "jna-5.17.0.jar"
     ]
 }
