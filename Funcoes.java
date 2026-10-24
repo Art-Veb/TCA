@@ -13,6 +13,21 @@ public class Funcoes {
         return valor;
     }
 
+     // Método que imprime o texto letra por letra
+    public static void imprimirDevagar(String texto) {
+        for (int i = 0; i < texto.length(); i++) {
+            System.out.print(texto.charAt(i)); 
+            System.out.flush();                
+            
+            try {
+                Thread.sleep(60);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        System.out.println();
+    }
+
     public static int sortearNumero(int limite) {
         int valor;
         valor = SORTEIO.nextInt(limite);
