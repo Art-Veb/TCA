@@ -37,6 +37,7 @@ public class Funcoes {
             }
             System.out.println();
         }
+        BibliotecaTCA.mudarCor(-1);
         System.out.println("Use A, D, W, S para mover o personagem. Pressione ESC para sair.");
     }
 
@@ -57,8 +58,11 @@ public class Funcoes {
         int linhas = mat.length;
         int colunas = mat[0].length;
         desenharTela(j, i, colunas, linhas, mat);
-        while (i != linhas - 1&& j != colunas - 1) {
+        while (true) {
             // Lógica para detectar o movimento
+            if (i == linhas - 1 && j == colunas - 1) {
+                break;
+            }
             if (BibliotecaTCA.pressionouTecla()) {
                 tecla = BibliotecaTCA.obtemTeclaPressionada();
                 switch (tecla) {
@@ -68,7 +72,7 @@ public class Funcoes {
                         if (j < 0){
                             j = 0;}
                             else if (matcop[i][j] == false) {
-                            mat[i][j] = "_ ";
+                            mat[i][j] = "| ";
                             j++;
                         }else {
                             mat[i][j] = "# ";
@@ -83,7 +87,7 @@ public class Funcoes {
                         if (j > colunas - 1) {
                             j = colunas - 1;
                         } else if (matcop[i][j] == false) {
-                            mat[i][j] = "_ ";
+                            mat[i][j] = "| ";
                             j--;
                         }else {
                             mat[i][j] = "# ";
@@ -129,7 +133,6 @@ public class Funcoes {
                 }
             }
 
-            limparConsole();
         }
 
     }
