@@ -12,7 +12,8 @@ public class Funcoes {
         valor = TECLADO.nextInt();
         return valor;
     }
-    public static int sortearNumero(int limite){
+
+    public static int sortearNumero(int limite) {
         int valor;
         valor = SORTEIO.nextInt(limite);
         return valor;
@@ -30,6 +31,11 @@ public class Funcoes {
         return mat;
     }
 
+    public static String lerTexto() {
+        String valor;
+        valor = TECLADO.next();
+        return valor;
+    }
 
     public static void desenharTela(int x, int y, int largura, int altura, String mat[][]) {
         System.out.println();
@@ -90,12 +96,12 @@ public class Funcoes {
                     case 'a':
                     case 'A':
                         j--;
-                        if (j < 0){
-                            j = 0;}
-                            else if (matcop[i][j] == false) {
+                        if (j < 0) {
+                            j = 0;
+                        } else if (matcop[i][j] == false) {
                             mat[i][j] = "| ";
                             j++;
-                        }else {
+                        } else {
                             mat[i][j] = "# ";
                             mat[i][j + 1] = ". ";
                         }
@@ -110,7 +116,7 @@ public class Funcoes {
                         } else if (matcop[i][j] == false) {
                             mat[i][j] = "| ";
                             j--;
-                        }else {
+                        } else {
                             mat[i][j] = "# ";
                             mat[i][j - 1] = ". ";
                         }
@@ -158,50 +164,49 @@ public class Funcoes {
 
     }
 
-    public static int[] sortearPosTesouro(int i ,int j, int linhas, int colunas) {
+    public static int[] sortearPosTesouro(int i, int j, int linhas, int colunas) {
         int[] posicao = new int[2];
-        do{
+        do {
             posicao[0] = SORTEIO.nextInt(linhas);
             posicao[1] = SORTEIO.nextInt(colunas);
-        }
-        while (posicao[0] == i && posicao[1] == j);
-        
+        } while (posicao[0] == i && posicao[1] == j);
+
         return posicao;
     }
 
-    public static String[][] posicionarTesouro(int[] posicao, String[][] matcop2){
+    public static String[][] posicionarTesouro(int[] posicao, String[][] matcop2) {
         matcop2[posicao[0]][posicao[1]] = "<tesouro>";
         return matcop2;
     }
 
-    public static int[] calcularDistTesouro(int[] pos, int i, int j){
+    public static int[] calcularDistTesouro(int[] pos, int i, int j) {
         int[] distTesouro = new int[2];
         distTesouro[0] = Math.abs(pos[0] - i);
         distTesouro[1] = Math.abs(pos[1] - j);
         return distTesouro;
     }
 
-    public static void exibirQuenteOuFrio(int [] distTesouro){
-        if (distTesouro[0] <= 1 && distTesouro[1] <= 1){
+    public static void exibirQuenteOuFrio(int[] distTesouro) {
+        if (distTesouro[0] <= 1 && distTesouro[1] <= 1) {
             System.out.println("Quente!");
-        }else if (distTesouro[0] < 3 || distTesouro[1] < 3){
+        } else if (distTesouro[0] < 3 || distTesouro[1] < 3) {
             System.out.println("Morno!");
-        }else{
+        } else {
             System.out.println("Frio!");
         }
     }
 
-    public static void exibirAreaQuenteOuFria(int [] distTesouro){
-        if (distTesouro[0] <= 1 && distTesouro[1] <= 1){
-            
-        }else if (distTesouro[0] < 3 || distTesouro[1] < 3){
-            
-        }else{
-            
+    public static void exibirAreaQuenteOuFria(int[] distTesouro) {
+        if (distTesouro[0] <= 1 && distTesouro[1] <= 1) {
+
+        } else if (distTesouro[0] < 3 || distTesouro[1] < 3) {
+
+        } else {
+
         }
     }
 
-public static void puzzle2(String mat2[][], String matcop2[][]) {
+    public static void puzzle2(String mat2[][], String matcop2[][]) {
         int tecla;
         int linhas = mat2.length;
         int colunas = mat2[0].length;
@@ -214,16 +219,16 @@ public static void puzzle2(String mat2[][], String matcop2[][]) {
 
         while (true) {
             // Lógica para detectar o movimento
-            
+
             if (BibliotecaTCA.pressionouTecla()) {
                 tecla = BibliotecaTCA.obtemTeclaPressionada();
                 switch (tecla) {
                     case 'a':
                     case 'A':
                         j--;
-                        if (j < 0){
+                        if (j < 0) {
                             j = 0;
-                        }else {
+                        } else {
                             mat2[i][j] = "# ";
                             mat2[i][j + 1] = ". ";
                         }
@@ -235,7 +240,7 @@ public static void puzzle2(String mat2[][], String matcop2[][]) {
                         j++;
                         if (j > colunas - 1) {
                             j = colunas - 1;
-                        }else {
+                        } else {
                             mat2[i][j] = "# ";
                             mat2[i][j - 1] = ". ";
                         }
@@ -248,7 +253,7 @@ public static void puzzle2(String mat2[][], String matcop2[][]) {
 
                         if (i < 0) {
                             i = 0;
-                        }else {
+                        } else {
                             mat2[i][j] = "# ";
                             mat2[i + 1][j] = ". ";
                         }
@@ -267,23 +272,76 @@ public static void puzzle2(String mat2[][], String matcop2[][]) {
                         BibliotecaTCA.limparTela();
                         desenharTela(j, i, colunas, linhas, mat2);
                         break;
-                        case 13:
-                        if(i == pos[0] && j == pos[1]){
+                    case 13:
+                        if (i == pos[0] && j == pos[1]) {
                             System.out.println("Parabéns! Você encontrou o tesouro!");
                             break;
-                        }else{
+                        } else {
                             distTesouro = calcularDistTesouro(pos, i, j);
                             exibirQuenteOuFrio(distTesouro);
                             continue;
                         }
                     case 27: // Código ASCII para a tecla ESC
                         return; // Sai do loop e termina o programa
-                        default:
+                    default:
                 }
             }
 
         }
 
+    }
+
+    public static boolean[] preencherVet(boolean[] vet){
+        for(int i = 0;i < vet.length;i++){
+            vet[i] = true;
+        }
+        return vet;
+    }
+
+    public static String formatarPalavra(String palavra,int letras){
+        char[] letrasFormatadas = new char[letras];
+        for(int i = 0;i < letras;i++){
+            letrasFormatadas[i] = palavra.charAt(i);
+        }
+        String palavraFormatada = new String(letrasFormatadas);
+        return palavraFormatada;
+    }
+
+    public static void puzzle3(String[] senhas) {
+        int letrasCorretas = 0;
+        int letrasConfirmadas = 0;
+        int j = 0;
+        while (j < senhas.length) {
+            String senhaAtual = senhas[j];
+            boolean[] vetorControle = new boolean[senhaAtual.length()];
+            vetorControle = preencherVet(vetorControle);
+            System.out.println("A senha atual possui " + senhaAtual.length() + " digitos");
+            String senhaInserida = lerTexto();
+            senhaInserida = formatarPalavra(senhaInserida, senhaAtual.length());
+            for (int i = 0; i < senhaInserida.length(); i++) {
+                if (senhaInserida.charAt(i) == senhaAtual.charAt(i)){
+                    letrasCorretas++;
+                }
+                for (int k = 0; k < senhaAtual.length(); k++) {
+                    if (senhaInserida.charAt(i) == senhaAtual.charAt(k)){
+                        if (vetorControle[k] == true) {
+                            letrasConfirmadas++;
+                            vetorControle[k] = false;
+                        }
+                        }
+                }
+            }
+                letrasConfirmadas -= letrasCorretas;
+                if (letrasConfirmadas == senhaAtual.length()) {
+                    System.out.println("Voce acertou a senha");
+                    j++;
+                }
+                else if (letrasConfirmadas > 0 || letrasCorretas > 0){
+                    System.out.println("Voce acertou " + letrasCorretas + " e errou a posicao de " + letrasConfirmadas);
+                }
+            letrasConfirmadas = 0;
+            letrasCorretas = 0;
+        }
     }
 
     public static void main(String[] args) {
@@ -316,7 +374,7 @@ public static void puzzle2(String mat2[][], String matcop2[][]) {
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " }
         };
-        //movimentacao(mat1, matcop);
+        // movimentacao(mat1, matcop);
         String[][] matcop2 = {
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
@@ -330,7 +388,9 @@ public static void puzzle2(String mat2[][], String matcop2[][]) {
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " }
         };
-        puzzle2(mat2, matcop2);
-        
+        String[] senhas = { "maca", "banana", "uva" };
+        puzzle3(senhas);
+        //puzzle2(mat2, matcop2);
+
     }
 }
