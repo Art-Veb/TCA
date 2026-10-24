@@ -267,7 +267,7 @@ public static void puzzle2(String mat2[][], String matcop2[][]) {
                         BibliotecaTCA.limparTela();
                         desenharTela(j, i, colunas, linhas, mat2);
                         break;
-                        case 'v':
+                        case 13:
                         if(i == pos[0] && j == pos[1]){
                             System.out.println("Parabéns! Você encontrou o tesouro!");
                             break;
@@ -309,8 +309,8 @@ public static void puzzle2(String mat2[][], String matcop2[][]) {
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", "# ", ". ", ". ", ". " },
+                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
@@ -330,7 +330,7 @@ public static void puzzle2(String mat2[][], String matcop2[][]) {
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " }
         };
-        puzzle2(mat2, matcop2);
+        //puzzle2(mat2, matcop2);
         
     }
 }
