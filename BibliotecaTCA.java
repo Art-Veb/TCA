@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 
+
 // =====================================================================
 // BIBLIOTECA DO TCA
 //   1. TELA      -> limpar a tela, escrever numa posição, cores, cursor

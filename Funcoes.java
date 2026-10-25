@@ -7,10 +7,325 @@ import com.sun.jna.Native;
 public class Funcoes {
     public final static Scanner TECLADO = new Scanner(System.in);
 
+// =============================FUNCOES MENU INICIO====================================
+     // Liga o Java às funções _kbhit e _getch do Windows (só usada no Windows)
+    public interface Crt extends Library {
+        Crt INSTANCE = Native.load("msvcrt", Crt.class);
+        int _kbhit();
+        int _getch();
+    }
+
+    static boolean windows = System.getProperty("os.name").toLowerCase().contains("win");
+    static boolean tecladoPreparado = false;
+
+    // Retorna true se alguma tecla foi pressionada. NÃO espera: se nenhuma
+    // tecla foi apertada, retorna false na hora e o jogo continua.
+    public static boolean pressionouTecla() {
+        if (windows) {
+            return Crt.INSTANCE._kbhit() != 0;
+        }
+        prepararTecladoMacLinux();
+        try {
+            return System.in.available() > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // Retorna o código ASCII da tecla pressionada (ex.: 'a', 'w', 27 = ESC).
+    // Se nenhuma tecla foi apertada, ESPERA até o usuário apertar uma.
+    public static int obtemTeclaPressionada() {
+        if (windows) {
+            return Crt.INSTANCE._getch();
+        }
+        prepararTecladoMacLinux();
+        try {
+            return System.in.read();
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    // Mostra "Pressione uma tecla para continuar..." e PARA o programa
+    // até o jogador apertar qualquer tecla.
+    //
+    // Exemplo:
+    //   System.out.println("GAME OVER");
+    //   esperarTecla();
+    public static void esperarTecla() {
+        System.out.println("Pressione uma tecla para continuar...");
+        obtemTeclaPressionada(); // fica esperando a tecla
+    }
+
+    // Mac/Linux: faz o terminal entregar cada tecla na hora (sem ENTER) e
+    // sem mostrar a letra na tela. Quando o programa termina, volta ao normal.
+    static void prepararTecladoMacLinux() {
+        if (tecladoPreparado) {
+            return;
+        }
+        tecladoPreparado = true;
+        executarStty("-icanon -echo -icrnl min 1"); // -icrnl: ENTER vira 13, igual ao Windows
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> executarStty("sane")));
+    }
+
+    static void executarStty(String opcoes) {
+        try {
+            new ProcessBuilder("sh", "-c", "stty " + opcoes + " < /dev/tty").start().waitFor();
+        } catch (Exception e) {
+            // se não conseguir, o teclado só vai funcionar com ENTER
+        }
+    }
+    // ===================================================================
+
+    public static void limparConsole() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
+    public static void gotoXY(int linha, int coluna) {
+        char escCode = 0x1B;
+        System.out.print(String.format("%c[%d;%df", escCode, linha, coluna));
+    }  
+
+    // Constantes das cores básicas, para usar com mudarCor e mudarCorFundo.
+    // Assim dá para escrever mudarCor(VERDE) em vez de mudarCor(2).
+    // "final" quer dizer que o valor nunca muda.
+    public static final int PRETO      = 0;
+    public static final int VERMELHO   = 1;
+    public static final int VERDE      = 2;
+    public static final int AMARELO    = 3;
+    public static final int AZUL       = 4;
+    public static final int MAGENTA    = 5;
+    public static final int CIANO      = 6;
+    public static final int CINZA      = 7;
+    public static final int BRANCO     = 15;
+    public static final int COR_PADRAO = -1; // a cor original do terminal
+
+    // Muda a cor do TEXTO. Tudo o que for escrito depois sai nessa cor.
+    //
+    // A cor é um número de 0 a 255 (são 256 cores!). Para as cores
+    // básicas, use as constantes acima. Para ver todas as 256 cores e
+    // escolher o número, chame a função mostrarCores().
+    // Use COR_PADRAO (-1) para voltar à cor original do terminal.
+    //
+    // Exemplo:
+    //   mudarCor(VERDE);                  // texto verde
+    //   System.out.println("Você venceu!");
+    //   mudarCor(208);                    // texto laranja (uma das 256 cores)
+    //   System.out.println("Cuidado!");
+    //   mudarCor(COR_PADRAO);             // volta ao normal
+    //
+    // ATENÇÃO:
+    //   - Use mudarCor(COR_PADRAO) no fim do programa para o terminal não ficar colorido.
+    //   - Cuidado com texto preto em terminal escuro (ou branco em terminal claro):
+    //     ele fica invisível!
+    //   - Só funciona rodando no terminal (não no console do Eclipse/NetBeans).
+    public static void mudarCor(int cor) {
+        if (cor >= 0 && cor <= 255) {
+            System.out.print("\033[38;5;" + cor + "m");
+        } else {
+            System.out.print("\033[39m"); // cor padrão do terminal
+        }
+    }
+
+    // Muda a cor do FUNDO (atrás das letras). Usa as mesmas cores
+    // do mudarCor: constantes ou números de 0 a 255.
+    //
+    // Exemplo:
+    //   mudarCorFundo(AZUL);              // fundo azul
+    //   mudarCor(AMARELO);                // texto amarelo
+    //   System.out.print(" PLACAR: 10 ");
+    //   mudarCorFundo(COR_PADRAO);        // volta o fundo ao normal
+    //   mudarCor(COR_PADRAO);             // volta o texto ao normal
+    //
+    // Dica: escreva espaços " " com a cor de fundo para desenhar blocos coloridos.
+    public static void mudarCorFundo(int cor) {
+        if (cor >= 0 && cor <= 255) {
+            System.out.print("\033[48;5;" + cor + "m");
+        } else {
+            System.out.print("\033[49m"); // cor padrão do terminal
+        }
+    }   
+
+
+    public static void atualizarMenu(int opcaoSelecionada, String[] opcoes) {
+        limparConsole();
+
+        int larguraOpcao = "MENU INICIAL".length();
+        for (String opcao : opcoes) {
+            larguraOpcao = Math.max(larguraOpcao, opcao.trim().length());
+        }
+        int larguraBotao = larguraOpcao + 4;
+        int larguraInterior = larguraBotao * 2 + 6;
+        String borda = "═".repeat(larguraInterior);
+
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        mudarCor(AZUL);
+        imprimirDevagarMenu("╔" + borda + "╗");
+        System.out.println();
+        String titulo = "MENU INICIAL";
+        int espacoTitulo = larguraInterior - titulo.length();
+        imprimirDevagarMenu("║" + " ".repeat(espacoTitulo / 2) + titulo
+                + " ".repeat(espacoTitulo - espacoTitulo / 2) + "║");
+        System.out.println();
+        imprimirDevagarMenu("╠" + borda + "╣");
+        System.out.println();
+        int linhas = (opcoes.length + 1) / 2;
+        for (int linha = 0; linha < linhas; linha++) {
+            int indiceEsquerdo = linha * 2;
+            int indiceDireito = indiceEsquerdo + 1;
+
+            mudarCor(AZUL);
+            imprimirDevagarMenu("║  ");
+            imprimirBordaBotao(larguraBotao, "┌", "┐", indiceEsquerdo == opcaoSelecionada);
+            mudarCor(AZUL);
+            imprimirDevagarMenu("  ");
+            imprimirBordaBotao(larguraBotao, "┌", "┐", indiceDireito == opcaoSelecionada);
+            mudarCor(AZUL);
+            imprimirDevagarMenu("  ║");
+            System.out.println();
+
+            mudarCor(AZUL);
+            imprimirDevagarMenu("║  ");
+            imprimirConteudoBotao(opcoes[indiceEsquerdo], indiceEsquerdo == opcaoSelecionada, larguraBotao);
+            mudarCorFundo(COR_PADRAO);
+            mudarCor(AZUL);
+            imprimirDevagarMenu("  ");
+            if (indiceDireito < opcoes.length) {
+                imprimirConteudoBotao(opcoes[indiceDireito], indiceDireito == opcaoSelecionada, larguraBotao);
+            } else {
+                imprimirConteudoBotao("", false, larguraBotao);
+            }
+            mudarCor(AZUL);
+            imprimirDevagarMenu("  ║");
+            System.out.println();
+
+            mudarCor(AZUL);
+            imprimirDevagarMenu("║  ");
+            imprimirBordaBotao(larguraBotao, "└", "┘", indiceEsquerdo == opcaoSelecionada);
+            mudarCor(AZUL);
+            imprimirDevagarMenu("  ");
+            imprimirBordaBotao(larguraBotao, "└", "┘", indiceDireito == opcaoSelecionada);
+            mudarCor(AZUL);
+            imprimirDevagarMenu("  ║");
+            System.out.println();
+        }
+        mudarCor(AZUL);
+        imprimirDevagarMenu("╚" + borda + "╝");
+        System.out.println();
+        System.out.println();
+        System.out.println("Use A/D para os lados, W/S para cima/baixo e ENTER para selecionar.");
+
+    }
+
+    private static void imprimirBordaBotao(int largura, String esquerda, String direita, boolean selecionado) {
+        mudarCorFundo(COR_PADRAO);
+        if (selecionado) {
+            mudarCor(VERMELHO);
+        } else {
+            mudarCor(AZUL);
+        }
+        imprimirDevagarMenu(esquerda + "─".repeat(largura - 2) + direita);
+        mudarCor(COR_PADRAO);
+    }
+
+    private static void imprimirConteudoBotao(String texto, boolean selecionado, int largura) {
+        String rotulo = texto.trim();
+        int larguraConteudo = largura - 2;
+        String indicador = "  ";
+        if (selecionado) {
+            indicador = "> ";
+        }
+        int espacos = larguraConteudo - indicador.length() - rotulo.length();
+
+        mudarCorFundo(COR_PADRAO);
+        if (selecionado) {
+            mudarCor(VERMELHO);
+        } else {
+            mudarCor(AZUL);
+        }
+        imprimirDevagarMenu("│");
+        if (selecionado) {
+            mudarCor(VERMELHO);
+        } else {
+            mudarCor(COR_PADRAO);
+        }
+        imprimirDevagarMenu(indicador + rotulo);
+        mudarCor(COR_PADRAO);
+        imprimirDevagarMenu(" ".repeat(espacos));
+        if (selecionado) {
+            mudarCor(VERMELHO);
+        } else {
+            mudarCor(AZUL);
+        }
+        imprimirDevagarMenu("│");
+        mudarCor(COR_PADRAO);
+    }
+
+    public static void executarAcaoMenu(int opcaoSelecionada) {
+        
+        limparConsole();
+
+        switch (opcaoSelecionada) {
+            case 0:
+                mudarCor(AZUL);
+                imprimirDevagar("\n\nComeçar novo jogo selecionado.\n\n");
+                
+                break;
+            case 1:
+                mudarCor(AZUL);
+                imprimirDevagar("\n\nSobre o jogo selecionado.\n\n");           
+                break;
+            case 2:
+                mudarCor(AZUL);
+                imprimirDevagar("\n\nCréditos selecionado.\n\n");
+                break;
+            default:
+                mudarCor(VERMELHO);
+                imprimirDevagar("\n\nOpção inválida.\n\n");
+                break;
+        }
+        esperarTecla();
+        limparConsole();
+
+    }// =============================FUNCOES MENU FIM====================================
+
+
     public static int lerValorInt() {
         int valor;
         valor = TECLADO.nextInt();
         return valor;
+    }
+
+     // Método que imprime o texto letra por letra
+    public static void imprimirDevagar(String texto) {
+        for (int i = 0; i < texto.length(); i++) {
+            System.out.print(texto.charAt(i)); 
+            System.out.flush();                
+            
+            try {
+                Thread.sleep(60);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        System.out.println();
+    }
+
+     // Método que imprime o menu letra por letra
+    public static void imprimirDevagarMenu(String texto) {
+        for (int i = 0; i < texto.length(); i++) {
+            System.out.print(texto.charAt(i)); 
+            System.out.flush();                
+            
+            try {
+                Thread.sleep(0,5);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
     }
 
     public static int sortearNumero(int limite) {
@@ -71,11 +386,6 @@ public class Funcoes {
         }
         BibliotecaTCA.mudarCor(-1);
         System.out.println("Aperte Q para ver area quente, M para ver area morna, F para ver area fria");
-    }
-
-    public static void limparConsole() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
     }
 
     public static void puzzle1(String mat[][], boolean matcop[][]) {
@@ -312,6 +622,7 @@ public class Funcoes {
         int letrasConfirmadas = 0;
         int j = 0;
         while (j < senhas.length) {
+            
             String senhaAtual = senhas[j];
             boolean[] vetorControle = new boolean[senhaAtual.length()];
             vetorControle = preencherVet(vetorControle);
@@ -332,7 +643,7 @@ public class Funcoes {
                 }
             }
                 letrasConfirmadas -= letrasCorretas;
-                if (letrasConfirmadas == senhaAtual.length()) {
+                if (letrasCorretas == senhaAtual.length()) {
                     System.out.println("Voce acertou a senha");
                     j++;
                 }
@@ -391,6 +702,7 @@ public class Funcoes {
         String[] senhas = { "maca", "banana", "uva" };
         puzzle3(senhas);
         //puzzle2(mat2, matcop2);
+        Historia.main(args);
 
     }
 }
