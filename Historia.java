@@ -17,7 +17,7 @@ public class Historia{
         };
 
         int opcaoSelecionada = 0;
-        Funcoes.atualizarMenu(  opcaoSelecionada, opcoes);
+        //(  opcaoSelecionada, opcoes);
         
         while (true) {   
             BibliotecaTCA.esconderCursor();         
@@ -28,21 +28,21 @@ public class Historia{
                     case 'w':
                     case 'W':
                         opcaoSelecionada = moverLinhaMenu(opcaoSelecionada, opcoes.length, -1);
-                        Funcoes.atualizarMenu(opcaoSelecionada, opcoes);
+                        //(opcaoSelecionada, opcoes);
 
                         break;  
 
                     case 's':
                     case 'S':
                         opcaoSelecionada = moverLinhaMenu(opcaoSelecionada, opcoes.length, 1);
-                        Funcoes.atualizarMenu(opcaoSelecionada, opcoes);
+                        //(opcaoSelecionada, opcoes);
                         break;
 
                     case 'a':
                     case 'A':
                         if (opcaoSelecionada % 2 == 1) {
                             opcaoSelecionada--;
-                            Funcoes.atualizarMenu(opcaoSelecionada, opcoes);
+                            //(opcaoSelecionada, opcoes);
                         }
                         break;
 
@@ -50,7 +50,7 @@ public class Historia{
                     case 'D':
                         if (opcaoSelecionada % 2 == 0 && opcaoSelecionada + 1 < opcoes.length) {
                             opcaoSelecionada++;
-                            Funcoes.atualizarMenu(opcaoSelecionada, opcoes);
+                            //(opcaoSelecionada, opcoes);
                         }
                         break;
 
@@ -58,8 +58,8 @@ public class Historia{
                         if (opcaoSelecionada == 3) {
                             return;
                         }
-                        Funcoes.executarAcaoMenu(opcaoSelecionada);
-                        Funcoes.atualizarMenu(opcaoSelecionada, opcoes);
+                        //opcaoSelecionada);
+                        //(opcaoSelecionada, opcoes);
                         break;
                 }
                 
