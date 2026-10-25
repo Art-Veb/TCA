@@ -413,7 +413,7 @@ public class BibliotecaTCA {
                 maior = opcoes[i].length();
             }
         }
-        int largura = maior + 4; // espaço para o "> " e uma margem
+        int largura = maior + 4 ; // espaço para o "> " e uma margem
 
         limparTela();
         System.out.println("╔" + "═".repeat(largura) + "╗");

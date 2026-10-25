@@ -7,11 +7,14 @@ import com.sun.jna.Native;
 public class Funcoes {
     public final static Scanner TECLADO = new Scanner(System.in);
 
-// =============================FUNCOES MENU INICIO====================================
-     // Liga o Java às funções _kbhit e _getch do Windows (só usada no Windows)
+    // =============================FUNCOES MENU
+    // INICIO====================================
+    // Liga o Java às funções _kbhit e _getch do Windows (só usada no Windows)
     public interface Crt extends Library {
         Crt INSTANCE = Native.load("msvcrt", Crt.class);
+
         int _kbhit();
+
         int _getch();
     }
 
@@ -50,8 +53,8 @@ public class Funcoes {
     // até o jogador apertar qualquer tecla.
     //
     // Exemplo:
-    //   System.out.println("GAME OVER");
-    //   esperarTecla();
+    // System.out.println("GAME OVER");
+    // esperarTecla();
     public static void esperarTecla() {
         System.out.println("Pressione uma tecla para continuar...");
         obtemTeclaPressionada(); // fica esperando a tecla
@@ -85,20 +88,20 @@ public class Funcoes {
     public static void gotoXY(int linha, int coluna) {
         char escCode = 0x1B;
         System.out.print(String.format("%c[%d;%df", escCode, linha, coluna));
-    }  
+    }
 
     // Constantes das cores básicas, para usar com mudarCor e mudarCorFundo.
     // Assim dá para escrever mudarCor(VERDE) em vez de mudarCor(2).
     // "final" quer dizer que o valor nunca muda.
-    public static final int PRETO      = 0;
-    public static final int VERMELHO   = 1;
-    public static final int VERDE      = 2;
-    public static final int AMARELO    = 3;
-    public static final int AZUL       = 4;
-    public static final int MAGENTA    = 5;
-    public static final int CIANO      = 6;
-    public static final int CINZA      = 7;
-    public static final int BRANCO     = 15;
+    public static final int PRETO = 0;
+    public static final int VERMELHO = 1;
+    public static final int VERDE = 2;
+    public static final int AMARELO = 3;
+    public static final int AZUL = 4;
+    public static final int MAGENTA = 5;
+    public static final int CIANO = 6;
+    public static final int CINZA = 7;
+    public static final int BRANCO = 15;
     public static final int COR_PADRAO = -1; // a cor original do terminal
 
     // Muda a cor do TEXTO. Tudo o que for escrito depois sai nessa cor.
@@ -109,17 +112,18 @@ public class Funcoes {
     // Use COR_PADRAO (-1) para voltar à cor original do terminal.
     //
     // Exemplo:
-    //   mudarCor(VERDE);                  // texto verde
-    //   System.out.println("Você venceu!");
-    //   mudarCor(208);                    // texto laranja (uma das 256 cores)
-    //   System.out.println("Cuidado!");
-    //   mudarCor(COR_PADRAO);             // volta ao normal
+    // mudarCor(VERDE); // texto verde
+    // System.out.println("Você venceu!");
+    // mudarCor(208); // texto laranja (uma das 256 cores)
+    // System.out.println("Cuidado!");
+    // mudarCor(COR_PADRAO); // volta ao normal
     //
     // ATENÇÃO:
-    //   - Use mudarCor(COR_PADRAO) no fim do programa para o terminal não ficar colorido.
-    //   - Cuidado com texto preto em terminal escuro (ou branco em terminal claro):
-    //     ele fica invisível!
-    //   - Só funciona rodando no terminal (não no console do Eclipse/NetBeans).
+    // - Use mudarCor(COR_PADRAO) no fim do programa para o terminal não ficar
+    // colorido.
+    // - Cuidado com texto preto em terminal escuro (ou branco em terminal claro):
+    // ele fica invisível!
+    // - Só funciona rodando no terminal (não no console do Eclipse/NetBeans).
     public static void mudarCor(int cor) {
         if (cor >= 0 && cor <= 255) {
             System.out.print("\033[38;5;" + cor + "m");
@@ -132,11 +136,11 @@ public class Funcoes {
     // do mudarCor: constantes ou números de 0 a 255.
     //
     // Exemplo:
-    //   mudarCorFundo(AZUL);              // fundo azul
-    //   mudarCor(AMARELO);                // texto amarelo
-    //   System.out.print(" PLACAR: 10 ");
-    //   mudarCorFundo(COR_PADRAO);        // volta o fundo ao normal
-    //   mudarCor(COR_PADRAO);             // volta o texto ao normal
+    // mudarCorFundo(AZUL); // fundo azul
+    // mudarCor(AMARELO); // texto amarelo
+    // System.out.print(" PLACAR: 10 ");
+    // mudarCorFundo(COR_PADRAO); // volta o fundo ao normal
+    // mudarCor(COR_PADRAO); // volta o texto ao normal
     //
     // Dica: escreva espaços " " com a cor de fundo para desenhar blocos coloridos.
     public static void mudarCorFundo(int cor) {
@@ -145,9 +149,7 @@ public class Funcoes {
         } else {
             System.out.print("\033[49m"); // cor padrão do terminal
         }
-    }   
-
-
+    }
 
     public static int lerValorInt() {
         int valor;
@@ -155,12 +157,12 @@ public class Funcoes {
         return valor;
     }
 
-     // Método que imprime o texto letra por letra
+    // Método que imprime o texto letra por letra
     public static void imprimirDevagar(String texto) {
         for (int i = 0; i < texto.length(); i++) {
-            System.out.print(texto.charAt(i)); 
-            System.out.flush();                
-            
+            System.out.print(texto.charAt(i));
+            System.out.flush();
+
             try {
                 Thread.sleep(60);
             } catch (InterruptedException e) {
@@ -170,14 +172,14 @@ public class Funcoes {
         System.out.println();
     }
 
-     // Método que imprime o menu letra por letra
+    // Método que imprime o menu letra por letra
     public static void imprimirDevagarMenu(String texto) {
         for (int i = 0; i < texto.length(); i++) {
-            System.out.print(texto.charAt(i)); 
-            System.out.flush();                
-            
+            System.out.print(texto.charAt(i));
+            System.out.flush();
+
             try {
-                Thread.sleep(0,5);
+                Thread.sleep(0, 5);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -457,16 +459,16 @@ public class Funcoes {
 
     }
 
-    public static boolean[] preencherVet(boolean[] vet){
-        for(int i = 0;i < vet.length;i++){
+    public static boolean[] preencherVet(boolean[] vet) {
+        for (int i = 0; i < vet.length; i++) {
             vet[i] = true;
         }
         return vet;
     }
 
-    public static String formatarPalavra(String palavra,int letras){
+    public static String formatarPalavra(String palavra, int letras) {
         char[] letrasFormatadas = new char[letras];
-        for(int i = 0;i < letras;i++){
+        for (int i = 0; i < letras; i++) {
             letrasFormatadas[i] = palavra.charAt(i);
         }
         String palavraFormatada = new String(letrasFormatadas);
@@ -478,7 +480,7 @@ public class Funcoes {
         int letrasConfirmadas = 0;
         int j = 0;
         while (j < senhas.length) {
-            
+
             String senhaAtual = senhas[j];
             boolean[] vetorControle = new boolean[senhaAtual.length()];
             vetorControle = preencherVet(vetorControle);
@@ -486,29 +488,129 @@ public class Funcoes {
             String senhaInserida = lerTexto();
             senhaInserida = formatarPalavra(senhaInserida, senhaAtual.length());
             for (int i = 0; i < senhaInserida.length(); i++) {
-                if (senhaInserida.charAt(i) == senhaAtual.charAt(i)){
+                if (senhaInserida.charAt(i) == senhaAtual.charAt(i)) {
                     letrasCorretas++;
                 }
                 for (int k = 0; k < senhaAtual.length(); k++) {
-                    if (senhaInserida.charAt(i) == senhaAtual.charAt(k)){
+                    if (senhaInserida.charAt(i) == senhaAtual.charAt(k)) {
                         if (vetorControle[k] == true) {
                             letrasConfirmadas++;
                             vetorControle[k] = false;
                         }
-                        }
+                    }
                 }
             }
-                letrasConfirmadas -= letrasCorretas;
-                if (letrasCorretas == senhaAtual.length()) {
-                    System.out.println("Voce acertou a senha");
-                    j++;
-                }
-                else if (letrasConfirmadas > 0 || letrasCorretas > 0){
-                    System.out.println("Voce acertou " + letrasCorretas + " e errou a posicao de " + letrasConfirmadas);
-                }
+            letrasConfirmadas -= letrasCorretas;
+            if (letrasCorretas == senhaAtual.length()) {
+                System.out.println("Voce acertou a senha");
+                j++;
+            } else if (letrasConfirmadas > 0 || letrasCorretas > 0) {
+                System.out.println("Voce acertou " + letrasCorretas + " e errou a posicao de " + letrasConfirmadas);
+            }
             letrasConfirmadas = 0;
             letrasCorretas = 0;
         }
+    }
+
+    public static int defesa(int dano) {
+        return dano / 2;
+    }
+
+    public static int defesaCompleta(int dano) {
+        return dano - dano;
+    }
+
+    public static void informativo(int ataqueInimigo, int vidaInimiga) {
+        System.out.println("Vida: " + vidaInimiga);
+        System.out.println("Ataque: " + ataqueInimigo);
+    }
+
+    public static void sistemaDBatalha(int ataqueInimigo, int vidaInimiga, int velocidadeInimiga) {
+        int[] ataque = { 30, 10 };
+        int cargaEspecialPersonagem = 0;
+        int cargaEspecialInimigo = 0;
+        int vida = 100;
+        int cura = 30;
+        int ataqueBaseInimigo = ataqueInimigo;
+        String[] opcoes = { "Ataque", "Defesa", "Cura", "Status" };
+        String[] ataques = { "Ataque pesado", "Ataque leve" };
+        String[] defesas = { "Defesa imparcial", "Defesa completa" };
+        while (true) {
+            int pontosDeAcao = 3;
+            while (pontosDeAcao != 0) {
+                int escolha = BibliotecaTCA.escolherNoMenu("Batalha", opcoes);
+                int subescolha = 0;
+                if (escolha == 0) {
+                    // subescolha = menu dos ataques (pesado e leve)
+                    if (subescolha == 0) {
+                        if (pontosDeAcao >= 2) {
+                            int sorteio = SORTEIO.nextInt(3);
+                            if (sorteio == 2) {
+                                vidaInimiga -= ataque[0];
+                                cargaEspecialPersonagem++;
+                                pontosDeAcao -= 2;
+                            } else {
+                                pontosDeAcao -= 2;
+                            }
+
+                        } else {
+                            System.out.println("Voce não tem PA (pontos de acao) suficiente");
+                            continue;
+                        }
+                    } else if (subescolha == 1) {
+                        if (pontosDeAcao >= 1) {
+                            vidaInimiga -= ataque[1];
+                            pontosDeAcao--;
+                        } else {
+                            System.out.println("Voce não tem PA (pontos de acao) suficiente");
+                            continue;
+                        }
+                    } else if (subescolha == 27) {
+                        continue;
+                    }
+                } else if (escolha == 1) {
+                    // menu das defesa (parry e parcial(50%))
+                    if (subescolha == 0) {
+                        if (pontosDeAcao >= 1) {
+                            ataqueInimigo /= 2;
+                            pontosDeAcao--;
+                        } else {
+                            System.out.println("Voce não tem PA (pontos de acao) suficiente");
+                            continue;
+                        }
+                    } else if (subescolha == 1) {
+                        if (pontosDeAcao == 3) {
+                            ataqueInimigo = 0;
+                            pontosDeAcao-=3;
+                        } else {
+                            System.out.println("Voce não tem PA (pontos de acao) suficiente");
+                            continue;
+                        }
+                    } else if (subescolha == 27) {
+                        continue;
+                    }
+                } else if (escolha == 2) {
+                    if (vida > 70) {
+                        System.out.println("Voce n esta machucado o suficiente para usar a pocao");
+                    } else if (pontosDeAcao == 3) {
+                        vida += cura;
+                        pontosDeAcao -= 3;
+                    } else {
+                        System.out.println("Voce não tem PA (pontos de acao) suficiente");
+                        continue;
+                    }
+                } else if (escolha == 3) {
+                    informativo(ataqueInimigo, vidaInimiga);
+                    if (subescolha == 27) {
+                        continue;
+                    }
+                }
+
+            }
+            vida -= ataqueInimigo;
+            ataqueInimigo = ataqueBaseInimigo;
+        }
+
     }
 
     public static void main(String[] args) {
@@ -556,9 +658,11 @@ public class Funcoes {
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " }
         };
         String[] senhas = { "maca", "banana", "uva" };
-        puzzle3(senhas);
-        //puzzle2(mat2, matcop2);
-        Historia.main(args);
+        String[] acoes = { "Ataque", "Cura", "Defesa", "Staus" };
+
+        // BibliotecaTCA.escolherNoMenu("Batalha", acoes);
+        // puzzle3(senhas);
+        // puzzle2(mat2, matcop2);
 
     }
 }
