@@ -622,6 +622,7 @@ public class Funcoes {
         int letrasConfirmadas = 0;
         int j = 0;
         while (j < senhas.length) {
+            
             String senhaAtual = senhas[j];
             boolean[] vetorControle = new boolean[senhaAtual.length()];
             vetorControle = preencherVet(vetorControle);
@@ -642,7 +643,7 @@ public class Funcoes {
                 }
             }
                 letrasConfirmadas -= letrasCorretas;
-                if (letrasConfirmadas == senhaAtual.length()) {
+                if (letrasCorretas == senhaAtual.length()) {
                     System.out.println("Voce acertou a senha");
                     j++;
                 }
@@ -701,6 +702,7 @@ public class Funcoes {
         String[] senhas = { "maca", "banana", "uva" };
         puzzle3(senhas);
         //puzzle2(mat2, matcop2);
+        Historia.main(args);
 
     }
 }
