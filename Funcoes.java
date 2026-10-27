@@ -17,6 +17,91 @@ public class Funcoes {
 
         int _getch();
     }
+    public static int escolherNoMenu(String titulo, String[] opcoes,int ataque, int vida, int pntsdacao) {
+        int selecionada = 0;
+
+        while (true) {
+            desenharMenu(titulo, opcoes, selecionada,ataque,vida,pntsdacao);
+            int tecla = obtemTeclaPressionada(); // espera o jogador apertar uma tecla
+
+            if (tecla == 'w' || tecla == 'W') {
+                selecionada--;
+                if (selecionada < 0) {
+                    selecionada = opcoes.length - 1; // do topo, pula para a última
+                }
+            } else if (tecla == 's' || tecla == 'S') {
+                selecionada++;
+                if (selecionada >= opcoes.length) {
+                    selecionada = 0; // da última, volta para o topo
+                }
+            } else if (tecla == 13 || tecla == 10) { // ENTER
+                return selecionada;
+            } else if (tecla == 27) { // ESC
+                return -1;
+            }
+        }
+    }
+
+    // Desenha o menu numa caixa, com a opção selecionada em verde e
+    // marcada com ">". A caixa cresce para caber o texto mais comprido.
+    // É usada pelo escolherNoMenu, mas também dá para chamar sozinha.
+    public static void desenharMenu(String titulo, String[] opcoes, int selecionada,int vida,int ataque, int pntsdacao) {
+        // descobre o tamanho do maior texto, para a caixa caber tudo
+        int maior = titulo.length();
+        for (int i = 0; i < opcoes.length; i++) {
+            if (opcoes[i].length() > maior) {
+                maior = opcoes[i].length();
+            }
+        }
+        int largura = maior + 4 ; // espaço para o "> " e uma margem
+
+        BibliotecaTCA.limparTela();
+        informativoJogador(ataque, vida, pntsdacao);
+        System.out.println("╔" + "═".repeat(largura) + "╗");
+        System.out.println("║  " + completar(titulo, maior) + "  ║");
+        System.out.println("╠" + "═".repeat(largura) + "╣");
+        for (int i = 0; i < opcoes.length; i++) {
+            if (i == selecionada) {
+                System.out.print("║> ");
+                mudarCor(VERDE);
+                System.out.print(completar(opcoes[i], maior));
+                mudarCor(COR_PADRAO); // volta para a cor padrão
+                System.out.println("  ║");
+            } else {
+                System.out.println("║  " + completar(opcoes[i], maior) + "  ║");
+            }
+        }
+        System.out.println("╚" + "═".repeat(largura) + "╝");
+        System.out.println();
+        System.out.println("Use W/S para navegar e ENTER para selecionar. ESC para sair.");
+    }
+
+    public static void desenharMenu2(int vida,int ataque) {
+        // descobre o tamanho do maior texto, para a caixa caber tud
+        BibliotecaTCA.limparTela();
+        informativoInimigo(ataque, vida);
+        System.out.println("Use W/S para navegar e ENTER para selecionar. ESC para sair.");
+    }
+
+
+    public static int escolherNoMenu2(int ataque, int vida) {
+        int selecionada = 0;
+
+        while (true) {
+            desenharMenu2(ataque, vida);
+            int tecla = obtemTeclaPressionada(); // espera o jogador apertar uma tecla
+            if (tecla == 13 || tecla == 10) { // ENTER
+                return selecionada;
+            } else if (tecla == 27) { // ESC
+                return -1;
+            }
+        }
+    }
+    // Completa o texto com espaços à direita até ter o tamanho pedido.
+    // Ex.: completar("oi", 5) -> "oi   "
+    static String completar(String texto, int tamanho) {
+        return String.format("%-" + tamanho + "s", texto);
+    }
 
     static boolean windows = System.getProperty("os.name").toLowerCase().contains("win");
     static boolean tecladoPreparado = false;
@@ -525,10 +610,10 @@ public class Funcoes {
         System.out.println("Ataque: " + ataqueInimigo);
     }
 
-    public static void informativoJogador(int ataque, int vida,int pontosDeAcao) {
-        System.out.println("          Vida: " + vida);
-        System.out.println("          Ataque: " + ataque);
-        System.out.println("          Pontos de acao: " + pontosDeAcao);
+    public static void informativoJogador(int vida, int ataque,int pontosDeAcao) {
+        System.out.println("Vida: " + vida);
+        System.out.println("Ataque: " + ataque);
+        System.out.println("Pontos de acao: " + pontosDeAcao);
     }
     public static boolean sistemaDBatalha(int vidaInimiga, int ataqueInimigo) {
         boolean lutaVencida = false;
@@ -545,17 +630,17 @@ public class Funcoes {
         while (true) {
             if (vida <= 0) {
                 System.out.println("Voce perdeu clique enter para voltar ao checkpoint");
-                int restart = BibliotecaTCA.escolherNoMenu("Voce morreu", espaco);
+                int restart =  BibliotecaTCA.escolherNoMenu("Voce morreu", espaco);
                 if (restart == 13) {
                     return lutaVencida = false;
                 }
             }
             int pontosDeAcao = 3;
             while (pontosDeAcao != 0) {
-                int escolha = BibliotecaTCA.escolherNoMenu("   Batalha   ", opcoes);
+                int escolha =  escolherNoMenu("   Batalha   ", opcoes,ataque[0],vida,pontosDeAcao);
                 int subescolha = 0;
                 if (escolha == 0) {
-                    subescolha = BibliotecaTCA.escolherNoMenu("   Ataques   ", ataques);
+                    subescolha =  escolherNoMenu("   Ataques   ", ataques,ataque[0],vida,pontosDeAcao);
                     if (subescolha == 0) {
                         if (pontosDeAcao >= 2) {
                             int sorteio = SORTEIO.nextInt(3);
@@ -571,6 +656,7 @@ public class Funcoes {
 
                         } else {
                             System.out.println("Voce nao tem PA (pontos de acao) suficiente");
+                            BibliotecaTCA.esperar(3000);
                             continue;
                         }
                     } else if (subescolha == 1) {
@@ -582,19 +668,21 @@ public class Funcoes {
                                 }
                         } else {
                             System.out.println("Voce nao tem PA (pontos de acao) suficiente");
+                            BibliotecaTCA.esperar(3000);
                             continue;
                         }
                     } else if (subescolha == 27) {
                         continue;
                     }
                 } else if (escolha == 1) {
-                    subescolha = BibliotecaTCA.escolherNoMenu("   Defesas   ", defesas);
+                    subescolha =  escolherNoMenu("   Defesas   ", defesas,ataque[0],vida,pontosDeAcao);
                     if (subescolha == 0) {
                         if (pontosDeAcao >= 1) {
                             ataqueInimigo /= 2;
                             pontosDeAcao--;
                         } else {
                             System.out.println("Voce nao tem PA (pontos de acao) suficiente");
+                            BibliotecaTCA.esperar(3000);
                             continue;
                         }
                     } else if (subescolha == 1) {
@@ -603,6 +691,7 @@ public class Funcoes {
                             pontosDeAcao-=3;
                         } else {
                             System.out.println("Voce nao tem PA (pontos de acao) suficiente");
+                            BibliotecaTCA.esperar(3000);
                             continue;
                         }
                     } else if (subescolha == 27) {
@@ -611,15 +700,19 @@ public class Funcoes {
                 } else if (escolha == 2) {
                     if (vida > 70) {
                         System.out.println("Voce n esta machucado o suficiente para usar a pocao");
+                        BibliotecaTCA.esperar(3000);
+                        continue;
                     } else if (pontosDeAcao == 3) {
                         vida += cura;
                         pontosDeAcao -= 3;
                     } else {
                         System.out.println("Voce nao tem PA (pontos de acao) suficiente");
+                        BibliotecaTCA.esperar(3000);
                         continue;
                     }
                 } else if (escolha == 3) {
-                    informativoInimigo(ataqueInimigo, vidaInimiga);
+                    subescolha = escolherNoMenu2(ataqueBaseInimigo,vidaInimiga);
+                    informativoInimigo(ataqueBaseInimigo, vidaInimiga);
                     if (subescolha == 27) {
                         continue;
                     }
@@ -636,8 +729,8 @@ public class Funcoes {
         int[] status = new int[2];
         int dano = 50;
         int vida = 75;
-        status[0] = vida;
-        status[1] = dano; 
+        status[1] = vida;
+        status[0] = dano; 
         return status;
     }
 
@@ -710,21 +803,23 @@ public class Funcoes {
         int[] statusInimigo = new int[2];
         while (areasExploradas != 3) {
             System.out.println("Escolha a area que deseja explorar");
+            BibliotecaTCA.esperar(3000);
             int area = BibliotecaTCA.escolherNoMenu("   Areas   ", areas);
             if (area == 0) {
+                puzzle1(mat1, matcop1);
                 do{
-                    puzzle1(mat1, matcop1);
                     System.out.println("E entao voce acha o boss");
+                    BibliotecaTCA.esperar(3000);
                     statusInimigo = goblinAnciao();
                     terminou = sistemaDBatalha(statusInimigo[0], statusInimigo[1]);
                 }while(terminou == false);
                 terminou = false;
                 continue;
             }else if (area == 1) {
+                puzzle2(mat2, matcop2);
                 do{
-                    puzzle2(mat2, matcop2);
                     System.out.println("E entao voce acha o boss");
-
+                    BibliotecaTCA.esperar(3000);
                     statusInimigo = pirata();
                     terminou = sistemaDBatalha(statusInimigo[0], statusInimigo[1]);
                 }while(terminou == false);
@@ -734,6 +829,7 @@ public class Funcoes {
                 puzzle3(senhas);
                 do{
                     System.out.println("E entao voce acha o boss");
+                    BibliotecaTCA.esperar(3000);
                     statusInimigo = reiPerdido();
                     terminou = sistemaDBatalha(statusInimigo[0], statusInimigo[1]);
                 }while(terminou == false);
