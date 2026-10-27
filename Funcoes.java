@@ -520,12 +520,18 @@ public class Funcoes {
         return dano - dano;
     }
 
-    public static void informativo(int ataqueInimigo, int vidaInimiga) {
+    public static void informativoInimigo(int ataqueInimigo, int vidaInimiga) {
         System.out.println("Vida: " + vidaInimiga);
         System.out.println("Ataque: " + ataqueInimigo);
     }
 
-    public static void sistemaDBatalha(int ataqueInimigo, int vidaInimiga, int velocidadeInimiga) {
+    public static void informativoJogador(int ataque, int vida,int pontosDeAcao) {
+        System.out.println("          Vida: " + vida);
+        System.out.println("          Ataque: " + ataque);
+        System.out.println("          Pontos de acao: " + pontosDeAcao);
+    }
+    public static boolean sistemaDBatalha(int vidaInimiga, int ataqueInimigo) {
+        boolean lutaVencida = false;
         int[] ataque = { 30, 10 };
         int cargaEspecialPersonagem = 0;
         int cargaEspecialInimigo = 0;
@@ -535,47 +541,60 @@ public class Funcoes {
         String[] opcoes = { "Ataque", "Defesa", "Cura", "Status" };
         String[] ataques = { "Ataque pesado", "Ataque leve" };
         String[] defesas = { "Defesa imparcial", "Defesa completa" };
+        String[] espaco = {"   "};
         while (true) {
+            if (vida <= 0) {
+                System.out.println("Voce perdeu clique enter para voltar ao checkpoint");
+                int restart = BibliotecaTCA.escolherNoMenu("Voce morreu", espaco);
+                if (restart == 13) {
+                    return lutaVencida = false;
+                }
+            }
             int pontosDeAcao = 3;
             while (pontosDeAcao != 0) {
-                int escolha = BibliotecaTCA.escolherNoMenu("Batalha", opcoes);
+                int escolha = BibliotecaTCA.escolherNoMenu("   Batalha   ", opcoes);
                 int subescolha = 0;
                 if (escolha == 0) {
-                    // subescolha = menu dos ataques (pesado e leve)
+                    subescolha = BibliotecaTCA.escolherNoMenu("   Ataques   ", ataques);
                     if (subescolha == 0) {
                         if (pontosDeAcao >= 2) {
                             int sorteio = SORTEIO.nextInt(3);
                             if (sorteio == 2) {
                                 vidaInimiga -= ataque[0];
-                                cargaEspecialPersonagem++;
                                 pontosDeAcao -= 2;
+                                if (vidaInimiga <= 0) {
+                                    return lutaVencida = true;
+                                }
                             } else {
                                 pontosDeAcao -= 2;
                             }
 
                         } else {
-                            System.out.println("Voce não tem PA (pontos de acao) suficiente");
+                            System.out.println("Voce nao tem PA (pontos de acao) suficiente");
                             continue;
                         }
                     } else if (subescolha == 1) {
                         if (pontosDeAcao >= 1) {
                             vidaInimiga -= ataque[1];
                             pontosDeAcao--;
+                            if (vidaInimiga <= 0) {
+                                    return lutaVencida = true;
+                                }
                         } else {
-                            System.out.println("Voce não tem PA (pontos de acao) suficiente");
+                            System.out.println("Voce nao tem PA (pontos de acao) suficiente");
                             continue;
                         }
                     } else if (subescolha == 27) {
                         continue;
                     }
                 } else if (escolha == 1) {
-                    // menu das defesa (parry e parcial(50%))
+                    subescolha = BibliotecaTCA.escolherNoMenu("   Defesas   ", defesas);
                     if (subescolha == 0) {
                         if (pontosDeAcao >= 1) {
                             ataqueInimigo /= 2;
                             pontosDeAcao--;
                         } else {
-                            System.out.println("Voce não tem PA (pontos de acao) suficiente");
+                            System.out.println("Voce nao tem PA (pontos de acao) suficiente");
                             continue;
                         }
                     } else if (subescolha == 1) {
@@ -583,7 +602,7 @@ public class Funcoes {
                             ataqueInimigo = 0;
                             pontosDeAcao-=3;
                         } else {
-                            System.out.println("Voce não tem PA (pontos de acao) suficiente");
+                            System.out.println("Voce nao tem PA (pontos de acao) suficiente");
                             continue;
                         }
                     } else if (subescolha == 27) {
@@ -596,11 +615,11 @@ public class Funcoes {
                         vida += cura;
                         pontosDeAcao -= 3;
                     } else {
-                        System.out.println("Voce não tem PA (pontos de acao) suficiente");
+                        System.out.println("Voce nao tem PA (pontos de acao) suficiente");
                         continue;
                     }
                 } else if (escolha == 3) {
-                    informativo(ataqueInimigo, vidaInimiga);
+                    informativoInimigo(ataqueInimigo, vidaInimiga);
                     if (subescolha == 27) {
                         continue;
                     }
@@ -613,6 +632,33 @@ public class Funcoes {
 
     }
 
+    public static int[] goblinAnciao(){
+        int[] status = new int[2];
+        int dano = 50;
+        int vida = 75;
+        status[0] = vida;
+        status[1] = dano; 
+        return status;
+    }
+
+    public static int[] pirata(){
+        int[] status = new int[2];
+        int dano = 25;
+        int vida = 120;
+        status[0] = vida;
+        status[1] = dano; 
+        return status;
+    }
+
+    public static int[] reiPerdido(){
+        int[] status = new int[2];
+        int dano = 40;
+        int vida = 150;
+        status[0] = vida;
+        status[1] = dano; 
+        return status;
+    }
+    
     public static void main(String[] args) {
         String[][] mat1 = {
                 { "# ", ". ", ". ", ". ", ". ", ". " },
@@ -657,10 +703,46 @@ public class Funcoes {
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " }
         };
+        int areasExploradas = 0;
+        String[] areas = {"Aldeia dos Goblins", "Ilha do pirata", "Tumba do Rei Perdido"};
         String[] senhas = { "maca", "banana", "uva" };
-        String[] acoes = { "Ataque", "Cura", "Defesa", "Staus" };
+        boolean terminou = false;
+        int[] statusInimigo = new int[2];
+        while (areasExploradas != 3) {
+            System.out.println("Escolha a area que deseja explorar");
+            int area = BibliotecaTCA.escolherNoMenu("   Areas   ", areas);
+            if (area == 0) {
+                do{
+                    puzzle1(mat1, matcop1);
+                    System.out.println("E entao voce acha o boss");
+                    statusInimigo = goblinAnciao();
+                    terminou = sistemaDBatalha(statusInimigo[0], statusInimigo[1]);
+                }while(terminou == false);
+                terminou = false;
+                continue;
+            }else if (area == 1) {
+                do{
+                    puzzle2(mat2, matcop2);
+                    System.out.println("E entao voce acha o boss");
 
-        // BibliotecaTCA.escolherNoMenu("Batalha", acoes);
+                    statusInimigo = pirata();
+                    terminou = sistemaDBatalha(statusInimigo[0], statusInimigo[1]);
+                }while(terminou == false);
+                terminou = false;
+                continue;
+            }else if (area == 2) {
+                puzzle3(senhas);
+                do{
+                    System.out.println("E entao voce acha o boss");
+                    statusInimigo = reiPerdido();
+                    terminou = sistemaDBatalha(statusInimigo[0], statusInimigo[1]);
+                }while(terminou == false);
+                terminou = false;
+                continue;
+            }
+        }
+        
+        
         // puzzle3(senhas);
         // puzzle2(mat2, matcop2);
 
