@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 import com.sun.jna.Library;
@@ -645,11 +646,11 @@ public class Funcoes {
                     subescolha =  escolherNoMenu("   Ataques   ", ataques,ataque,vida,pontosDeAcao,pocoesDCura);
                     if (subescolha == 0) {
                         if (pontosDeAcao >= 2) {
-                            int sorteio = SORTEIO.nextInt(2) + 1;
-                            if (sorteio <= 1) {
+                            int sorteio = SORTEIO.nextInt(4) + 1;
+                            if (sorteio <= 3) {
                                 vidaInimiga -= ataque[0];
                                 mudarCor(VERDE);
-                                System.out.println("Voce acerta um golpe pesado e causa" + ataque[0] + " de dano");
+                                System.out.println("Voce acerta um golpe pesado e causa " + ataque[0] + " de dano");
                                 BibliotecaTCA.esperar(1500);
                                 mudarCor(-1);
                                 pontosDeAcao -= 2;
@@ -674,6 +675,8 @@ public class Funcoes {
                     } else if (subescolha == 1) {
                         if (pontosDeAcao >= 1) {
                             vidaInimiga -= ataque[1];
+                            mudarCor(VERDE);
+                            System.out.println("Voce acerta um golpe leve e causa " + ataque[1] + " de dano");
                             pontosDeAcao--;
                             if (vidaInimiga <= 0) {
                                     return lutaVencida = true;
@@ -773,6 +776,37 @@ public class Funcoes {
         status[0] = vida;
         status[1] = dano; 
         return status;
+    }
+
+    public static void interaçaoGoblinAnciao() throws IOException{
+        System.out.println("Aperte esc para pular o dialogo");
+        int entrada = System.in.read();
+        if (entrada == 27) {
+            System.out.println();
+        }else{
+
+        }
+
+    }
+
+    public static void interaçaoPirata() throws IOException{
+        System.out.println("Aperte esc para pular o dialogo");
+        int entrada = System.in.read();
+        if (entrada == 27) {
+            System.out.println();
+        }else{
+            
+        }
+    }
+
+    public static void interaçaoReiPerdido() throws IOException{
+        System.out.println("Aperte esc para pular o dialogo");
+        int entrada = System.in.read();
+        if (entrada == 27) {
+            System.out.println();
+        }else{
+            
+        }
     }
     
     public static void main(String[] args) {
