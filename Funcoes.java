@@ -366,7 +366,7 @@ public class Funcoes {
         int j = 0;
         int vidas = 4;
         BibliotecaTCA.esconderCursor();
-        desenharTela(0, 0, colunas, linhas, mat);
+        desenharTela(j, i, colunas, linhas, mat);
 
         while (true) {
             // Lógica para detectar o movimento
@@ -380,6 +380,7 @@ public class Funcoes {
                     case 'a':
                     case 'A':
                         j--;
+                        BibliotecaTCA.limparTela();
                         if (j < 0) {
                             j = 0;
                         } else if (matcop[i][j] == false) {
@@ -397,12 +398,12 @@ public class Funcoes {
                             mat[i][j] = "# ";
                             mat[i][j + 1] = ". ";
                         }
-                        BibliotecaTCA.limparTela();
-                        desenharTelaPuzzle1(linhas, colunas, i, j, mat);
+                        desenharTelaPuzzle1(j, i, colunas, linhas, mat);
                         break;
                     case 'd':
                     case 'D':
                         j++;
+                        BibliotecaTCA.limparTela();
                         if (j > colunas - 1) {
                             j = colunas - 1;
                         } else if (matcop[i][j] == false) {
@@ -420,13 +421,13 @@ public class Funcoes {
                             mat[i][j] = "# ";
                             mat[i][j - 1] = ". ";
                         }
-                        BibliotecaTCA.limparTela();
-                        desenharTelaPuzzle1(linhas, colunas, i, j, mat);
+                        
+                        desenharTelaPuzzle1(j, i, colunas, linhas, mat);
                         break;
                     case 'w':
                     case 'W':
                         i--;
-
+                        BibliotecaTCA.limparTela();
                         if (i < 0) {
                             i = 0;
                         } else if (matcop[i][j] == false) {
@@ -444,12 +445,12 @@ public class Funcoes {
                             mat[i][j] = "# ";
                             mat[i + 1][j] = ". ";
                         }
-                        BibliotecaTCA.limparTela();
-                        desenharTelaPuzzle1(linhas, colunas, i, j, mat);
+                        desenharTelaPuzzle1(j, i, colunas, linhas, mat);
                         break;
                     case 's':
                     case 'S':
                         i++;
+                        BibliotecaTCA.limparTela();
                         if (i > linhas - 1) {
                             i = linhas - 1;
                         } else if (matcop[i][j] == false) {
@@ -467,7 +468,7 @@ public class Funcoes {
                             mat[i][j] = "# ";
                             mat[i - 1][j] = ". ";
                         }
-                        BibliotecaTCA.limparTela();
+                       
                         desenharTelaPuzzle1(j, i, colunas, linhas, mat);
 
                 }
