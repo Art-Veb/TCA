@@ -18,11 +18,13 @@ public class Funcoes {
 
         int _getch();
     }
-    public static int escolherNoMenu(String titulo, String[] opcoes,int[] ataque, int vida, int pntsdacao,int pocoesDCura) {
+
+    public static int escolherNoMenu(String titulo, String[] opcoes, int[] ataque, int vida, int pntsdacao,
+            int pocoesDCura) {
         int selecionada = 0;
 
         while (true) {
-            desenharMenu(titulo, opcoes, selecionada,vida,ataque,pntsdacao, pocoesDCura);
+            desenharMenu(titulo, opcoes, selecionada, vida, ataque, pntsdacao, pocoesDCura);
             int tecla = obtemTeclaPressionada(); // espera o jogador apertar uma tecla
 
             if (tecla == 'w' || tecla == 'W') {
@@ -46,7 +48,8 @@ public class Funcoes {
     // Desenha o menu numa caixa, com a opção selecionada em verde e
     // marcada com ">". A caixa cresce para caber o texto mais comprido.
     // É usada pelo escolherNoMenu, mas também dá para chamar sozinha.
-    public static void desenharMenu(String titulo, String[] opcoes, int selecionada,int vida,int[] ataque, int pntsdacao,int pocoesdCura) {
+    public static void desenharMenu(String titulo, String[] opcoes, int selecionada, int vida, int[] ataque,
+            int pntsdacao, int pocoesdCura) {
         // descobre o tamanho do maior texto, para a caixa caber tudo
         int maior = titulo.length();
         for (int i = 0; i < opcoes.length; i++) {
@@ -54,10 +57,10 @@ public class Funcoes {
                 maior = opcoes[i].length();
             }
         }
-        int largura = maior + 4 ; // espaço para o "> " e uma margem
+        int largura = maior + 4; // espaço para o "> " e uma margem
 
         BibliotecaTCA.limparTela();
-        informativoJogador(vida,ataque, pntsdacao,pocoesdCura);
+        informativoJogador(vida, ataque, pntsdacao, pocoesdCura);
         System.out.println("╔" + "═".repeat(largura) + "╗");
         System.out.println("║  " + completar(titulo, maior) + "  ║");
         System.out.println("╠" + "═".repeat(largura) + "╣");
@@ -77,13 +80,12 @@ public class Funcoes {
         System.out.println("Use W/S para navegar e ENTER para selecionar. ESC para sair.");
     }
 
-    public static void desenharMenu2(int vida,int ataque) {
+    public static void desenharMenu2(int vida, int ataque) {
         // descobre o tamanho do maior texto, para a caixa caber tud
         BibliotecaTCA.limparTela();
         informativoInimigo(ataque, vida);
         System.out.println("Use W/S para navegar e ENTER para selecionar. ESC para sair.");
     }
-
 
     public static int escolherNoMenu2(int ataque, int vida) {
         int selecionada = 0;
@@ -98,8 +100,9 @@ public class Funcoes {
             }
         }
     }
+
     // Completa o texto com espaços à direita até ter o tamanho pedido.
-    // Ex.: completar("oi", 5) -> "oi   "
+    // Ex.: completar("oi", 5) -> "oi "
     static String completar(String texto, int tamanho) {
         return String.format("%-" + tamanho + "s", texto);
     }
@@ -248,7 +251,7 @@ public class Funcoes {
         for (int i = 0; i < texto.length(); i++) {
             System.out.print(texto.charAt(i));
             System.out.flush();
-
+            BibliotecaTCA.esconderCursor();
             try {
                 Thread.sleep(60);
             } catch (InterruptedException e) {
@@ -298,6 +301,7 @@ public class Funcoes {
 
     public static void desenharTela(int x, int y, int largura, int altura, String mat[][]) {
         System.out.println();
+        BibliotecaTCA.esconderCursor();
         for (int i = 0; i < altura; i++) {
             for (int j = 0; j < largura; j++) {
                 if (i == y && j == x) {
@@ -316,6 +320,7 @@ public class Funcoes {
 
     public static void desenharTelaTesouro(int x, int y, int largura, int altura, String mat[][]) {
         System.out.println();
+        BibliotecaTCA.esconderCursor();
         for (int i = 0; i < altura; i++) {
             for (int j = 0; j < largura; j++) {
                 if (i == y && j == x) {
@@ -338,6 +343,7 @@ public class Funcoes {
         int j = 0;
         int linhas = mat.length;
         int colunas = mat[0].length;
+        BibliotecaTCA.esconderCursor();
         desenharTela(j, i, colunas, linhas, mat);
         while (true) {
             // Lógica para detectar o movimento
@@ -441,6 +447,7 @@ public class Funcoes {
     }
 
     public static void exibirQuenteOuFrio(int[] distTesouro) {
+        
         if (distTesouro[0] <= 1 && distTesouro[1] <= 1) {
             System.out.println("Quente!");
         } else if (distTesouro[0] < 3 || distTesouro[1] < 3) {
@@ -462,6 +469,7 @@ public class Funcoes {
 
     public static void puzzle2(String mat2[][], String matcop2[][]) {
         int tecla;
+        BibliotecaTCA.esconderCursor();
         int linhas = mat2.length;
         int colunas = mat2[0].length;
         int[] distTesouro = new int[2];
@@ -565,6 +573,7 @@ public class Funcoes {
         int letrasCorretas = 0;
         int letrasConfirmadas = 0;
         int j = 0;
+        BibliotecaTCA.esconderCursor();
         while (j < senhas.length) {
 
             String senhaAtual = senhas[j];
@@ -612,13 +621,14 @@ public class Funcoes {
         System.out.println("Ataque: " + ataqueInimigo);
     }
 
-    public static void informativoJogador(int vida, int[] ataque,int pontosDeAcao, int pocoesDcura) {
+    public static void informativoJogador(int vida, int[] ataque, int pontosDeAcao, int pocoesDcura) {
         System.out.println("Voce possui atualmente:");
         System.out.println("Vida: " + vida);
         System.out.println("Ataque: " + ataque[0] + "-" + ataque[1]);
         System.out.println("Pocoes de cura: " + pocoesDcura);
         System.out.println("Pontos de acao: " + pontosDeAcao);
     }
+
     public static boolean sistemaDBatalha(int vidaInimiga, int ataqueInimigo) {
         boolean lutaVencida = false;
         int[] ataque = { 30, 10 };
@@ -626,24 +636,25 @@ public class Funcoes {
         int cargaEspecialInimigo = 0;
         int vida = 100;
         int cura = 30;
+        BibliotecaTCA.esconderCursor();
         int ataqueBaseInimigo = ataqueInimigo;
         int pocoesDCura = 3;
         String[] opcoes = { "Ataque", "Defesa", "Cura", "Status" };
         String[] ataques = { "Ataque pesado", "Ataque leve" };
         String[] defesas = { "Defesa imparcial", "Defesa completa" };
-        String[] espaco = {"   "};
+        String[] espaco = { "   " };
         while (true) {
             if (vida <= 0) {
                 BibliotecaTCA.escolherNoMenu("Voce morreu", espaco);
                 BibliotecaTCA.esperar(2000);
-                return lutaVencida = false;
+                return lutaVencida;
             }
             int pontosDeAcao = 3;
             while (pontosDeAcao != 0) {
-                int escolha =  escolherNoMenu("   Batalha   ", opcoes,ataque,vida,pontosDeAcao,pocoesDCura);
+                int escolha = escolherNoMenu("   Batalha   ", opcoes, ataque, vida, pontosDeAcao, pocoesDCura);
                 int subescolha = 0;
                 if (escolha == 0) {
-                    subescolha =  escolherNoMenu("   Ataques   ", ataques,ataque,vida,pontosDeAcao,pocoesDCura);
+                    subescolha = escolherNoMenu("   Ataques   ", ataques, ataque, vida, pontosDeAcao, pocoesDCura);
                     if (subescolha == 0) {
                         if (pontosDeAcao >= 2) {
                             int sorteio = SORTEIO.nextInt(4) + 1;
@@ -679,8 +690,8 @@ public class Funcoes {
                             System.out.println("Voce acerta um golpe leve e causa " + ataque[1] + " de dano");
                             pontosDeAcao--;
                             if (vidaInimiga <= 0) {
-                                    return lutaVencida = true;
-                                }
+                                return lutaVencida = true;
+                            }
                         } else {
                             mudarCor(VERMELHO);
                             System.out.println("Voce nao tem PA (pontos de acao) suficiente");
@@ -692,7 +703,7 @@ public class Funcoes {
                         continue;
                     }
                 } else if (escolha == 1) {
-                    subescolha =  escolherNoMenu("   Defesas   ", defesas,ataque,vida,pontosDeAcao,pocoesDCura);
+                    subescolha = escolherNoMenu("   Defesas   ", defesas, ataque, vida, pontosDeAcao, pocoesDCura);
                     if (subescolha == 0) {
                         if (pontosDeAcao >= 1) {
                             ataqueInimigo /= 2;
@@ -707,7 +718,7 @@ public class Funcoes {
                     } else if (subescolha == 1) {
                         if (pontosDeAcao == 3) {
                             ataqueInimigo = 0;
-                            pontosDeAcao-=3;
+                            pontosDeAcao -= 3;
                         } else {
                             mudarCor(VERMELHO);
                             System.out.println("Voce nao tem PA (pontos de acao) suficiente");
@@ -737,7 +748,7 @@ public class Funcoes {
                         continue;
                     }
                 } else if (escolha == 3) {
-                    subescolha = escolherNoMenu2(ataqueBaseInimigo,vidaInimiga);
+                    subescolha = escolherNoMenu2(ataqueBaseInimigo, vidaInimiga);
                     informativoInimigo(ataqueBaseInimigo, vidaInimiga);
                     if (subescolha == 27) {
                         continue;
@@ -746,69 +757,195 @@ public class Funcoes {
 
             }
             vida -= ataqueInimigo;
+            if (ataqueInimigo == 0) {
+                mudarCor(VERDE);
+                BibliotecaTCA.esperar(500);
+                System.out.println("Voce bloqueia perfeitamente o ataque");
+                BibliotecaTCA.esperar(500);
+                mudarCor(-1);
+            } else if (ataqueBaseInimigo > ataqueInimigo) {
+                mudarCor(VERDE);
+                BibliotecaTCA.esperar(500);
+                System.out.println("Voce defende parcialmente");
+                BibliotecaTCA.esperar(500);
+                mudarCor(-1);
+            }
             ataqueInimigo = ataqueBaseInimigo;
         }
 
     }
 
-    public static int[] goblinAnciao(){
+    public static int[] goblinAnciao() {
         int[] status = new int[2];
         int dano = 50;
         int vida = 75;
         status[1] = vida;
-        status[0] = dano; 
+        status[0] = dano;
         return status;
     }
 
-    public static int[] pirata(){
+    public static int[] pirata() {
         int[] status = new int[2];
         int dano = 25;
         int vida = 120;
         status[0] = vida;
-        status[1] = dano; 
+        status[1] = dano;
         return status;
     }
 
-    public static int[] reiPerdido(){
+    public static int[] reiPerdido() {
         int[] status = new int[2];
         int dano = 40;
         int vida = 150;
         status[0] = vida;
-        status[1] = dano; 
+        status[1] = dano;
         return status;
     }
 
-    public static void interaçaoGoblinAnciao() throws IOException{
-        System.out.println("Aperte esc para pular o dialogo");
-        int entrada = System.in.read();
+    public static void interaçaoGoblinAnciao(){
+        System.out.println("Aperte esc para pular o dialogo e enter para prosseguir");
+        int entrada = obtemTeclaPressionada();
         if (entrada == 27) {
             System.out.println();
-        }else{
-
+            return;
+        }
+        BibliotecaTCA.esperar(2000);
+        if(entrada != 27){
+            mudarCor(VERDE);
+            imprimirDevagar("Voce realmente acha que vai escapar daqui com vida???");
+            BibliotecaTCA.esperar(500);
+            imprimirDevagar("Nos goblins temos odio a raca humana");
+            BibliotecaTCA.esperar(500);
+            System.out.println( "                                  @@@@@@@@@@@@@@@@@                             \r\n" + //
+                                "                             @@@@@@@%************#%@@@@@@                       \r\n" + //
+                                "                        @@@@%%*************************#%@@@                    \r\n" + //
+                                "                      @@%#*********************************%@@                  \r\n" + //
+                                "                    @@%**********************************#***%@@                \r\n" + //
+                                "                   @@%**#*************************************#@@@           @@@\r\n" + //
+                                "                  @@@*******************************************@@         @@#@@\r\n" + //
+                                "@@                @@%**%#***********************************##**#@@      @@%**@@\r\n" + //
+                                "@@#@@             @@#**##***********************************@#***@@     @@#**#@@\r\n" + //
+                                " @%**#@@          @@***#%**********************************#@#***%@    @@****%@@\r\n" + //
+                                "  @@****%@@       @@****#***********************************@#***#@   @%*****%@@\r\n" + //
+                                "  @@#******@@     @%***@@*************%#*@#****************#@#***#@  @@***%#*%@@\r\n" + //
+                                "   @@********%@   @%***%@*************#%*%******************@#***#@ @@#*%#*#*%@@\r\n" + //
+                                "    @@***#%##**%@ @#*#@#*************************************%%**#@@@**%***#*%@@\r\n" + //
+                                "    @@#**#***%#**%@##%*****************##%*#############*********%@@#*%****#**@@\r\n" + //
+                                "     @@**#****#%**%@*%%%@%%%########%%%#*********#%@@%%%%@@@@@@%*@@**%*****#**@@\r\n" + //
+                                "     @@%**#*****%#*@%****#@@@@#%***%@#*%*****%*#%++++@@@@@%#**###@#*#********#@@\r\n" + //
+                                "      @@#*********#*#*#%##%@%#++*#@#***#*****#***#%@%####@##*%@*@#*#***##****%@@\r\n" + //
+                                "       @@%****%###*#**%#****#####**#*********#***##***********##***%********%@@ \r\n" + //
+                                "        @@@#********#****#********@#**#***********#@%*****%@%*****#********%@@  \r\n" + //
+                                "           @@@*****@**#***%%****@%****#**************@@@@@#****%%*#*##****@@@   \r\n" + //
+                                "             @@%***#**%#*****#%*******#%**********************#@#*#@#***#@@     \r\n" + //
+                                "              @@%***#*#@#**************#%********************%@###*****@@@      \r\n" + //
+                                "               @@#*****#@#**********#***%****#%@@#********#%@%**##***#@@@       \r\n" + //
+                                "                @@%******%@@##*****%@********#@%**%***%@@@%#********#@@         \r\n" + //
+                                "                 @@#******#%%%#***#@##%%#***#%****#%****%@%#********%@@         \r\n" + //
+                                "                  @@@#***#%@%*****@****#%@%@#******##***%@@@@#****#@@@          \r\n" + //
+                                "                    @@@@@@@@@#****%******#**************#@@ @@@@@@@@@           \r\n" + //
+                                "                            @#***#*******##%%%%**********@@                     \r\n" + //
+                                "                            @%********@@%###**##@@@#*****@@                     \r\n" + //
+                                "                            @%*****%@%*************#%****#@@@                   \r\n" + //
+                                "                            @#****************************%@@                   \r\n" + //
+                                "                           @%**************************%@@@                     \r\n" + //
+                                "                             @@@##*****************#%@@@@@                      \r\n" + //
+                                "                              @@#%@@%#**********#%@@%##%@@                      \r\n" + //
+                                "                              @@####%%@@##**##%@@%#####%@@                      \r\n" + //
+                                "                              @@%#######%@@@%%#########%@@                      \r\n" + //
+                                "                              @@%######################%@@                      \r\n" + //
+                                "                              @@#######%###############%@@                      \r\n" + //
+                                "                              @@######%@%#####%@#######%@@                      \r\n" + //
+                                "                             @@%#######@@#####@@########@@@                     \r\n" + //
+                                "                             @@########%@@###@@%########%@@                     \r\n" + //
+                                "");
+            mudarCor(-1);
         }
 
     }
 
-    public static void interaçaoPirata() throws IOException{
-        System.out.println("Aperte esc para pular o dialogo");
-        int entrada = System.in.read();
+    public static void interaçaoPirata() {
+        System.out.println("Aperte esc para pular o dialogo e enter para prosseguir");
+        int entrada = obtemTeclaPressionada();
+
         if (entrada == 27) {
             System.out.println();
-        }else{
-            
+            return;
+        }
+        BibliotecaTCA.esperar(2000);
+        if (entrada != 27) {
+            mudarCor(AMARELO);
+            imprimirDevagar("Hmm...");
+            BibliotecaTCA.esperar(500);
+            imprimirDevagar("Nao faco ideia de quem voce e");
+            BibliotecaTCA.esperar(500);
+            imprimirDevagar("Mas nao vou deixar voce levar esse tesouro tao facil");
+            BibliotecaTCA.esperar(500);
+            System.out.println("⠀⠀⠀⠀⠀⢀⣤⣶⣾⣿⣿⣿⣷⣶⣤⡀⠀⠀⠀⠀⠀\r\n" + //
+                    "⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀\r\n" + //
+                    "⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀\r\n" + //
+                    "⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀\r\n" + //
+                    "⠀⠀⠀⠀⢰⡟⠛⠉⠙⢻⣿⡟⠋⠉⠙⢻⡇⠀⠀⠀⠀\r\n" + //
+                    "⠀⠀⠀⠀⢸⣷⣀⣀⣠⣾⠛⣷⣄⣀⣀⣼⡏⠀⠀⠀⠀\r\n" + //
+                    "⠀⠀⣀⠀⠀⠛⠋⢻⣿⣧⣤⣸⣿⡟⠙⠛⠀⠀⣀⠀⠀\r\n" + //
+                    "⢀⣰⣿⣦⠀⠀⠀⠼⣿⣿⣿⣿⣿⡷⠀⠀⠀⣰⣿⣆⡀\r\n" + //
+                    "⢻⣿⣿⣿⣧⣄⠀⠀⠁⠉⠉⠋⠈⠀⠀⣀⣴⣿⣿⣿⡿\r\n" + //
+                    "⠀⠀⠀⠈⠙⠻⣿⣶⣄⡀⠀⢀⣠⣴⣿⠿⠛⠉⠁⠀⠀\r\n" + //
+                    "⠀⠀⠀⠀⠀⠀⠀⠉⣻⣿⣷⣿⣟⠉⠀⠀⠀⠀⠀⠀⠀\r\n" + //
+                    "⠀⠀⠀⠀⢀⣠⣴⣿⠿⠋⠉⠙⠿⣷⣦⣄⡀⠀⠀⠀⠀\r\n" + //
+                    "⣴⣶⣶⣾⡿⠟⠋⠀⠀⠀⠀⠀⠀⠀⠙⠻⣿⣷⣶⣶⣦\r\n" + //
+                    "⠙⢻⣿⡟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⣿⡿⠋\r\n" + //
+                    "⠀⠀⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠀⠀");
+            mudarCor(-1);
         }
     }
 
-    public static void interaçaoReiPerdido() throws IOException{
-        System.out.println("Aperte esc para pular o dialogo");
-        int entrada = System.in.read();
+    public static void interaçaoReiPerdido() {
+        System.out.println("Aperte esc para pular o dialogo e enter para prosseguir");
+        int entrada = obtemTeclaPressionada();
         if (entrada == 27) {
             System.out.println();
-        }else{
-            
+            return;
+        }
+        if (entrada != 27) {
+            mudarCor(208);
+            imprimirDevagar("Que sono!!!");
+            BibliotecaTCA.esperar(500);
+            imprimirDevagar("QUEM OUSA ME ACORDAR DE UM SONO DE MAIS DE 1000 ANOS");
+            BibliotecaTCA.esperar(500);
+            mudarCor(VERMELHO);
+            imprimirDevagar("(A estatua começa a brilhar e rachar)");
+            BibliotecaTCA.esperar(500);
+            mudarCor(208);
+            imprimirDevagar("Sinta a minha furia");
+            BibliotecaTCA.esperar(500);
+            System.out.println("                    .\r\n" + //
+                    "                   / \\\r\n" + //
+                    "                  _\\ /_\r\n" + //
+                    "        .     .  (,'v`.)  .     .\r\n" + //
+                    "        \\)   ( )  ,' `.  ( )   (/\r\n" + //
+                    "         \\`. / `-'     `-' \\ ,'/\r\n" + //
+                    "          : '    _______    ' :\r\n" + //
+                    "          |  _,-'  ,-.  `-._  |\r\n" + //
+                    "          |,' ( )__`-'__( ) `.|\r\n" + //
+                    "          (|,-,'-._   _.-`.-.|)\r\n" + //
+                    "          /  /<( o)> <( o)>\\  \\\r\n" + //
+                    "          :  :     | |     :  :\r\n" + //
+                    "          |  |     ; :     |  |\r\n" + //
+                    "          |  |    (.-.)    |  |\r\n" + //
+                    "          |  |  ,' ___ `.  |  |\r\n" + //
+                    "          ;  |)/ ,'---'. \\(|  :\r\n" + //
+                    "      _,-/   |/\\(       )/\\|   \\-._\r\n" + //
+                    "_..--'.-(    |   `-'''-'   |    )-.`--.._\r\n" + //
+                    "         `.  ;`._________,':  ,'\r\n" + //
+                    "        ,' `/               \\'`.\r\n" + //
+                    "             `------.------'          SSt\r\n" + //
+                    "                    '\r\n" + //
+                    "");
+            mudarCor(-1);
         }
     }
-    
+
     public static void main(String[] args) {
         String[][] mat1 = {
                 { "# ", ". ", ". ", ". ", ". ", ". " },
@@ -854,9 +991,9 @@ public class Funcoes {
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " }
         };
         int areasExploradas = 0;
-        String[] areas = {"Aldeia dos Goblins", "Ilha do pirata", "Tumba do Rei Perdido"};
+        String[] areas = { "Aldeia dos Goblins", "Ilha do Pirata", "Tumba do Rei Perdido" };
         String[] senhas = { "maca", "banana", "uva" };
-        boolean[] areasCompletas = {false,false,false};
+        boolean[] areasCompletas = { false, false, false };
         int[] statusInimigo = new int[2];
         while (areasExploradas != 3) {
             System.out.println("Escolha a area que deseja explorar");
@@ -870,15 +1007,18 @@ public class Funcoes {
                     continue;
                 }
                 puzzle1(mat1, matcop1);
-                do{
+                do {
+                    interaçaoGoblinAnciao();
+                    mudarCor(VERMELHO);
                     System.out.println("E entao voce acha o boss");
+                    mudarCor(-1);
                     BibliotecaTCA.esperar(2000);
                     statusInimigo = goblinAnciao();
                     areasCompletas[0] = sistemaDBatalha(statusInimigo[0], statusInimigo[1]);
-                }while(areasCompletas[0] == false);
+                } while (areasCompletas[0] == false);
                 areasExploradas++;
                 continue;
-            }else if (area == 1) {
+            } else if (area == 1) {
                 if (areasCompletas[1] == true) {
                     mudarCor(VERMELHO);
                     System.out.println("Voce ja explorou " + areas[1]);
@@ -886,15 +1026,18 @@ public class Funcoes {
                     continue;
                 }
                 puzzle2(mat2, matcop2);
-                do{
+                do {
+                    interaçaoPirata();
+                    mudarCor(VERMELHO);
                     System.out.println("E entao voce acha o boss");
+                    mudarCor(-1);
                     BibliotecaTCA.esperar(2000);
                     statusInimigo = pirata();
                     areasCompletas[1] = sistemaDBatalha(statusInimigo[0], statusInimigo[1]);
-                }while(areasCompletas[1] == false);
+                } while (areasCompletas[1] == false);
                 areasExploradas++;
                 continue;
-            }else if (area == 2) {
+            } else if (area == 2) {
                 if (areasCompletas[2] == true) {
                     mudarCor(VERMELHO);
                     System.out.println("Voce ja explorou " + areas[2]);
@@ -902,18 +1045,19 @@ public class Funcoes {
                     continue;
                 }
                 puzzle3(senhas);
-                do{
+                do {
+                    interaçaoReiPerdido();
+                    mudarCor(VERMELHO);
                     System.out.println("E entao voce acha o boss");
+                    mudarCor(-1);
                     BibliotecaTCA.esperar(2000);
                     statusInimigo = reiPerdido();
                     areasCompletas[2] = sistemaDBatalha(statusInimigo[0], statusInimigo[1]);
-                }while(areasCompletas[2] == false);
+                } while (areasCompletas[2] == false);
                 areasExploradas++;
                 continue;
             }
         }
-        
-        
 
     }
 }
