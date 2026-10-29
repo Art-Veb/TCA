@@ -22,7 +22,7 @@ public class Funcoes {
     public static int escolherNoMenu(String titulo, String[] opcoes, int[] ataque, int vida, int pntsdacao,
             int pocoesDCura) {
         int selecionada = 0;
-
+        BibliotecaTCA.esconderCursor();
         while (true) {
             desenharMenu(titulo, opcoes, selecionada, vida, ataque, pntsdacao, pocoesDCura);
             int tecla = obtemTeclaPressionada(); // espera o jogador apertar uma tecla
@@ -61,6 +61,8 @@ public class Funcoes {
 
         BibliotecaTCA.limparTela();
         informativoJogador(vida, ataque, pntsdacao, pocoesdCura);
+        System.out.print("             ");
+        informativoInimigo(vida, largura);
         System.out.println("╔" + "═".repeat(largura) + "╗");
         System.out.println("║  " + completar(titulo, maior) + "  ║");
         System.out.println("╠" + "═".repeat(largura) + "╣");
@@ -318,7 +320,7 @@ public class Funcoes {
         System.out.println("Use A, D, W, S para mover o personagem. Pressione ESC para sair.");
     }
 
-    public static void desenharTelaPuzzle1(int x, int y, int largura, int altura, String mat[][]) {
+    public static void desenharTelaPuzzle1(int x, int y, int largura, int altura, String mat[][], int vidas) {
         System.out.println();
         BibliotecaTCA.esconderCursor();
         BibliotecaTCA.limparTela();
@@ -337,6 +339,10 @@ public class Funcoes {
         }
         BibliotecaTCA.mudarCor(-1);
         System.out.println("Use A, D, W, S para mover o personagem. Evite bater nas paredes invisiveis.");
+        System.out.println("Voce possui atualmente: ");
+        mudarCor(VERMELHO);
+        System.out.print(vidas + " vidas\n");
+        mudarCor(-1);
     }
 
     public static void desenharTelaTesouro(int x, int y, int largura, int altura, String mat[][]) {
@@ -366,11 +372,13 @@ public class Funcoes {
         int j = 0;
         int vidas = 4;
         BibliotecaTCA.esconderCursor();
-        desenharTela(j, i, colunas, linhas, mat);
+        String[][] matTemporaria = new String[mat.length][mat[0].length];
+        matTemporaria = atualizarMatriz(mat, matTemporaria);
+
+        desenharTela(j, i, colunas, linhas, matTemporaria);
 
         while (true) {
             // Lógica para detectar o movimento
-
             if (i == linhas - 1 && j == colunas - 1) {
                 return true;
             }
@@ -384,21 +392,19 @@ public class Funcoes {
                         if (j < 0) {
                             j = 0;
                         } else if (matcop[i][j] == false) {
-                            mat[i][j] = "| ";
+                            matTemporaria[i][j] = "| ";
                             j++;
                             vidas--;
-                            System.out.println("Voce possui atualmente: ");
-                            mudarCor(VERMELHO);
-                            System.out.print(vidas + " vidas\n");
+
                             mudarCor(-1);
                             if (vidas == 0) {
                                 return false;
                             }
                         } else {
-                            mat[i][j] = "# ";
-                            mat[i][j + 1] = ". ";
+                            matTemporaria[i][j] = "# ";
+                            matTemporaria[i][j + 1] = ". ";
                         }
-                        desenharTelaPuzzle1(j, i, colunas, linhas, mat);
+                        desenharTelaPuzzle1(j, i, colunas, linhas, matTemporaria, vidas);
                         break;
                     case 'd':
                     case 'D':
@@ -407,22 +413,17 @@ public class Funcoes {
                         if (j > colunas - 1) {
                             j = colunas - 1;
                         } else if (matcop[i][j] == false) {
-                            mat[i][j] = "| ";
+                            matTemporaria[i][j] = "| ";
                             j--;
                             vidas--;
-                            System.out.println("Voce possui atualmente: ");
-                            mudarCor(VERMELHO);
-                            System.out.print(vidas + " vidas\n");
-                            mudarCor(-1);
                             if (vidas == 0) {
                                 return false;
                             }
                         } else {
-                            mat[i][j] = "# ";
-                            mat[i][j - 1] = ". ";
+                            matTemporaria[i][j] = "# ";
+                            matTemporaria[i][j - 1] = ". ";
                         }
-                        
-                        desenharTelaPuzzle1(j, i, colunas, linhas, mat);
+                        desenharTelaPuzzle1(j, i, colunas, linhas, matTemporaria, vidas);
                         break;
                     case 'w':
                     case 'W':
@@ -431,21 +432,20 @@ public class Funcoes {
                         if (i < 0) {
                             i = 0;
                         } else if (matcop[i][j] == false) {
-                            mat[i][j] = "_ ";
+                            matTemporaria[i][j] = "_ ";
                             i++;
                             vidas--;
-                            System.out.println("Voce possui atualmente: ");
-                            mudarCor(VERMELHO);
-                            System.out.print(vidas + " vidas\n");
+
                             mudarCor(-1);
                             if (vidas == 0) {
                                 return false;
                             }
                         } else {
-                            mat[i][j] = "# ";
-                            mat[i + 1][j] = ". ";
+                            matTemporaria[i][j] = "# ";
+                            matTemporaria[i + 1][j] = ". ";
                         }
-                        desenharTelaPuzzle1(j, i, colunas, linhas, mat);
+
+                        desenharTelaPuzzle1(j, i, colunas, linhas, matTemporaria, vidas);
                         break;
                     case 's':
                     case 'S':
@@ -454,23 +454,21 @@ public class Funcoes {
                         if (i > linhas - 1) {
                             i = linhas - 1;
                         } else if (matcop[i][j] == false) {
-                            mat[i][j] = "_ ";
+                            matTemporaria[i][j] = "_ ";
                             i--;
                             vidas--;
-                            System.out.println("Voce possui atualmente: ");
-                            mudarCor(VERMELHO);
-                            System.out.print(vidas + " vidas\n");
+
                             mudarCor(-1);
                             if (vidas == 0) {
                                 return false;
                             }
                         } else {
-                            mat[i][j] = "# ";
-                            mat[i - 1][j] = ". ";
+                            matTemporaria[i][j] = "# ";
+                            matTemporaria[i - 1][j] = ". ";
                         }
-                       
-                        desenharTelaPuzzle1(j, i, colunas, linhas, mat);
 
+                        desenharTelaPuzzle1(j, i, colunas, linhas, matTemporaria, vidas);
+                        break;
                 }
             }
 
@@ -812,9 +810,12 @@ public class Funcoes {
 
             }
             vida -= ataqueInimigo;
+            mudarCor(VERMELHO);
+            imprimirDevagar("O inimigo ataca causando " + ataqueInimigo + " de dano");
+            mudarCor(-1);
             if (ataqueInimigo == 0) {
                 mudarCor(VERDE);
-                BibliotecaTCA.esperar(500);
+                BibliotecaTCA.esperar(1000);
                 System.out.println("Voce bloqueia perfeitamente o ataque");
                 BibliotecaTCA.esperar(500);
                 mudarCor(-1);
@@ -1019,6 +1020,18 @@ public class Funcoes {
         }
     }
 
+    public static String[][] atualizarMatriz(String[][] mat1, String[][] matBase) {
+        if (mat1.length != matBase.length || mat1[0].length != matBase[0].length) {
+            return null;
+        }
+        for (int i = 0; i < mat1.length; i++) {
+            for (int j = 0; j < mat1[0].length; j++) {
+                matBase[i][j] = mat1[i][j];
+            }
+        }
+        return matBase;
+    }
+
     public static void main(String[] args) {
         String[][] mat1 = {
                 { "# ", ". ", ". ", ". ", ". ", ". " },
@@ -1083,8 +1096,8 @@ public class Funcoes {
                 }
                 boolean passou = false;
                 while (passou == false) {
-                    mat1 = matBasePuzzle1;
-                    passou = puzzle1(mat1, matcop1);
+                    matBasePuzzle1 = atualizarMatriz(mat1, matBasePuzzle1);
+                    passou = puzzle1(matBasePuzzle1, matcop1);
                 }
                 do {
                     interaçaoGoblinAnciao();
