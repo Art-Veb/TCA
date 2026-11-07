@@ -19,12 +19,21 @@ public class TCA {
         int _getch();
     }
 
+    public static void limparTela() {
+        System.out.print("\033[2J"); // apaga a tela
+        System.out.print("\033[H"); // volta o cursor para o canto (1, 1)
+        System.out.flush(); // garante que os comandos acima sejam enviados agora
+    }
+
+
     public static int escolherNoMenu(String titulo, String[] opcoes, int[] ataque, int vida, int pntsdacao,
-            int pocoesDCura) {
+            int pocoesDCura, int vidaInimiga, int ataqueInimigo, int cargaEspecialPersonagem,
+            int cargaEspecialInimigo) {
         int selecionada = 0;
         BibliotecaTCA.esconderCursor();
         while (true) {
-            desenharMenu(titulo, opcoes, selecionada, vida, ataque, pntsdacao, pocoesDCura);
+            desenharMenu(titulo, opcoes, selecionada, vida, ataque, pntsdacao, pocoesDCura, vidaInimiga, ataqueInimigo,
+                    cargaEspecialPersonagem, cargaEspecialInimigo);
             int tecla = obtemTeclaPressionada(); // espera o jogador apertar uma tecla
 
             if (tecla == 'w' || tecla == 'W') {
@@ -58,7 +67,8 @@ public class TCA {
     // marcada com ">". A caixa cresce para caber o texto mais comprido.
     // É usada pelo escolherNoMenu, mas também dá para chamar sozinha.
     public static void desenharMenu(String titulo, String[] opcoes, int selecionada, int vida, int[] ataque,
-            int pntsdacao, int pocoesdCura) {
+            int pntsdacao, int pocoesdCura, int vidaInimiga, int ataqueInimigo, int cargaEspecialPersonagem,
+            int cargaEspecialInimigo) {
         // descobre o tamanho do maior texto, para a caixa caber tudo
         int maior = titulo.length();
         for (int i = 0; i < opcoes.length; i++) {
@@ -69,9 +79,10 @@ public class TCA {
         int largura = maior + 4; // espaço para o "> " e uma margem
 
         BibliotecaTCA.limparTela();
-        
-        System.out.print("             ");
-        
+
+        informativo(vida, ataque, pntsdacao, pocoesdCura, vidaInimiga, ataqueInimigo, cargaEspecialPersonagem,
+                cargaEspecialInimigo);
+
         System.out.println("╔" + "═".repeat(largura) + "╗");
         System.out.println("║  " + completar(titulo, maior) + "  ║");
         System.out.println("╠" + "═".repeat(largura) + "╣");
@@ -89,27 +100,6 @@ public class TCA {
         System.out.println("╚" + "═".repeat(largura) + "╝");
         System.out.println();
         System.out.println("Use W/S para navegar e ENTER para selecionar. ESC para sair.");
-    }
-
-    public static void desenharMenu2(int vida, int ataque) {
-        // descobre o tamanho do maior texto, para a caixa caber tud
-        BibliotecaTCA.limparTela();
-        informativoInimigo(ataque, vida);
-        System.out.println("Use W/S para navegar e ENTER para selecionar. ESC para sair.");
-    }
-
-    public static int escolherNoMenu2(int ataque, int vida) {
-        int selecionada = 0;
-
-        while (true) {
-            desenharMenu2(ataque, vida);
-            int tecla = obtemTeclaPressionada(); // espera o jogador apertar uma tecla
-            if (tecla == 13 || tecla == 10) { // ENTER
-                return selecionada;
-            } else if (tecla == 27) { // ESC
-                return -1;
-            }
-        }
     }
 
     // Completa o texto com espaços à direita até ter o tamanho pedido.
@@ -202,6 +192,8 @@ public class TCA {
     public static final int CIANO = 6;
     public static final int CINZA = 7;
     public static final int BRANCO = 15;
+    public static final int VIOLETA = 93;
+    public static final int VERDE_LIMA = 46;
     public static final int COR_PADRAO = -1; // a cor original do terminal
 
     // Muda a cor do TEXTO. Tudo o que for escrito depois sai nessa cor.
@@ -485,6 +477,8 @@ public class TCA {
 
     }
 
+    public static final int QNT_AREIAS_MOVEDICAS = 30;
+
     public static int[] sortearPosTesouro(int i, int j, int linhas, int colunas) {
         int[] posicao = new int[2];
         do {
@@ -496,7 +490,20 @@ public class TCA {
     }
 
     public static String[][] posicionarTesouro(int[] posicao, String[][] matcop2) {
-        matcop2[posicao[0]][posicao[1]] = "<tesouro>";
+        matcop2[posicao[0]][posicao[1]] = "tesouro";
+        return matcop2;
+    }
+
+    public static String[][] posicionarAreiasMovedicas(String[][] matcop2, int linhas, int colunas){
+        int i = 0;
+        while(i < QNT_AREIAS_MOVEDICAS){
+            int linha = SORTEIO.nextInt(linhas);
+            int coluna = SORTEIO.nextInt(colunas);
+            if(matcop2[linha][coluna] != "tesouro" && matcop2[linha][coluna] != "areia"){
+                matcop2[linha][coluna] = "areia";
+                i++;
+            }
+        }
         return matcop2;
     }
 
@@ -518,26 +525,20 @@ public class TCA {
         }
     }
 
-    public static void exibirAreaQuenteOuFria(int[] distTesouro) {
-        if (distTesouro[0] <= 1 && distTesouro[1] <= 1) {
 
-        } else if (distTesouro[0] < 3 || distTesouro[1] < 3) {
-
-        } else {
-
-        }
-    }
-
-    public static void puzzle2(String mat2[][], String matcop2[][]) {
+    public static void puzzle2(String mat2[][]) {
         int tecla;
         BibliotecaTCA.esconderCursor();
         int linhas = mat2.length;
         int colunas = mat2[0].length;
         int[] distTesouro = new int[2];
+        String[][] matcop2 = new String[linhas][colunas];
+        matcop2 = atualizarMatriz(mat2, matcop2);
         int j = colunas / 2;
         int i = linhas / 2;
         int[] pos = sortearPosTesouro(i, j, linhas, colunas);
         matcop2 = posicionarTesouro(pos, matcop2);
+        matcop2 = posicionarAreiasMovedicas(matcop2, linhas, colunas);
         desenharTela(j, i, colunas, linhas, mat2);
 
         while (true) {
@@ -596,7 +597,7 @@ public class TCA {
                         desenharTela(j, i, colunas, linhas, mat2);
                         break;
                     case 13:
-                        if (i == pos[0] && j == pos[1]) {
+                        if (matcop2[i][j] == "tesouro") {
                             System.out.println("Parabéns! Você encontrou o tesouro!");
                             return;
                         } else {
@@ -676,26 +677,60 @@ public class TCA {
         return dano - dano;
     }
 
-    public static void informativoInimigo(int vidaInimiga, int ataqueInimigo) {
-        System.out.println("O Inimigo está atualmente com: ");
-        System.out.println("Vida: " + vidaInimiga);
-        System.out.println("Ataque: " + ataqueInimigo);
-    }
-
-
-    public static void informativo(int vida, int[] ataque, int pontosDeAcao, int pocoesDcura,int vidaInimiga, int ataqueInimigo) {
+    public static void informativo(int vida, int[] ataque, int pontosDeAcao, int pocoesDcura, int vidaInimiga,
+            int ataqueInimigo, int cargaEspecialPersonagem, int cargaEspecialInimigo) {
         BibliotecaTCA.limparTela();
-        escreverEm(5,1,"Voce possui atualmente:\n");
-        escreverEm(6,1,"Vida: " + vida + "\n");
-        escreverEm(7,1,"Ataque: " + ataque[0] + "-" + ataque[1] + "\n");
-        escreverEm(8,1,"Pocoes de cura: " + pocoesDcura + "\n");
-        escreverEm(9,1,"Pontos de acao: " + pontosDeAcao + "\n");
+        System.out.println("Voce possui atualmente:");
+        mudarCor(VERMELHO);
+        System.out.println("Vida: " + vida);
+        mudarCor(VERDE);
+        System.out.println("Ataque: " + ataque[0] + "-" + ataque[1]);
+        mudarCor(VIOLETA);
+        System.out.println("Carga especial: ");
 
-        escreverEm(10,1,"O Inimigo está atualmente com: \n");
-        escreverEm(11,1,"Vida: " + vidaInimiga + "\n");
-        escreverEm(12,1,"Ataque: " + ataqueInimigo + "");
-        
+        for (int i = 0; i < cargaEspecialPersonagem; i++) {
+            mudarCorFundo(VIOLETA);
+            System.out.print(" ");
+            mudarCorFundo(-1);
+            System.out.print("|");
+        }
+        for (int i = 0; i < ATAQUE_ESPECIAL_PERSONAGEM - cargaEspecialPersonagem; i++) {
+            mudarCorFundo(VERMELHO);
+            System.out.print(" ");
+            mudarCorFundo(-1);
+            System.out.print("|");
+        }
+        mudarCor(AZUL);
+        System.out.println("\nPocoes de cura: " + pocoesDcura);
+        mudarCor(AMARELO);
+        System.out.println("Pontos de acao: " + pontosDeAcao + "\n");
+        mudarCor(-1);
+        System.out.println("O Inimigo está atualmente com: ");
+        mudarCor(VERMELHO);
+        System.out.println("Vida: " + vidaInimiga);
+        mudarCor(VERDE);
+        System.out.println("Ataque: " + ataqueInimigo);
+        mudarCor(VERDE_LIMA);
+        System.out.println("Carga especial: ");
+        for (int i = 0; i < cargaEspecialInimigo; i++) {
+            mudarCorFundo(VERDE_LIMA);
+            System.out.print(" ");
+            mudarCorFundo(-1);
+            System.out.print("|");
+        }
+        for (int i = 0; i < ATAQUE_ESPECIAL_INIMIGO - cargaEspecialInimigo; i++) {
+            mudarCorFundo(VERMELHO);
+            System.out.print(" ");
+            mudarCorFundo(-1);
+            System.out.print("|");
+        }
+        System.out.println();
+        mudarCor(-1);
+
     }
+
+    public static final int ATAQUE_ESPECIAL_PERSONAGEM = 5;
+    public static final int ATAQUE_ESPECIAL_INIMIGO = 3;
 
     public static boolean sistemaDBatalha(int vidaInimiga, int ataqueInimigo) {
         boolean lutaVencida = false;
@@ -707,8 +742,8 @@ public class TCA {
         BibliotecaTCA.esconderCursor();
         int ataqueBaseInimigo = ataqueInimigo;
         int pocoesDCura = 3;
-        String[] opcoes = { "Ataque", "Defesa", "Cura", "Status" };
-        String[] ataques = { "Ataque pesado", "Ataque leve" };
+        String[] opcoes = { "Ataque", "Defesa", "Cura" };
+        String[] ataques = { "Ataque pesado", "Ataque leve", "Ataque especial" };
         String[] defesas = { "Defesa imparcial", "Defesa completa" };
         String[] espaco = { "   " };
         while (true) {
@@ -719,13 +754,15 @@ public class TCA {
             }
             int pontosDeAcao = 3;
             while (pontosDeAcao != 0) {
-                
-                int escolha = escolherNoMenu("   Batalha   ", opcoes, ataque, vida, pontosDeAcao, pocoesDCura);
+                limparTela();
+
+                int escolha = escolherNoMenu("   Batalha   ", opcoes, ataque, vida, pontosDeAcao, pocoesDCura,
+                        vidaInimiga, ataqueInimigo, cargaEspecialPersonagem, cargaEspecialInimigo);
                 int subescolha = 0;
-                informativo(vida, ataque, pontosDeAcao, pocoesDCura, vidaInimiga, ataqueInimigo);
                 if (escolha == 0) {
-                    informativo(vida, ataque, pontosDeAcao, pocoesDCura, vidaInimiga, ataqueInimigo);
-                    subescolha = escolherNoMenu("   Ataques   ", ataques, ataque, vida, pontosDeAcao, pocoesDCura);
+
+                    subescolha = escolherNoMenu("   Ataques   ", ataques, ataque, vida, pontosDeAcao, pocoesDCura,
+                            vidaInimiga, ataqueInimigo, cargaEspecialPersonagem, cargaEspecialInimigo);
                     if (subescolha == 0) {
                         if (pontosDeAcao >= 2) {
                             int sorteio = SORTEIO.nextInt(4) + 1;
@@ -733,6 +770,7 @@ public class TCA {
                                 vidaInimiga -= ataque[0];
                                 mudarCor(VERDE);
                                 System.out.println("Voce acerta um golpe pesado e causa " + ataque[0] + " de dano");
+                                cargaEspecialPersonagem++;
                                 BibliotecaTCA.esperar(1500);
                                 mudarCor(-1);
                                 pontosDeAcao -= 2;
@@ -755,7 +793,6 @@ public class TCA {
                             continue;
                         }
                     } else if (subescolha == 1) {
-                        
                         if (pontosDeAcao >= 1) {
                             vidaInimiga -= ataque[1];
                             mudarCor(VERDE);
@@ -763,7 +800,34 @@ public class TCA {
                             mudarCor(-1);
                             pontosDeAcao--;
                             if (vidaInimiga <= 0) {
+                                mudarCor(VERMELHO);
+                                System.out.println("Voce derrotou o boss");
+                                mudarCor(-1);
                                 return lutaVencida = true;
+                            }
+                        } else if (subescolha == 2) {
+                            if (pontosDeAcao > 0) {
+                                if (cargaEspecialPersonagem == ATAQUE_ESPECIAL_PERSONAGEM) {
+                                    vidaInimiga -= ataque[0] * 2;
+                                    mudarCor(VERDE);
+                                    System.out.println(
+                                            "Voce acerta um golpe especial e causa " + ataque[0] * 2 + " de dano");
+                                    mudarCor(-1);
+                                    pontosDeAcao--;
+                                    cargaEspecialPersonagem = 0;
+                                    if (vidaInimiga <= 0) {
+                                        mudarCor(VERMELHO);
+                                        System.out.println("Voce derrotou o boss");
+                                        mudarCor(-1);
+                                        return lutaVencida = true;
+                                    }
+                                } else {
+                                    mudarCor(VERMELHO);
+                                    System.out.println("Voce nao tem carga especial suficiente");
+                                    mudarCor(-1);
+                                    BibliotecaTCA.esperar(1500);
+                                    continue;
+                                }
                             }
                         } else {
                             mudarCor(VERMELHO);
@@ -772,12 +836,30 @@ public class TCA {
                             BibliotecaTCA.esperar(1500);
                             continue;
                         }
+                    } else if (subescolha == 2) {
+                        if (pontosDeAcao > 0) {
+                            if (cargaEspecialPersonagem == ATAQUE_ESPECIAL_PERSONAGEM) {
+                                vidaInimiga -= ataque[0] * 2;
+                                mudarCor(VERDE);
+                                imprimirDevagar("Voce acerta um golpe especial e causa " + ataque[0] * 2 + " de dano");
+                                mudarCor(-1);
+                                pontosDeAcao--;
+                                cargaEspecialPersonagem = 0;
+                            }
+                            if (vidaInimiga <= 0) {
+                                mudarCor(VERMELHO);
+                                System.out.println("Voce derrotou o boss");
+                                mudarCor(-1);
+                                return lutaVencida = true;
+                            }
+                        }
                     } else if (subescolha == 27) {
                         continue;
                     }
                 } else if (escolha == 1) {
-                    informativo(vida, ataque, pontosDeAcao, pocoesDCura, vidaInimiga, ataqueInimigo);
-                    subescolha = escolherNoMenu("   Defesas   ", defesas, ataque, vida, pontosDeAcao, pocoesDCura);
+
+                    subescolha = escolherNoMenu("   Defesas   ", defesas, ataque, vida, pontosDeAcao, pocoesDCura,
+                            vidaInimiga, ataqueInimigo, cargaEspecialPersonagem, cargaEspecialInimigo);
                     if (subescolha == 0) {
                         if (pontosDeAcao >= 1) {
                             ataqueInimigo /= 2;
@@ -804,7 +886,6 @@ public class TCA {
                         continue;
                     }
                 } else if (escolha == 2) {
-                    informativo(vida, ataque, pontosDeAcao, pocoesDCura, vidaInimiga, ataqueInimigo);
                     if (vida > 70) {
                         mudarCor(VERMELHO);
                         System.out.println("Voce nao esta machucado o suficiente para usar a pocao");
@@ -822,20 +903,21 @@ public class TCA {
                         BibliotecaTCA.esperar(1500);
                         continue;
                     }
-                } else if (escolha == 3) {
-                    informativo(vida, ataque, pontosDeAcao, pocoesDCura, vidaInimiga, ataqueInimigo);
-                    subescolha = escolherNoMenu2(ataqueBaseInimigo, vidaInimiga);
-                    
-                    if (subescolha == 27) {
-                        continue;
-                    }
                 }
 
             }
-            vida -= ataqueInimigo;
-            mudarCor(VERMELHO);
-            imprimirDevagar("O inimigo ataca causando " + ataqueInimigo + " de dano");
-            mudarCor(-1);
+            if (cargaEspecialInimigo == ATAQUE_ESPECIAL_INIMIGO) {
+                vida -= ataqueInimigo * 2;
+                cargaEspecialInimigo = 0;
+                imprimirDevagar("O inimigo usou um ataque especial causando " + ataqueBaseInimigo * 2 + " de dano");
+            } else {
+                vida -= ataqueInimigo;
+                cargaEspecialInimigo++;
+                mudarCor(VERMELHO);
+
+                imprimirDevagar("O inimigo ataca causando " + ataqueBaseInimigo + " de dano");
+                mudarCor(-1);
+            }
             if (ataqueInimigo == 0) {
                 mudarCor(VERDE);
                 BibliotecaTCA.esperar(1000);
@@ -845,7 +927,7 @@ public class TCA {
             } else if (ataqueBaseInimigo > ataqueInimigo) {
                 mudarCor(VERDE);
                 BibliotecaTCA.esperar(500);
-                System.out.println("Voce defende parcialmente");
+                System.out.println("Voce defende parcialmente mas recebe " + ataqueInimigo + " de dano");
                 BibliotecaTCA.esperar(500);
                 mudarCor(-1);
             }
@@ -857,7 +939,7 @@ public class TCA {
     public static int[] goblinAnciao() {
         int[] status = new int[2];
         int dano = 50;
-        int vida = 75;
+        int vida = 200;
         status[1] = vida;
         status[0] = dano;
         return status;
@@ -865,8 +947,8 @@ public class TCA {
 
     public static int[] pirata() {
         int[] status = new int[2];
-        int dano = 25;
-        int vida = 120;
+        int dano = 35;
+        int vida = 240;
         status[0] = vida;
         status[1] = dano;
         return status;
@@ -875,7 +957,7 @@ public class TCA {
     public static int[] reiPerdido() {
         int[] status = new int[2];
         int dano = 40;
-        int vida = 150;
+        int vida = 400;
         status[0] = vida;
         status[1] = dano;
         return status;
@@ -1088,19 +1170,7 @@ public class TCA {
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " }
         };
         // movimentacao(mat1, matcop);
-        String[][] matcop2 = {
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", "# ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " }
-        };
+        
         int areasExploradas = 0;
         String[] areas = { "Aldeia dos Goblins", "Ilha do Pirata", "Tumba do Rei Perdido" };
         String[] senhas = { "maca", "banana", "uva" };
@@ -1129,7 +1199,7 @@ public class TCA {
                     mudarCor(-1);
                     BibliotecaTCA.esperar(2000);
                     statusInimigo = goblinAnciao();
-                    areasCompletas[0] = sistemaDBatalha(statusInimigo[0], statusInimigo[1]);
+                    areasCompletas[0] = sistemaDBatalha(statusInimigo[1], statusInimigo[0]);
                 } while (areasCompletas[0] == false);
                 areasExploradas++;
                 continue;
@@ -1140,7 +1210,7 @@ public class TCA {
                     mudarCor(-1);
                     continue;
                 }
-                puzzle2(mat2, matcop2);
+                puzzle2(mat2);
                 do {
                     interaçaoPirata();
                     mudarCor(VERMELHO);
