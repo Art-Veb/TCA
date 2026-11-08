@@ -343,6 +343,29 @@ public class TCA {
         System.out.println("Use A, D, W, S para mover o personagem. Pressione ESC para sair.");
     }
 
+    public static void desenharTela_AreiaMovedica(int x, int y, int largura, int altura, String mat[][],String matcop[][],int[] posTesouro) {
+        System.out.println();
+        BibliotecaTCA.esconderCursor();
+        for (int i = 0; i < altura; i++) {
+            for (int j = 0; j < largura; j++) {
+                
+                if (i == y && j == x) {
+                    BibliotecaTCA.mudarCor(1);
+                    System.out.printf("%s\t", mat[i][j]);
+                } else if (x - 1 <= j && j <= x + 1 && y - 1 <= i && i <= y + 1) {
+                    BibliotecaTCA.mudarCor(AMARELO);
+                    System.out.printf("%s\t", matcop[i][j]);
+                }else{
+                    BibliotecaTCA.mudarCor(-1);
+                    System.out.printf("%s\t", mat[i][j]);
+                }
+            }
+            System.out.println();
+        }
+        BibliotecaTCA.mudarCor(-1);
+        System.out.println("Use A, D, W, S para mover o personagem. Pressione ESC para sair.");
+    }
+
     public static void desenharTelaPuzzle1(int x, int y, int largura, int altura, String mat[][], int vidas) {
         System.out.println();
         BibliotecaTCA.esconderCursor();
@@ -499,7 +522,7 @@ public class TCA {
 
     }
 
-    public static final int QNT_AREIAS_MOVEDICAS = 30;
+    public static final int QNT_AREIAS_MOVEDICAS = 15;
 
     public static int[] sortearPosTesouro(int i, int j, int linhas, int colunas) {
         int[] posicao = new int[2];
@@ -521,7 +544,7 @@ public class TCA {
         while (i < QNT_AREIAS_MOVEDICAS) {
             int linha = SORTEIO.nextInt(linhas);
             int coluna = SORTEIO.nextInt(colunas);
-            if (matcop2[linha][coluna] != "tesouro" && matcop2[linha][coluna] != "areia"
+            if (posicao[0] != linha && posicao[1] != coluna && matcop2[linha][coluna] != "areia"
                     && matcop2[linha][coluna] != "#" && linha != linha / 2 + 1 && linha != linha / 2 - 1
                     && coluna != coluna / 2 + 1 && coluna != coluna / 2 - 1 && linha != posicao[0] + 1
                     && linha != posicao[0] - 1 && coluna != posicao[1] + 1 && coluna != posicao[1] - 1) {
@@ -550,22 +573,16 @@ public class TCA {
         }
     }
 
-    public static boolean verificarAreiasMovedicas(int i, int j, String[][] matcop2) {
-        if (matcop2[i][j] == "areia") {
-            System.out.println("Voce caiu em uma area de areia movedica!");
-            return false;
-        }
-        return true;
-    }
 
     public static int areaDVerificacaoMovedica = 2;
 
-    public static void mostrarAreiaMovedica(String matcop2[][],int i, int j){
+    public static void mostrarAreiaMovedica(String[][] mat, String[][] matcop2, int i, int j){
         for(int k = i - 2;k < i + 2; k++){
             for(int l = j - 2;l < j + 2;l++){
-                System.out.print(matcop2[k][l]);
+                System.out.printf("%s\t", matcop2[k][l]);
             }
         }
+        
     }
 
     public static boolean puzzle2(String mat2[][]) {
@@ -579,7 +596,6 @@ public class TCA {
         int j = colunas / 2;
         int i = linhas / 2;
         int[] pos = sortearPosTesouro(i, j, linhas, colunas);
-        matcop2 = posicionarTesouro(pos, matcop2);
         matcop2 = posicionarAreiasMovedicas(matcop2, linhas, colunas, pos);
         desenharTela(j, i, colunas, linhas, mat2);
 
@@ -598,7 +614,7 @@ public class TCA {
                             mat2[i][j] = "# ";
                             mat2[i][j + 1] = ". ";
                         }
-                        verificarAreiasMovedicas(i, j, matcop2);
+                        
                         BibliotecaTCA.limparTela();
                         desenharTela(j, i, colunas, linhas, mat2);
                         break;
@@ -611,7 +627,7 @@ public class TCA {
                             mat2[i][j] = "# ";
                             mat2[i][j - 1] = ". ";
                         }
-                        verificarAreiasMovedicas(i, j, matcop2);
+                        
                         BibliotecaTCA.limparTela();
                         desenharTela(j, i, colunas, linhas, mat2);
                         break;
@@ -625,7 +641,7 @@ public class TCA {
                             mat2[i][j] = "# ";
                             mat2[i + 1][j] = ". ";
                         }
-                        verificarAreiasMovedicas(i, j, matcop2);
+                        
                         BibliotecaTCA.limparTela();
                         desenharTela(j, i, colunas, linhas, mat2);
                         break;
@@ -638,12 +654,12 @@ public class TCA {
                             mat2[i][j] = "# ";
                             mat2[i - 1][j] = ". ";
                         }
-                        verificarAreiasMovedicas(i, j, matcop2);
+                        
                         BibliotecaTCA.limparTela();
                         desenharTela(j, i, colunas, linhas, mat2);
                         break;
                     case 13:
-                        if (matcop2[i][j] == "tesouro") {
+                        if (i == pos[0] && j == pos[1]) {
                             System.out.println("Parabéns! Você encontrou o tesouro!");
                             return true;
                         } else {
@@ -653,7 +669,8 @@ public class TCA {
                         }
                     case'v':
                     case'V': 
-                        return false; 
+                        desenharTela_AreiaMovedica(j, i, colunas, linhas, mat2, matcop2,pos);
+                        
                     default:
                 }
             }
