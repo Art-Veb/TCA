@@ -27,6 +27,7 @@ public class TCA {
 
     // Guarda o momento em que o cronômetro começou (em milissegundos)
     static long inicioCronometro = 0;
+    ///home/aluno/Área de trabalho/TCA/TCA.java
 
     // Começa (ou recomeça) a contar o tempo do zero.
     //
@@ -574,7 +575,7 @@ public class TCA {
     }
 
 
-    public static int areaDVerificacaoMovedica = 2;
+    public static int AREADEVERFICACAO_AREIASMOVEDICAS = 1;
 
     public static void mostrarAreiaMovedica(String[][] mat, String[][] matcop2, int i, int j){
         for(int k = i - 2;k < i + 2; k++){
@@ -597,6 +598,7 @@ public class TCA {
         int i = linhas / 2;
         int[] pos = sortearPosTesouro(i, j, linhas, colunas);
         matcop2 = posicionarAreiasMovedicas(matcop2, linhas, colunas, pos);
+        matcop2[i][j] = ". ";
         desenharTela(j, i, colunas, linhas, mat2);
 
         while (true) {
