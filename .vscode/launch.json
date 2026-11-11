@@ -9,6 +9,13 @@
             "name": "TCA",
             "request": "launch",
             "mainClass": "TCA",
+            "projectName": "TCA_2294adc5"
+        },
+        {
+            "type": "java",
+            "name": "TCA",
+            "request": "launch",
+            "mainClass": "TCA",
             "projectName": "TCA_4c3d7714"
         },
         {

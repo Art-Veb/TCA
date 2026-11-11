@@ -25,6 +25,28 @@ public class TCA {
         System.out.flush(); // garante que os comandos acima sejam enviados agora
     }
 
+    // Guarda o momento em que o cronômetro começou (em milissegundos)
+    static long inicioCronometro = 0;
+    ///home/aluno/Área de trabalho/TCA/TCA.java
+
+    // Começa (ou recomeça) a contar o tempo do zero.
+    //
+    // Exemplo: jogo com tempo limite de 30 segundos
+    //   iniciarCronometro();
+    //   while (segundosPassados() < 30) {
+    //       // ... jogo rodando ...
+    //   }
+    //   System.out.println("Acabou o tempo!");
+    public static void iniciarCronometro() {
+        inicioCronometro = System.currentTimeMillis();
+    }
+
+    // Retorna quantos segundos passaram desde o iniciarCronometro().
+    // O valor tem casas decimais: 1.5 quer dizer um segundo e meio.
+    public static double segundosPassados() {
+        long agora = System.currentTimeMillis();
+        return (agora - inicioCronometro) / 1000.0;
+    }
 
     public static int escolherNoMenu(String titulo, String[] opcoes, int[] ataque, int vida, int pntsdacao,
             int pocoesDCura, int vidaInimiga, int ataqueInimigo, int cargaEspecialPersonagem,
@@ -321,6 +343,29 @@ public class TCA {
         System.out.println("Use A, D, W, S para mover o personagem. Pressione ESC para sair.");
     }
 
+    public static void desenharTela_AreiaMovedica(int x, int y, int largura, int altura, String mat[][],String matcop[][],int[] posTesouro) {
+        System.out.println();
+        BibliotecaTCA.esconderCursor();
+        for (int i = 0; i < altura; i++) {
+            for (int j = 0; j < largura; j++) {
+                
+                if (i == y && j == x) {
+                    BibliotecaTCA.mudarCor(1);
+                    System.out.printf("%s\t", mat[i][j]);
+                } else if (x - 1 <= j && j <= x + 1 && y - 1 <= i && i <= y + 1) {
+                    BibliotecaTCA.mudarCor(AMARELO);
+                    System.out.printf("%s\t", matcop[i][j]);
+                }else{
+                    BibliotecaTCA.mudarCor(-1);
+                    System.out.printf("%s\t", mat[i][j]);
+                }
+            }
+            System.out.println();
+        }
+        BibliotecaTCA.mudarCor(-1);
+        System.out.println("Use A, D, W, S para mover o personagem. Pressione ESC para sair.");
+    }
+
     public static void desenharTelaPuzzle1(int x, int y, int largura, int altura, String mat[][], int vidas) {
         System.out.println();
         BibliotecaTCA.esconderCursor();
@@ -477,7 +522,7 @@ public class TCA {
 
     }
 
-    public static final int QNT_AREIAS_MOVEDICAS = 30;
+    public static final int QNT_AREIAS_MOVEDICAS = 15;
 
     public static int[] sortearPosTesouro(int i, int j, int linhas, int colunas) {
         int[] posicao = new int[2];
@@ -494,12 +539,15 @@ public class TCA {
         return matcop2;
     }
 
-    public static String[][] posicionarAreiasMovedicas(String[][] matcop2, int linhas, int colunas){
+    public static String[][] posicionarAreiasMovedicas(String[][] matcop2, int linhas, int colunas, int[] posicao) {
         int i = 0;
-        while(i < QNT_AREIAS_MOVEDICAS){
+        while (i < QNT_AREIAS_MOVEDICAS) {
             int linha = SORTEIO.nextInt(linhas);
             int coluna = SORTEIO.nextInt(colunas);
-            if(matcop2[linha][coluna] != "tesouro" && matcop2[linha][coluna] != "areia"){
+            if (posicao[0] != linha && posicao[1] != coluna && matcop2[linha][coluna] != "areia"
+                    && matcop2[linha][coluna] != "#" && linha != linha / 2 + 1 && linha != linha / 2 - 1
+                    && coluna != coluna / 2 + 1 && coluna != coluna / 2 - 1 && linha != posicao[0] + 1
+                    && linha != posicao[0] - 1 && coluna != posicao[1] + 1 && coluna != posicao[1] - 1) {
                 matcop2[linha][coluna] = "areia";
                 i++;
             }
@@ -526,7 +574,18 @@ public class TCA {
     }
 
 
-    public static void puzzle2(String mat2[][]) {
+    public static int AREADEVERFICACAO_AREIASMOVEDICAS = 1;
+
+    public static void mostrarAreiaMovedica(String[][] mat, String[][] matcop2, int i, int j){
+        for(int k = i - 2;k < i + 2; k++){
+            for(int l = j - 2;l < j + 2;l++){
+                System.out.printf("%s\t", matcop2[k][l]);
+            }
+        }
+        
+    }
+
+    public static boolean puzzle2(String mat2[][]) {
         int tecla;
         BibliotecaTCA.esconderCursor();
         int linhas = mat2.length;
@@ -537,8 +596,8 @@ public class TCA {
         int j = colunas / 2;
         int i = linhas / 2;
         int[] pos = sortearPosTesouro(i, j, linhas, colunas);
-        matcop2 = posicionarTesouro(pos, matcop2);
-        matcop2 = posicionarAreiasMovedicas(matcop2, linhas, colunas);
+        matcop2 = posicionarAreiasMovedicas(matcop2, linhas, colunas, pos);
+        matcop2[i][j] = ". ";
         desenharTela(j, i, colunas, linhas, mat2);
 
         while (true) {
@@ -556,6 +615,7 @@ public class TCA {
                             mat2[i][j] = "# ";
                             mat2[i][j + 1] = ". ";
                         }
+                        
                         BibliotecaTCA.limparTela();
                         desenharTela(j, i, colunas, linhas, mat2);
                         break;
@@ -568,6 +628,7 @@ public class TCA {
                             mat2[i][j] = "# ";
                             mat2[i][j - 1] = ". ";
                         }
+                        
                         BibliotecaTCA.limparTela();
                         desenharTela(j, i, colunas, linhas, mat2);
                         break;
@@ -581,6 +642,7 @@ public class TCA {
                             mat2[i][j] = "# ";
                             mat2[i + 1][j] = ". ";
                         }
+                        
                         BibliotecaTCA.limparTela();
                         desenharTela(j, i, colunas, linhas, mat2);
                         break;
@@ -593,20 +655,23 @@ public class TCA {
                             mat2[i][j] = "# ";
                             mat2[i - 1][j] = ". ";
                         }
+                        
                         BibliotecaTCA.limparTela();
                         desenharTela(j, i, colunas, linhas, mat2);
                         break;
                     case 13:
-                        if (matcop2[i][j] == "tesouro") {
+                        if (i == pos[0] && j == pos[1]) {
                             System.out.println("Parabéns! Você encontrou o tesouro!");
-                            return;
+                            return true;
                         } else {
                             distTesouro = calcularDistTesouro(pos, i, j);
                             exibirQuenteOuFrio(distTesouro);
                             continue;
                         }
-                    case 27: // Código ASCII para a tecla ESC
-                        return; // Sai do loop e termina o programa
+                    case'v':
+                    case'V': 
+                        desenharTela_AreiaMovedica(j, i, colunas, linhas, mat2, matcop2,pos);
+                        
                     default:
                 }
             }
@@ -1170,7 +1235,7 @@ public class TCA {
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " }
         };
         // movimentacao(mat1, matcop);
-        
+
         int areasExploradas = 0;
         String[] areas = { "Aldeia dos Goblins", "Ilha do Pirata", "Tumba do Rei Perdido" };
         String[] senhas = { "maca", "banana", "uva" };
