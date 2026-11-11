@@ -86,6 +86,8 @@ public class TCA {
         System.out.print(String.format("%c[%d;%df", escCode, linha, coluna));
     }
 
+    
+
     // Desenha o menu numa caixa, com a opção selecionada em verde e
     // marcada com ">". A caixa cresce para caber o texto mais comprido.
     // É usada pelo escolherNoMenu, mas também dá para chamar sozinha.
@@ -586,6 +588,14 @@ public class TCA {
         
     }
 
+    public static void esperar(int milissegundos) {
+        try {
+            Thread.sleep(milissegundos);
+        } catch (InterruptedException e) {
+            // não faz nada: se a espera for interrompida, o programa só continua
+        }
+    }
+
     public static boolean puzzle2(String mat2[][]) {
         int tecla;
         BibliotecaTCA.esconderCursor();
@@ -600,9 +610,12 @@ public class TCA {
         matcop2 = posicionarAreiasMovedicas(matcop2, linhas, colunas, pos);
         matcop2[i][j] = ". ";
         desenharTela(j, i, colunas, linhas, mat2);
-
-        while (true) {
+        
+        iniciarCronometro();
+        while (segundosPassados() < 45) {
             // Lógica para detectar o movimento
+            escreverEm(20, 1, String.format("%.1f s", segundosPassados()));
+                    esperar(100);
 
             if (BibliotecaTCA.pressionouTecla()) {
                 tecla = BibliotecaTCA.obtemTeclaPressionada();
@@ -678,7 +691,7 @@ public class TCA {
             }
 
         }
-
+        return false;
     }
 
     public static boolean[] preencherVet(boolean[] vet) {
