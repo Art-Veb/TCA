@@ -262,7 +262,8 @@ public class TCA {
     static boolean restauracaoRegistrada = false;
 
     public static void esconderCursor() {
-        System.out.print("\033[?25l");
+        return;
+        /*System.out.print("\033[?25l");
         System.out.flush();
 
         // Registra só uma vez o código que roda quando o programa termina
@@ -274,7 +275,7 @@ public class TCA {
                 mudarCorFundo(COR_PADRAO);
                 mostrarCursor();
             }));
-        }
+        }*/
     }
 
     public static void mostrarCursor() {
@@ -427,14 +428,14 @@ public class TCA {
             for (int j = 0; j < largura; j++) {
 
                 if (i == y && j == x) {
-                    BibliotecaTCA.mudarCor(1);
-                    System.out.printf("%s\t", mat[i][j]);
-                } else if (x - 1 <= j && j <= x + 1 && y - 1 <= i && i <= y + 1) {
+                    BibliotecaTCA.mudarCor(VERMELHO);
+                    System.out.print("#\t");
+                } else if (x - AREADEVERFICACAO_AREIASMOVEDICAS <= j && j <= x + AREADEVERFICACAO_AREIASMOVEDICAS && y - AREADEVERFICACAO_AREIASMOVEDICAS <= i && i <= y + AREADEVERFICACAO_AREIASMOVEDICAS) {
                     BibliotecaTCA.mudarCor(AMARELO);
                     System.out.printf("%s\t", matcop[i][j]);
                 } else {
                     BibliotecaTCA.mudarCor(-1);
-                    System.out.printf("%s\t", mat[i][j]);
+                    System.out.print(".\t");
                 }
             }
             System.out.println();
@@ -651,7 +652,8 @@ public class TCA {
         }
     }
 
-    public static int AREADEVERFICACAO_AREIASMOVEDICAS = 1;
+    public final static int AREADEVERFICACAO_AREIASMOVEDICAS = 1;
+    public final static int COOLDOWN = 5;
 
     public static void mostrarAreiaMovedica(String[][] mat, String[][] matcop2, int i, int j) {
         for (int k = i - 2; k < i + 2; k++) {
@@ -661,6 +663,7 @@ public class TCA {
         }
 
     }
+
 
     public static void esperar(int milissegundos) {
         try {
@@ -685,13 +688,18 @@ public class TCA {
         matcop2[i][j] = ". ";
         desenharTela(j, i, colunas, linhas, mat2);
         boolean primeiraVez = true;
+        double segundos = 0;
+        
 
         iniciarCronometro();
-
-        while (segundosPassados() < 45) {
-            double segundos = segundosPassados();
+        segundosPassados();
+        while (true) {
+            
+            if (segundosPassados() == 45) {
+               return false; 
+            }
             // Lógica para detectar o movimento
-            escreverEm(1, 1, String.format("%.1f s", segundos));
+            escreverEm(1, 1, String.format("%.1f s", segundosPassados()));
             esperar(100);
 
             if (BibliotecaTCA.pressionouTecla()) {
@@ -703,7 +711,7 @@ public class TCA {
                         if (j < 0) {
                             j = 0;
                         } else if (matcop2[i][j] == "areia") {
-                            System.out.println("Voce caiu em uma areia movediça! Game over!");
+                            escreverEm(2, 1, "Voce caiu em uma areia movediça! Game over!");
                             return false;
                         } else {
                             mat2[i][j] = "# ";
@@ -719,7 +727,7 @@ public class TCA {
                         if (j > colunas - 1) {
                             j = colunas - 1;
                         } else if (matcop2[i][j] == "areia") {
-                            System.out.println("Voce caiu em uma areia movediça! Game over!");
+                            escreverEm(2, 1, "Voce caiu em uma areia movediça! Game over!");
                             return false;
                         } else {
                             mat2[i][j] = "# ";
@@ -736,7 +744,7 @@ public class TCA {
                         if (i < 0) {
                             i = 0;
                         } else if (matcop2[i][j] == "areia") {
-                            System.out.println("Voce caiu em uma areia movediça! Game over!");
+                            escreverEm(2, 1, "Voce caiu em uma areia movediça! Game over!");
                             return false;
                         } else {
                             mat2[i][j] = "# ";
@@ -752,7 +760,7 @@ public class TCA {
                         if (i > linhas - 1) {
                             i = linhas - 1;
                         } else if (matcop2[i][j] == "areia") {
-                            System.out.println("Voce caiu em uma areia movediça! Game over!");
+                            escreverEm(2, 1, "Voce caiu em uma areia movediça! Game over!");
                             return false;
                         } else {
                             mat2[i][j] = "# ";
@@ -764,7 +772,7 @@ public class TCA {
                         break;
                     case 13:
                         if (i == pos[0] && j == pos[1]) {
-                            System.out.println("Parabéns! Você encontrou o tesouro!");
+                            escreverEm(2, 1, "Parabéns! Você encontrou o tesouro!");
                             return true;
                         } else {
                             distTesouro = calcularDistTesouro(pos, i, j);
@@ -773,16 +781,22 @@ public class TCA {
                         }
                     case 'v':
                     case 'V':
+                        if (segundosPassados() - segundos < COOLDOWN || primeiraVez) {
+                            int segundosQFaltam = COOLDOWN - (int)(segundosPassados() - segundos);
+                            escreverEm(1, 2, "Voce ainda nao pode usar a habilidade espere " + segundosQFaltam);
+                            primeiraVez = false;
+                        }else if (System.currentTimeMillis() - segundos >= COOLDOWN){
                         desenharTela_AreiaMovedica(j, i, colunas, linhas, mat2, matcop2, pos);
-                        segundos = segundosPassados() + 10;
+                        segundos = segundosPassados();
+                        }
+
 
                     default:
 
                 }
             }
-
         }
-        return false;
+    
     }
 
     public static boolean[] preencherVet(boolean[] vet) {
@@ -1311,6 +1325,8 @@ public class TCA {
     public static int ATRIBUICAOBASE = 5;
 
     public static void main(String[] args) {
+        System.out.println("teste");
+        lerValorInt();
         String[][] mat1 = {
                 { "# ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". " },
@@ -1345,7 +1361,7 @@ public class TCA {
         // movimentacao(mat1, matcop);
 
         int areasExploradas = 0;
-        int pontosDeUpgrade = 0;
+        int pontosDeUpgrade = 5;
         Atributos atributosPadrao = new Atributos();
         int ataquePesado = atributosPadrao.ataquePesado;
         int ataqueLeve = atributosPadrao.ataqueLeve;
@@ -1447,7 +1463,8 @@ public class TCA {
                         System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade");
                         System.out.println(
                                 "Deseja aumentar o ataque pesado em quantos pontos? (1 ponto = 10 de ataque pesado) (digite 0 para voltar)");
-                        pontosDeUpgradeEscolhidos = lerValorInt();
+                                pontosDeUpgradeEscolhidos = lerValorInt();
+                                mostrarCursor();
                         if (pontosDeUpgradeEscolhidos > pontosDeUpgrade) {
                             System.out.println("Voce nao tem pontos de upgrade suficientes");
                             esperar(1000);
@@ -1475,6 +1492,7 @@ public class TCA {
                         System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade");
                         System.out.println(
                                 "Deseja aumentar a vida em quantos pontos? (1 ponto = 10 de vida) (digite 0 para voltar)");
+                                mostrarCursor();
                         pontosDeUpgradeEscolhidos = lerValorInt();
                         if (pontosDeUpgradeEscolhidos > pontosDeUpgrade) {
                             System.out.println("Voce nao tem pontos de upgrade suficientes");
