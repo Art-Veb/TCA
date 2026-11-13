@@ -190,8 +190,7 @@ public class BibliotecaTCA {
     // termina (até com Ctrl + C), a biblioteca mostra o cursor e volta as
     // cores ao normal sozinha. Sem isso, o terminal ficaria sem cursor.
     public static void esconderCursor() {
-        return ;
-        /*System.out.print("\033[?25l");
+        System.out.print("\033[?25l");
         System.out.flush();
 
         // Registra só uma vez o código que roda quando o programa termina
@@ -203,7 +202,7 @@ public class BibliotecaTCA {
                 mudarCorFundo(COR_PADRAO);
                 mostrarCursor();
             }));
-        }*/
+        }
     }
 
     // Mostra o cursor de novo (desfaz o esconderCursor).
