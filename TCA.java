@@ -1325,8 +1325,6 @@ public class TCA {
     public static int ATRIBUICAOBASE = 5;
 
     public static void main(String[] args) {
-        System.out.println("teste");
-        lerValorInt();
         String[][] mat1 = {
                 { "# ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". " },
@@ -1454,72 +1452,136 @@ public class TCA {
                 }
             } else if (escolha == 1) {
                 String[] atributos = { "Ataque pesado", "Ataque leve", "Vida", "Eficiencia de defesa" };
-                int subescolha = escolherNoMenuBasico("   Status do personagem   ", atributos);
-                while (subescolha != -1 && subescolha != 27) {
-                    int pontosDeUpgradeEscolhidos;
-
+                int[] pontosGastos = {0 ,0 ,0 ,0 };
+                String[] pontos = {"1 ponto", "Todos os pontos", "Reset de status"};
+                int escolhaDePontos;
+                boolean voltar = false;
+                
+                while (true) {
+                    int subescolha = escolherNoMenuBasico("   Status do personagem   ", atributos);
+                    voltar = false;
                     if (subescolha == 0) {
+                        if (voltar) {
+                            break;
+                        }
                         System.out.println("Ataque pesado: " + ataquePesado);
                         System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade");
                         System.out.println(
-                                "Deseja aumentar o ataque pesado em quantos pontos? (1 ponto = 10 de ataque pesado) (digite 0 para voltar)");
-                                pontosDeUpgradeEscolhidos = lerValorInt();
-                                mostrarCursor();
-                        if (pontosDeUpgradeEscolhidos > pontosDeUpgrade) {
-                            System.out.println("Voce nao tem pontos de upgrade suficientes");
-                            esperar(1000);
-                            break;
-                        } else {
-                            ataquePesado = ataquePesado + (pontosDeUpgradeEscolhidos * 10);
+                                "Deseja aumentar o ataque pesado em quantos pontos? (1 ponto = 10 de ataque pesado)");
+                                
+                                while(true){
+                                    escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
+                                if (escolhaDePontos == 0) {
+                                    if (pontosDeUpgrade == 0) {
+                                        System.out.println("Voce esta sem pontos de upgrade");
+                                    }else{
+                                    ataquePesado = ataquePesado + 10;
+                                    pontosDeUpgrade--;
+                                    pontosGastos[0]++;}
+                                }else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
+                                    voltar = true;
+                                    break;
+                                }else if (escolhaDePontos == 1) {
+                                    ataquePesado = ataquePesado + (pontosDeUpgrade * 10);
+                                    pontosGastos[0]+=pontosDeUpgrade;
+                                    pontosDeUpgrade = 0;
+                                }else if (escolhaDePontos == 2) {
+                                    ataquePesado = atributosPadrao.ataquePesado;
+                                    pontosDeUpgrade = pontosGastos[0];
+                                }
+                            }
+                    } else if (subescolha == 1) {
+                        if (voltar) {
                             break;
                         }
-                    } else if (subescolha == 1) {
                         System.out.println("Ataque leve: " + ataqueLeve);
                         System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade");
                         System.out.println(
                                 "Deseja aumentar o ataque leve em quantos pontos? (1 ponto = 5 de ataque leve) (digite 0 para voltar)");
-                        pontosDeUpgradeEscolhidos = lerValorInt();
-                        if (pontosDeUpgradeEscolhidos > pontosDeUpgrade) {
-                            System.out.println("Voce nao tem pontos de upgrade suficientes");
-                            esperar(1000);
-                            break;
-                        } else {
-                            ataqueLeve = ataqueLeve + (pontosDeUpgradeEscolhidos * 5);
+                       while(true){
+                                escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
+                                if (escolhaDePontos == 0) {
+                                    if (pontosDeUpgrade == 0) {
+                                        System.out.println("Voce esta sem pontos de upgrade");
+                                    }else{
+                                    ataqueLeve = ataqueLeve + 5;
+                                    pontosDeUpgrade--;}
+                                }else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
+                                    voltar = true;
+                                    break;
+                                }else if (escolhaDePontos == 1) {
+                                    ataqueLeve = ataqueLeve + (pontosDeUpgrade * 5);
+                                    pontosGastos[1]+=pontosDeUpgrade;
+                                    pontosDeUpgrade = 0;
+                                }else if (escolhaDePontos == 2) {
+                                    ataquePesado = atributosPadrao.ataquePesado;
+                                    pontosDeUpgrade = pontosGastos[1];
+                                }
+                            }
+                    } else if (subescolha == 2) {
+                        if (voltar) {
                             break;
                         }
-                    } else if (subescolha == 2) {
                         System.out.println("Vida: " + vida);
                         System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade");
                         System.out.println(
                                 "Deseja aumentar a vida em quantos pontos? (1 ponto = 10 de vida) (digite 0 para voltar)");
-                                mostrarCursor();
-                        pontosDeUpgradeEscolhidos = lerValorInt();
-                        if (pontosDeUpgradeEscolhidos > pontosDeUpgrade) {
-                            System.out.println("Voce nao tem pontos de upgrade suficientes");
-                            esperar(1000);
-                            break;
-                        } else {
-                            vida = vida + (pontosDeUpgradeEscolhidos * 10);
+                                while(true){
+                                escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
+                                if (escolhaDePontos == 0) {
+                                    if (pontosDeUpgrade == 0) {
+                                        System.out.println("Voce esta sem pontos de upgrade");
+                                    }else{
+                                    vida = vida + 10;
+                                    pontosDeUpgrade--;
+                                    pontosGastos[2]++;}
+                                }else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
+                                    voltar = true;
+                                    break;
+                                }else if (escolhaDePontos == 1) {
+                                    vida = vida + (pontosDeUpgrade * 10);
+                                    pontosGastos[2]+=pontosDeUpgrade;
+                                    pontosDeUpgrade = 0;
+                                }else if (escolhaDePontos == 2) {
+                                    vida = atributosPadrao.vida;
+                                    pontosDeUpgrade = pontosGastos[2];
+                                }
+                            }
+                    } else if (subescolha == 3) {
+                        if (voltar) {
                             break;
                         }
-                    } else if (subescolha == 3) {
                         System.out.println("Eficiencia de defesa: " + eficienciaDeDefesa);
                         System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade");
                         System.out.println(
                                 "Deseja aumentar a eficiencia de defesa em quantos pontos? (1 ponto = 2 de eficiencia de defesa) (digite 0 para voltar)");
-                        pontosDeUpgradeEscolhidos = lerValorInt();
-                        if (pontosDeUpgradeEscolhidos > pontosDeUpgrade) {
-                            System.out.println("Voce nao tem pontos de upgrade suficientes");
-                            esperar(1000);
-                            break;
-                        } else {
-                            eficienciaDeDefesa = eficienciaDeDefesa + (pontosDeUpgradeEscolhidos * 2);
-                            break;
-                        }
+                        while(true){
+                                escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
+                                if (escolhaDePontos == 0) {
+                                    if (pontosDeUpgrade == 0) {
+                                        System.out.println("Voce esta sem pontos de upgrade");
+                                    }else{
+                                    eficienciaDeDefesa = eficienciaDeDefesa + 5;
+                                    pontosDeUpgrade--;
+                                    pontosGastos[3]++;}
+                                }else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
+                                    voltar = true;
+                                    break;
+                                }else if (escolhaDePontos == 1) {
+                                    eficienciaDeDefesa = eficienciaDeDefesa + (pontosDeUpgrade * 5);
+                                    pontosGastos[3]+=pontosDeUpgrade;
+                                    pontosDeUpgrade = 0;
+                                }else if (escolhaDePontos == 2) {
+                                    eficienciaDeDefesa = atributosPadrao.eficienciaDeDefesa;
+                                    pontosDeUpgrade = pontosGastos[3];
+                                }
+                            }
+                    }else if (subescolha == 27 || subescolha == -1) {
+                        break;
                     }
                     continue;
                 }
-            } else if (escolha == 27) {
+            } else if (escolha == 27 ) {
                 continue;
             }
 
