@@ -401,6 +401,7 @@ public class TCA {
     }
 
     public static void desenharTela(int x, int y, int largura, int altura, String mat[][]) {
+        limparTela();
         System.out.println();
         BibliotecaTCA.esconderCursor();
         for (int i = 0; i < altura; i++) {
@@ -486,7 +487,9 @@ public class TCA {
             System.out.println();
         }
         BibliotecaTCA.mudarCor(-1);
-        System.out.println("Aperte Q para ver area quente, M para ver area morna, F para ver area fria");
+        System.out.println(
+                "Aperte V para verificar areias movedicas e ENTER para verificar tesouro; A,W,S,D para movimentacao");
+
     }
 
     public static boolean puzzle1(String mat[][], boolean matcop[][]) {
@@ -687,17 +690,16 @@ public class TCA {
         int[] pos = sortearPosTesouro(i, j, linhas, colunas);
         matcop2 = posicionarAreiasMovedicas(matcop2, linhas, colunas, pos);
         matcop2[i][j] = ". ";
-        desenharTela(j, i, colunas, linhas, matPadrao);
         boolean primeiraVez = true;
         double segundos = 0;
 
         iniciarCronometro();
         segundosPassados();
+        desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
         while (segundosPassados() <= 45) {
-
-            // Lógica para detectar o movimento
-            escreverEm(1, 1, String.format("%.1f s", segundosPassados()));
+            escreverEm(1, 0, String.format("%.1f s", segundosPassados()));
             esperar(100);
+            // Lógica para detectar o movimento
 
             if (BibliotecaTCA.pressionouTecla()) {
                 tecla = BibliotecaTCA.obtemTeclaPressionada();
@@ -708,7 +710,7 @@ public class TCA {
                         if (j < 0) {
                             j = 0;
                         } else if (matcop2[i][j] == "areia") {
-                            escreverEm(2, 1, "Voce caiu em uma areia movediça! Game over!");
+                            System.out.println(" Voce caiu em uma areia movediça! Game over!");
                             return false;
                         } else {
                             matPadrao[i][j] = "# ";
@@ -716,7 +718,8 @@ public class TCA {
                         }
 
                         BibliotecaTCA.limparTela();
-                        desenharTela(j, i, colunas, linhas, matPadrao);
+                        desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
+                        ;
                         break;
                     case 'd':
                     case 'D':
@@ -724,7 +727,7 @@ public class TCA {
                         if (j > colunas - 1) {
                             j = colunas - 1;
                         } else if (matcop2[i][j] == "areia") {
-                            escreverEm(2, 1, "Voce caiu em uma areia movediça! Game over!");
+                            System.out.println(" Voce caiu em uma areia movediça! Game over!");
                             return false;
                         } else {
                             matPadrao[i][j] = "# ";
@@ -732,7 +735,7 @@ public class TCA {
                         }
 
                         BibliotecaTCA.limparTela();
-                        desenharTela(j, i, colunas, linhas, matPadrao);
+                        desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
                         break;
                     case 'w':
                     case 'W':
@@ -741,7 +744,7 @@ public class TCA {
                         if (i < 0) {
                             i = 0;
                         } else if (matcop2[i][j] == "areia") {
-                            escreverEm(2, 1, "Voce caiu em uma areia movediça! Game over!");
+                            System.out.println(" Voce caiu em uma areia movediça! Game over!");
                             return false;
                         } else {
                             matPadrao[i][j] = "# ";
@@ -749,7 +752,7 @@ public class TCA {
                         }
 
                         BibliotecaTCA.limparTela();
-                        desenharTela(j, i, colunas, linhas, matPadrao);
+                        desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
                         break;
                     case 's':
                     case 'S':
@@ -757,7 +760,7 @@ public class TCA {
                         if (i > linhas - 1) {
                             i = linhas - 1;
                         } else if (matcop2[i][j] == "areia") {
-                            escreverEm(2, 1, "Voce caiu em uma areia movediça! Game over!");
+                            System.out.println(" Voce caiu em uma areia movediça! Game over!");
                             return false;
                         } else {
                             matPadrao[i][j] = "# ";
@@ -765,11 +768,11 @@ public class TCA {
                         }
 
                         BibliotecaTCA.limparTela();
-                        desenharTela(j, i, colunas, linhas, matPadrao);
+                        desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
                         break;
                     case 13:
                         if (i == pos[0] && j == pos[1]) {
-                            escreverEm(2, 1, "Parabéns! Você encontrou o tesouro!");
+                            System.out.println(" Parabéns! Você encontrou o tesouro!");
                             System.out.println();
                             return true;
                         } else {
@@ -779,13 +782,15 @@ public class TCA {
                         }
                     case 'v':
                     case 'V':
-                        if (segundosPassados() - segundos < COOLDOWN ) {
+                        if (segundosPassados() - segundos < COOLDOWN) {
                             int segundosQFaltam = COOLDOWN - (int) (segundosPassados() - segundos);
-                            escreverEm(1, 2, "Voce ainda nao pode usar a habilidade espere " + segundosQFaltam);
-                            primeiraVez = false;
+                            System.out.println(" Voce ainda nao pode usar a habilidade espere " + segundosQFaltam);
+                            esperar(300);
+                            desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
                         } else if (System.currentTimeMillis() - segundos >= COOLDOWN || primeiraVez) {
                             desenharTela_AreiaMovedica(j, i, colunas, linhas, matPadrao, matcop2, pos);
                             segundos = segundosPassados();
+                            primeiraVez = false;
                         }
 
                     default:
@@ -813,12 +818,11 @@ public class TCA {
     }
 
     public static void puzzle3(String[] perguntas) {
-        
+
         int j = 0;
         BibliotecaTCA.esconderCursor();
         while (j < perguntas.length) {
 
-        
         }
     }
 
@@ -1122,6 +1126,7 @@ public class TCA {
     }
 
     public static void interaçaoGoblinAnciao() {
+        limparTela();
         System.out.println("Aperte esc para pular o dialogo e enter para prosseguir");
         int entrada = obtemTeclaPressionada();
         if (entrada == 27) {
@@ -1185,6 +1190,7 @@ public class TCA {
     }
 
     public static void interaçaoPirata() {
+        limparTela();
         System.out.println("Aperte esc para pular o dialogo e enter para prosseguir");
         int entrada = obtemTeclaPressionada();
 
@@ -1221,6 +1227,7 @@ public class TCA {
     }
 
     public static void interaçaoReiPerdido() {
+        limparTela();
         System.out.println("Aperte esc para pular o dialogo e enter para prosseguir");
         int entrada = obtemTeclaPressionada();
         if (entrada == 27) {
@@ -1353,7 +1360,7 @@ public class TCA {
             if (escolha == 0) {
                 System.out.println("Escolha a area que deseja explorar");
                 BibliotecaTCA.esperar(2000);
-                int area = BibliotecaTCA.escolherNoMenu("   Areas   ", areas);
+                int area = escolherNoMenuBasico("   Areas   ", areas);
                 if (area == 0) {
                     if (areasCompletas[0] == true) {
                         mudarCor(VERMELHO);
@@ -1388,6 +1395,7 @@ public class TCA {
                         continue;
                     }
                     do {
+                        limparTela();
                         areasCompletas[1] = puzzle2(mat2);
                     } while (areasCompletas[1] == false);
                     do {
