@@ -46,8 +46,8 @@ import com.sun.jna.Native;
 //     javac -cp "lib/*:." TCA.java
 //     java -cp "lib/*:." TCA
 //   Windows:
-//     javac -cp "lib/*;." MeuJogo.java
-//     java -cp "lib/*;." MeuJogo
+//     javac -cp "lib/*;." TCA.java
+//     java -cp "lib/*;." TCA
 //
 //   Compilando o MeuJogo.java, o javac compila a BibliotecaTCA.java
 //   junto, sozinho. Atenção ao separador: ":" no Mac/Linux e ";" no Windows.
