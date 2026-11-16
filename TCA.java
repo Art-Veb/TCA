@@ -911,7 +911,7 @@ public class TCA {
                             vidaInimiga, ataqueInimigo, cargaEspecialPersonagem, cargaEspecialInimigo);
                     if (subescolha == 0) {
                         if (pontosDeAcao >= 2) {
-                            int sorteio = SORTEIO.nextInt(4) + 1;
+                            int sorteio = SORTEIO.nextInt(5);
                             if (sorteio <= 3) {
                                 vidaInimiga -= atqPesado;
                                 mudarCor(VERDE);
@@ -1334,25 +1334,28 @@ public class TCA {
     public static int ATRIBUICAOBASE = 5;
 
     public static void main(String[] args) {
+        mudarCor(VERMELHO);
+        System.out.println("Digite o seu nome (Aviso: ele nao podera ser trocado depois de escolhido)");
+        String nome = lerTexto();
+        mudarCor(COR_PADRAO);
+        Historia.part1(nome);
         esconderCursor();
-        String[][] mat1 = {
-                { "# ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", "[] " }
-        };
-        boolean[][] matcop1 = {
-                { true, false, true, true, true, false },
-                { true, true, true, false, true, true },
-                { true, true, false, true, true, false },
-                { false, false, true, true, false, false },
-                { true, false, true, false, true, true },
-                { true, false, true, true, true, true }
-        };
-        String[][] matBasePuzzle1 = new String[mat1.length][mat1.length];
-        matBasePuzzle1 = mat1;
+        String[][] matPuzzle1;
+        boolean[][] matcopPuzzle1;
+        MatrizesPuzzle_1 matrizesPuzzle1 = new MatrizesPuzzle_1();
+        int numero = sortearNumero(4);
+        if (numero == 1) {
+            matPuzzle1 = matrizesPuzzle1.mat1;
+            matcopPuzzle1 = matrizesPuzzle1.matcop1;
+        }else if (numero == 2) {
+            matPuzzle1 = matrizesPuzzle1.mat2;
+            matcopPuzzle1 = matrizesPuzzle1.matcop2;
+        }else{
+            matPuzzle1 = matrizesPuzzle1.mat3;
+            matcopPuzzle1 = matrizesPuzzle1.matcop3;
+        }
+        String[][] matBasePuzzle1 = new String[matPuzzle1.length][matPuzzle1.length];
+        matBasePuzzle1 = matPuzzle1;
         String[][] mat2 = {
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
@@ -1366,7 +1369,6 @@ public class TCA {
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " }
         };
-        // movimentacao(mat1, matcop);
 
         int areasExploradas = 0;
         int pontosDeUpgrade = 5;
@@ -1398,8 +1400,8 @@ public class TCA {
                     }
                     boolean passou = false;
                     while (passou == false) {
-                        matBasePuzzle1 = atualizarMatriz(mat1, matBasePuzzle1);
-                        passou = puzzle1(matBasePuzzle1, matcop1);
+                        matBasePuzzle1 = atualizarMatriz(matPuzzle1, matBasePuzzle1);
+                        passou = puzzle1(matBasePuzzle1, matcopPuzzle1);
                     }
                     do {
                         interaçaoGoblinAnciao();
