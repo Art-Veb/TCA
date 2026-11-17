@@ -296,6 +296,7 @@ public class TCA {
     public static final int BRANCO = 15;
     public static final int VIOLETA = 93;
     public static final int VERDE_LIMA = 46;
+    public static final int LARANJA = 208;
     public static final int COR_PADRAO = -1; // a cor original do terminal
 
     // Muda a cor do TEXTO. Tudo o que for escrito depois sai nessa cor.
@@ -356,7 +357,7 @@ public class TCA {
         BibliotecaTCA.esconderCursor();
         for (int i = 0; i < texto.length(); i++) {
             System.out.print(texto.charAt(i));
-            esperar(70);
+            esperar(80);
         }
         System.out.println();
     }
@@ -698,6 +699,7 @@ public class TCA {
                             j = 0;
                         } else if (matcop2[i][j] == "areia") {
                             System.out.println(" Voce caiu em uma areia movediça! Game over!");
+                            esperar(800);
                             return false;
                         } else {
                             matPadrao[i][j] = "# ";
@@ -715,6 +717,7 @@ public class TCA {
                             j = colunas - 1;
                         } else if (matcop2[i][j] == "areia") {
                             System.out.println(" Voce caiu em uma areia movediça! Game over!");
+                            esperar(800);
                             return false;
                         } else {
                             matPadrao[i][j] = "# ";
@@ -732,6 +735,7 @@ public class TCA {
                             i = 0;
                         } else if (matcop2[i][j] == "areia") {
                             System.out.println(" Voce caiu em uma areia movediça! Game over!");
+                            esperar(800);
                             return false;
                         } else {
                             matPadrao[i][j] = "# ";
@@ -748,6 +752,7 @@ public class TCA {
                             i = linhas - 1;
                         } else if (matcop2[i][j] == "areia") {
                             System.out.println(" Voce caiu em uma areia movediça! Game over!");
+                            esperar(800);
                             return false;
                         } else {
                             matPadrao[i][j] = "# ";
@@ -1097,7 +1102,7 @@ public class TCA {
 
     public static int[] pirata() {
         int[] status = new int[2];
-        int dano = 35;
+        int dano = 75;
         int vida = 240;
         status[0] = vida;
         status[1] = dano;
@@ -1106,218 +1111,13 @@ public class TCA {
 
     public static int[] reiPerdido() {
         int[] status = new int[2];
-        int dano = 40;
+        int dano = 75;
         int vida = 400;
         status[0] = vida;
         status[1] = dano;
         return status;
     }
 
-    public static void interaçaoGoblinAnciao() {
-        limparTela();
-        System.out.println("Aperte esc para pular o dialogo e enter para prosseguir");
-        int entrada = obtemTeclaPressionada();
-        if (entrada == 27) {
-            System.out.println();
-            return;
-        }
-        BibliotecaTCA.esperar(2000);
-        if (entrada != 27) {
-            System.out.println();
-            mudarCor(VERDE);
-            imprimirDevagar("Voce realmente acha que vai escapar daqui com vida???");
-            BibliotecaTCA.esperar(500);
-            imprimirDevagar("Nos goblins temos odio a raca humana");
-            BibliotecaTCA.esperar(500);
-            System.out.println("                                  @@@@@@@@@@@@@@@@@                             \r\n" + //
-                    "                             @@@@@@@%************#%@@@@@@                       \r\n" + //
-                    "                        @@@@%%*************************#%@@@                    \r\n" + //
-                    "                      @@%#*********************************%@@                  \r\n" + //
-                    "                    @@%**********************************#***%@@                \r\n" + //
-                    "                   @@%**#*************************************#@@@           @@@\r\n" + //
-                    "                  @@@*******************************************@@         @@#@@\r\n" + //
-                    "@@                @@%**%#***********************************##**#@@      @@%**@@\r\n" + //
-                    "@@#@@             @@#**##***********************************@#***@@     @@#**#@@\r\n" + //
-                    " @%**#@@          @@***#%**********************************#@#***%@    @@****%@@\r\n" + //
-                    "  @@****%@@       @@****#***********************************@#***#@   @%*****%@@\r\n" + //
-                    "  @@#******@@     @%***@@*************%#*@#****************#@#***#@  @@***%#*%@@\r\n" + //
-                    "   @@********%@   @%***%@*************#%*%******************@#***#@ @@#*%#*#*%@@\r\n" + //
-                    "    @@***#%##**%@ @#*#@#*************************************%%**#@@@**%***#*%@@\r\n" + //
-                    "    @@#**#***%#**%@##%*****************##%*#############*********%@@#*%****#**@@\r\n" + //
-                    "     @@**#****#%**%@*%%%@%%%########%%%#*********#%@@%%%%@@@@@@%*@@**%*****#**@@\r\n" + //
-                    "     @@%**#*****%#*@%****#@@@@#%***%@#*%*****%*#%++++@@@@@%#**###@#*#********#@@\r\n" + //
-                    "      @@#*********#*#*#%##%@%#++*#@#***#*****#***#%@%####@##*%@*@#*#***##****%@@\r\n" + //
-                    "       @@%****%###*#**%#****#####**#*********#***##***********##***%********%@@ \r\n" + //
-                    "        @@@#********#****#********@#**#***********#@%*****%@%*****#********%@@  \r\n" + //
-                    "           @@@*****@**#***%%****@%****#**************@@@@@#****%%*#*##****@@@   \r\n" + //
-                    "             @@%***#**%#*****#%*******#%**********************#@#*#@#***#@@     \r\n" + //
-                    "              @@%***#*#@#**************#%********************%@###*****@@@      \r\n" + //
-                    "               @@#*****#@#**********#***%****#%@@#********#%@%**##***#@@@       \r\n" + //
-                    "                @@%******%@@##*****%@********#@%**%***%@@@%#********#@@         \r\n" + //
-                    "                 @@#******#%%%#***#@##%%#***#%****#%****%@%#********%@@         \r\n" + //
-                    "                  @@@#***#%@%*****@****#%@%@#******##***%@@@@#****#@@@          \r\n" + //
-                    "                    @@@@@@@@@#****%******#**************#@@ @@@@@@@@@           \r\n" + //
-                    "                            @#***#*******##%%%%**********@@                     \r\n" + //
-                    "                            @%********@@%###**##@@@#*****@@                     \r\n" + //
-                    "                            @%*****%@%*************#%****#@@@                   \r\n" + //
-                    "                            @#****************************%@@                   \r\n" + //
-                    "                           @%**************************%@@@                     \r\n" + //
-                    "                             @@@##*****************#%@@@@@                      \r\n" + //
-                    "                              @@#%@@%#**********#%@@%##%@@                      \r\n" + //
-                    "                              @@####%%@@##**##%@@%#####%@@                      \r\n" + //
-                    "                              @@%#######%@@@%%#########%@@                      \r\n" + //
-                    "                              @@%######################%@@                      \r\n" + //
-                    "                              @@#######%###############%@@                      \r\n" + //
-                    "                              @@######%@%#####%@#######%@@                      \r\n" + //
-                    "                             @@%#######@@#####@@########@@@                     \r\n" + //
-                    "                             @@########%@@###@@%########%@@                     \r\n" + //
-                    "");
-            mudarCor(-1);
-        }
-
-    }
-
-    public static void interaçaoPirata() {
-        limparTela();
-        System.out.println("Aperte esc para pular o dialogo e enter para prosseguir");
-        int entrada = obtemTeclaPressionada();
-
-        if (entrada == 27) {
-            System.out.println();
-            return;
-        }
-        BibliotecaTCA.esperar(2000);
-        if (entrada != 27) {
-            mudarCor(AMARELO);
-            imprimirDevagar("Hmm...");
-            BibliotecaTCA.esperar(500);
-            imprimirDevagar("Nao faco ideia de quem voce e");
-            BibliotecaTCA.esperar(500);
-            imprimirDevagar("Mas nao vou deixar voce levar esse tesouro tao facil");
-            BibliotecaTCA.esperar(500);
-            System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%--=#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+:+*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*:+*++%%%%%%%%%%%%%+-+%%%%%%%%%%%+%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%###=*%%%%%%%%%%%%%%%+**%%%%%%%%%*==%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%**#%%%%%%%%%%%%#+*#+#%%%%%%%%#=%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*-.#%%%%%%%%%%%%%##%%%%%%%%%*=#%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%#%%%%%%%%%%%%%%%+:::*%%%%%%%%%%#-#-%%%%%%%%%#*#%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%#=:*%%%%%%%%%%%%#= :.+*+#%%%%#*-#:%#=#%%%%%%**+%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%*%=#%%%%%%%%%%-.   :*-+.#%:  .*:%%#-=+=*##%*+%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%#*=*#%%%%%%%%*.     .=+*.=%*:.:=.---.-=#%%%#:%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%##%%%%%%%%%%%%%*+:-+++=:-#:     ...:=+++**###*#****+=--+-%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%*-=%%%%%%%%%%%*...:#%**.--..=++**+-==*#-..-:=+*:-=*+=*+#*%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%#-#%%%%%%%%-.   :*==-+*#==:.--=++.=#:  -#**%--*#%%%++%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%#*#%%%%#**=..:+-**#*-.#+. =##**=:-#-..-++##=-**#%##-#%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%#=-=+#%-*=*-###-+##-:.*...:=-..:::=++**####*+-::+*=%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%*+%%#=-*+*. :.==##+.:. :*##=+**+-:.... ..*%%#*=#%*%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%*=+=*+=*#=..-===:-**+*=:...:.      .. ..:#%%+=*+%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%*+*+#%-*%=-=-*#%+:..      =.     ::... .*%%%:%=#%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%#*+*#%%-=-*##=.           +.   .:=*:  ..*%%#=%*=%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%+=#++:*#%%#=.           +.     .:.  .+%%%=+%#=%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%#+:**%=#%%%+.          -.         .=%%%#:%%#=%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%#*+%%%=%#*=-=..-=..  . .... ..--..--=*##:%%#=%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%####*:.       .++=:-   ::=+=..   .   :#*#*#%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+%-.##*++-.-. ..:*#:-:**-.. .-.-++*##.-%#%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%##*.=*#%%%%%#**--::=###=::-:**#%%%%%#*+.=*%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*#+:#*#%%%%%%%%%+****#****+#%%%%%%%%%*#-*##%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+*:=*%%%%%%%%%%%%%*=.+*%%%%%%%%%%%%%++-#*%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*#-.:#%%%%%%%%%%#*+-::*##%%%%%%%%%%#-.:#*%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#.-..:-++*##%%##=****%*++*-*#%%##*++-: :-.#%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%=:.-.::..++==:*.-+:#%#=+-.+:===+...:.-..-%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%=..::-=:  ....::.#%%%*....... .:=-::-.:#%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%=*-...:...:++-..-+%%%%%*-..:++:...:...=*#%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%**+--:.:-:..-.-.*%%*%%#-+.-..:-:::=+***#%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*****#%###-.:+-=*-*=:=:.:*##%#****+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%##**%+=-......=......:=+%#+##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%##==#%#*+-:.:..::.:.--=+#%#==##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+#.=*%*=##*+=+-.-+=++##=+%#+:**%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+*:..-+#=--+-#*=**:=:-+#+=:.:-=%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#+-.:-+-+++---.=.-:-=*=-==:.-=#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#*-..-+=:-:**=+-**---=+-..-+*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#+#=:..++=:-::::::-=*=:. +#*#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*#+.:::--=*+*+*+--:::.-#*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*+-.. :.=:*:-.: ..-=##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*##*:   :=+=.   :*#++%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#**#*=.......-*##*#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#***********#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
-                                "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-            mudarCor(-1);
-        }
-    }
-
-    public static void interaçaoReiPerdido() {
-        limparTela();
-        System.out.println("Aperte esc para pular o dialogo e enter para prosseguir");
-        int entrada = obtemTeclaPressionada();
-        if (entrada == 27) {
-            System.out.println();
-            return;
-        }
-        if (entrada != 27) {
-            mudarCor(208);
-            imprimirDevagar("Que sono!!!");
-            BibliotecaTCA.esperar(500);
-            imprimirDevagar("QUEM OUSA ME ACORDAR DE UM SONO DE MAIS DE 1000 ANOS");
-            BibliotecaTCA.esperar(500);
-            mudarCor(VERMELHO);
-            imprimirDevagar("(A estatua começa a brilhar e rachar)");
-            BibliotecaTCA.esperar(500);
-            mudarCor(208);
-            imprimirDevagar("Sinta a minha furia");
-            BibliotecaTCA.esperar(500);
-            System.out.println(
-                    "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%*%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%@@@@@%***%@@@@@%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@@@@@@@@@@@%***==+*****+==***%@@@@@@@@@@@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@@@@@@@@@#=****+==***#*==+****=#@@@@@@@@@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@@@@@***===+****==**+**==*#**+===***@@@@@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@@@@@#***+==****+=*****=+****==+*#*#@@@@@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@@@@@@#***==+****=*****=****+==***#@@@@@@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@@@@@@@************=:+************@@@@@@@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@@@@@@@#*******##**=:=***#*******#@@@@@@@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@@@@@@@%*******+++++*++++********%@@@@@@@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@@@@@@@+*+==+++*#########*+++==**+@@@@@@@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@@@@@@+===+##*++***###***+**##+===+@@@@@@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@@@@@%===+###=**=#######+**=###====%@@@@@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@@@@@====+###+@*%%#####%%*%+###+====@@@@@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@@@@%****+##########*##########+****%@@@@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@@@*=+#*+=########*****########=+*#+=*@@@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@@@====**==*######*+++*#######==**====@@@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@@+==----===*#+===========*#*===---===+@@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@+==-----===**===*#####*===**===-----==+@@@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@#====----====+===###***###+==+====----====#@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@======--======*#####===#####*======--======@@@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@%%%%@@@======-========*##+===+##*========-======@@@%%%%@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@%%%%%%%%@+=====---=======================---=====+@%%%%%%%%@@@@@@@@\r\n" + //
-                            "@@@@@@@@@%%%%%%%%%*===-----=====================-----===*%%%%%%%%%@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@%%%%%%%%%+--------+===============+--------+%%%%%%%%%@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@%%%%%%%%%=---=*****===========****+=---=%%%%%%%%%@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@@@@+%%%%%%%%%######*****++=++*****######%%%%%%%%%+@@@@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@@@@--::.:%%%%%%%%%#######*********#######%%%%%%%%%:.:::-@@@@@@@@@@@\r\n" + //
-                            "@@@@@@@@#--::::::.-%%%%%%%%%###################%%%%%%%%%-.:::--:--#@@@@@@@@\r\n" + //
-                            "@@@@@@%::-:::::::::.:#%%%%%%%%%#############%%%%%%%%%#:.:::::::::---%@@@@@@\r\n" + //
-                            "@@@@@+:::::::::::::::..#%%%%%%%%%#########%%%%%%%%%#..:::::::::::::--+@@@@@\r\n" + //
-                            "@@@@+::::::::::::::::::.:*%%%%%*%%%#####%%%##%%%%*:.::::::::::::::::::+@@@@\r\n" + //
-                            "@@@#:::::::::::::::::::::.:+%#***%%%##*%%%#**#%+..:::::::::::::::::::::#@@@\r\n" + //
-                            "@@@::::::::::::::::::::::::..*%%%%####***%%%%*..:-::::::::::::::::::::--@@@\r\n" + //
-                            "@@+::::::::::::::::::::::::::..+%%####***%%+..::::::::::::::::::::::::::+@@\r\n" + //
-                            "@@=::::::::::::::::::::::::::::..+####***=..::::::::::::::::::::::::::::=@@\r\n" + //
-                            "@@-::::::::::::::::::::::::::::-:.*###***:::::::::::::::::::::::::::::::-@@\r\n" + //
-                            "@@::::::::::::::::::::::::::::::::::+#+::::::::::::::::::::::::::::::::::@@\r\n" + //
-                            "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\r\n" //
-            );
-            mudarCor(-1);
-        }
-    }
 
     public static String[][] atualizarMatriz(String[][] mat1, String[][] matBase) {
         if (mat1.length != matBase.length || mat1[0].length != matBase[0].length) {
@@ -1331,61 +1131,63 @@ public class TCA {
         return matBase;
     }
 
-    public static int ATRIBUICAOBASE = 5;
+    public final static int ATRIBUICAOBASE = 5;
+    public final static int TENTATIVASNECESSARIAS = 5;
 
     public static void main(String[] args) {
         mudarCor(VERMELHO);
         System.out.println("Digite o seu nome (Aviso: ele nao podera ser trocado depois de escolhido)");
-        String nome = lerTexto();
         mudarCor(COR_PADRAO);
+        String nome = lerTexto();
         Historia.part1(nome);
         esconderCursor();
         String[][] matPuzzle1;
         boolean[][] matcopPuzzle1;
         MatrizesPuzzle_1 matrizesPuzzle1 = new MatrizesPuzzle_1();
         int numero = sortearNumero(4);
-        if (numero == 1) {
-            matPuzzle1 = matrizesPuzzle1.mat1;
-            matcopPuzzle1 = matrizesPuzzle1.matcop1;
-        }else if (numero == 2) {
-            matPuzzle1 = matrizesPuzzle1.mat2;
-            matcopPuzzle1 = matrizesPuzzle1.matcop2;
-        }else{
-            matPuzzle1 = matrizesPuzzle1.mat3;
-            matcopPuzzle1 = matrizesPuzzle1.matcop3;
-        }
-        String[][] matBasePuzzle1 = new String[matPuzzle1.length][matPuzzle1.length];
-        matBasePuzzle1 = matPuzzle1;
         String[][] mat2 = {
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", "# ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " }
+            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+            { ". ", ". ", ". ", "# ", ". ", ". ", ". " },
+            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+            { ". ", ". ", ". ", ". ", ". ", ". ", ". " }
         };
-
+        
         int areasExploradas = 0;
-        int pontosDeUpgrade = 5;
+        int pontosDeUpgrade = 0;
+        int tentativas = 0;
         Atributos atributosPadrao = new Atributos();
         int ataquePesado = atributosPadrao.ataquePesado;
         int ataqueLeve = atributosPadrao.ataqueLeve;
         int vida = atributosPadrao.vida;
         int eficienciaDeDefesa = atributosPadrao.eficienciaDeDefesa;
-
+        
         String[] areas = { "Aldeia dos Goblins", "Ilha do Pirata", "Tumba do Rei Perdido" };
         String[] menuInicial = { "Explorar areas", "Status do personagem" };
         String[] senhas = { "maca", "banana", "uva" };
         boolean[] areasCompletas = { false, false, false };
         int[] statusInimigo = new int[2];
-
+        
         while (areasExploradas != 3) {
-
+            if (numero == 1) {
+                matPuzzle1 = matrizesPuzzle1.mat1;
+                matcopPuzzle1 = matrizesPuzzle1.matcop1;
+            }else if (numero == 2) {
+                matPuzzle1 = matrizesPuzzle1.mat2;
+                matcopPuzzle1 = matrizesPuzzle1.matcop2;
+            }else{
+                matPuzzle1 = matrizesPuzzle1.mat3;
+                matcopPuzzle1 = matrizesPuzzle1.matcop3;
+            }
+            String[][] matBasePuzzle1 = new String[matPuzzle1.length][matPuzzle1.length];
+            matBasePuzzle1 = matPuzzle1;
+            
             int escolha = escolherNoMenuBasico("   Menu Inicial   ", menuInicial);
             if (escolha == 0) {
                 System.out.println("Escolha a area que deseja explorar");
@@ -1399,12 +1201,23 @@ public class TCA {
                         continue;
                     }
                     boolean passou = false;
+                    boolean restart = false;
                     while (passou == false) {
+                        System.out.println("Voce tem "+ (TENTATIVASNECESSARIAS - tentativas) + " tentativas para concluir este labririnto\n(Ele será resetado apos " + TENTATIVASNECESSARIAS + " tentativas)");
+                        esperar(1500);
                         matBasePuzzle1 = atualizarMatriz(matPuzzle1, matBasePuzzle1);
                         passou = puzzle1(matBasePuzzle1, matcopPuzzle1);
+                        tentativas++;
+                        if (tentativas == TENTATIVASNECESSARIAS) {
+                            restart = true;
+                            break;
+                        }
+                    }
+                    if (restart == true) {
+                        continue;
                     }
                     do {
-                        interaçaoGoblinAnciao();
+                        Historia.interacaoGoblinAnciaoInicio();
                         mudarCor(VERMELHO);
                         System.out.println("E entao voce acha o boss");
                         mudarCor(-1);
@@ -1415,7 +1228,9 @@ public class TCA {
                     } while (areasCompletas[0] == false);
                     areasExploradas++;
                     pontosDeUpgrade += ATRIBUICAOBASE;
+                    Historia.interacaoGoblinAnciaoFinal();
                     System.out.println("Voce recebeu: " + ATRIBUICAOBASE);
+                    esperar(700);
                     continue;
                 } else if (area == 1) {
                     if (areasCompletas[1] == true) {
@@ -1429,7 +1244,7 @@ public class TCA {
                         areasCompletas[1] = puzzle2(mat2);
                     } while (areasCompletas[1] == false);
                     do {
-                        interaçaoPirata();
+                        Historia.interacaoPirataInicio();
                         mudarCor(VERMELHO);
                         System.out.println("E entao voce acha o boss");
                         mudarCor(-1);
@@ -1440,7 +1255,9 @@ public class TCA {
                     } while (areasCompletas[1] == false);
                     areasExploradas++;
                     pontosDeUpgrade += ATRIBUICAOBASE;
+                    Historia.interacaoPirataFinal();
                     System.out.println("Voce recebeu: " + ATRIBUICAOBASE);
+                    esperar(700);
                     continue;
                 } else if (area == 2) {
                     if (areasCompletas[2] == true) {
@@ -1451,7 +1268,7 @@ public class TCA {
                     }
                     puzzle3(senhas);
                     do {
-                        interaçaoReiPerdido();
+                        Historia.interacaoReiPerdidoInicio();
                         mudarCor(VERMELHO);
                         System.out.println("E entao voce acha o boss");
                         mudarCor(-1);
@@ -1462,8 +1279,9 @@ public class TCA {
                     } while (areasCompletas[2] == false);
                     areasExploradas++;
                     pontosDeUpgrade += ATRIBUICAOBASE;
+                    Historia.interacaoReiPerdidoFinal();
                     imprimirDevagar("Voce recebeu: " + ATRIBUICAOBASE);
-                    esperar(500);
+                    esperar(700);
                     continue;
 
                 }
@@ -1481,12 +1299,13 @@ public class TCA {
                         if (voltar) {
                             break;
                         }
-                        System.out.println("Ataque pesado: " + ataquePesado);
-                        System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade");
-                        System.out.println(
-                                "Deseja aumentar o ataque pesado em quantos pontos? (1 ponto = 10 de ataque pesado)");
-
+                        
                         while (true) {
+                            System.out.println("Ataque pesado: " + ataquePesado);
+                            System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade e "+ pontosGastos[0] + " Investidos nesse status");
+                            System.out.println(
+                                    "Deseja aumentar o ataque pesado em quantos pontos? (1 ponto = 10 de ataque pesado)(pressione ESC para voltar)");
+                                    esperar(2000);
                             escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
                             if (escolhaDePontos == 0) {
                                 if (pontosDeUpgrade == 0) {
@@ -1512,11 +1331,12 @@ public class TCA {
                         if (voltar) {
                             break;
                         }
-                        System.out.println("Ataque leve: " + ataqueLeve);
-                        System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade");
-                        System.out.println(
-                                "Deseja aumentar o ataque leve em quantos pontos? (1 ponto = 5 de ataque leve) (digite 0 para voltar)");
                         while (true) {
+                            System.out.println("Ataque leve: " + ataqueLeve);
+                            System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade e "+ pontosGastos[1] + " Investidos nesse status");
+                            System.out.println(
+                                    "Deseja aumentar o ataque leve em quantos pontos? (1 ponto = 5 de ataque leve) (pressione ESC para voltar)");
+                                    esperar(2000);
                             escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
                             if (escolhaDePontos == 0) {
                                 if (pontosDeUpgrade == 0) {
@@ -1541,11 +1361,12 @@ public class TCA {
                         if (voltar) {
                             break;
                         }
-                        System.out.println("Vida: " + vida);
-                        System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade");
-                        System.out.println(
-                                "Deseja aumentar a vida em quantos pontos? (1 ponto = 10 de vida) (digite 0 para voltar)");
                         while (true) {
+                            System.out.println("Vida: " + vida);
+                            System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade e " + pontosGastos[2] + " Investidos nesse status");
+                            System.out.println(
+                                    "Deseja aumentar a vida em quantos pontos? (1 ponto = 10 de vida) (pressione ESC para voltar)");
+                                    esperar(2000);
                             escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
                             if (escolhaDePontos == 0) {
                                 if (pontosDeUpgrade == 0) {
@@ -1572,9 +1393,11 @@ public class TCA {
                             break;
                         }
                         System.out.println("Eficiencia de defesa: " + eficienciaDeDefesa);
-                        System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade");
+                        System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade e "+ pontosGastos[3] + " Investidos nesse status");
                         System.out.println(
-                                "Deseja aumentar a eficiencia de defesa em quantos pontos? (1 ponto = 2 de eficiencia de defesa) (digite 0 para voltar)");
+                                "Deseja aumentar a eficiencia de defesa em quantos pontos? (1 ponto = 2 de eficiencia de defesa)(pressione ESC para voltar)");
+                                esperar(2000);
+
                         while (true) {
                             escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
                             if (escolhaDePontos == 0) {

@@ -43,7 +43,7 @@ public class MatrizesPuzzle_1 {
         boolean[][] matcop3 = {
                 { true, true, true, true, true, true },
                 { true, false, true, false, true, false },
-                { true, true, true, true, true, true },
+                { true, true, true, true, false, true },
                 { true, false, true, false, true, true },
                 { true, true, true, true, false, true },
                 { true, false, false, false, false, true }
