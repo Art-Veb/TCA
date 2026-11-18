@@ -1,3 +1,2 @@
-.vscode/
-jna-5.17.0.jar
-Jna-5.17.0.jar
+# Compiled class file
+*.class
