@@ -9,14 +9,21 @@
             "name": "TCA",
             "request": "launch",
             "mainClass": "TCA",
-            "projectName": "TCA_4c3d7714"
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "TCA",
+            "request": "launch",
+            "mainClass": "TCA",
+            "projectName": ""
         },
         {
             "type": "java",
             "name": "Historia",
             "request": "launch",
             "mainClass": "Historia",
-            "projectName": "TCA_4c3d7714"
+            "projectName": ""
         },
         {
             "type": "java",
@@ -29,14 +36,14 @@
             "name": "BibliotecaTCA",
             "request": "launch",
             "mainClass": "BibliotecaTCA",
-            "projectName": "TCA_4c3d7714"
+            "projectName": ""
         },
         {
             "type": "java",
             "name": "Funcoes",
             "request": "launch",
             "mainClass": "Funcoes",
-            "projectName": "TCA_4c3d7714"
+            "projectName": ""
         }
     ]
 }

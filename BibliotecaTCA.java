@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 
 import com.sun.jna.Library;
 import com.sun.jna.Native;
-
+///home/aluno/Área de trabalho/TCA/TCA.java
 
 // =====================================================================
 // BIBLIOTECA DO TCA
@@ -43,11 +43,11 @@ import com.sun.jna.Native;
 //
 // COMO COMPILAR E RODAR PELO TERMINAL (dentro da pasta do projeto):
 //   Mac e Linux:
-//     javac -cp "lib/*:." MeuJogo.java
-//     java -cp "lib/*:." MeuJogo
+//     javac -cp "lib/*:." TCA.java
+//     java -cp "lib/*:." TCA
 //   Windows:
-//     javac -cp "lib/*;." MeuJogo.java
-//     java -cp "lib/*;." MeuJogo
+//     javac -cp "lib/*;." TCA.java
+//     java -cp "lib/*;." TCA
 //
 //   Compilando o MeuJogo.java, o javac compila a BibliotecaTCA.java
 //   junto, sozinho. Atenção ao separador: ":" no Mac/Linux e ";" no Windows.
