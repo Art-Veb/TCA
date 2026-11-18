@@ -817,12 +817,14 @@ public class TCA {
                 if(numSelecionado == 3){
                     mudarCor(VERDE);
                     System.out.println("Voce acertou!!");
+                    esperar(1000);
                     mudarCor(-1);
                     perguntasFeitas[0] = true;
                     i++;
                 }else{
                     mudarCor(VERMELHO);
                     System.out.println("Voce errou :( !!");
+                    esperar(1000);
                     mudarCor(-1);
                     continue;
                 }
@@ -831,12 +833,14 @@ public class TCA {
                 if(numSelecionado == 1){
                     mudarCor(VERDE);
                     System.out.println("Voce acertou!!");
+                    esperar(1000);
                     mudarCor(-1);
                     perguntasFeitas[1] = true;
                     i++;
                 }else{
                     mudarCor(VERMELHO);
                     System.out.println("Voce errou :( !!");
+                    esperar(1000);
                     mudarCor(-1);
                     continue;
                 };
@@ -845,12 +849,14 @@ public class TCA {
                 if(numSelecionado == 1){
                     mudarCor(VERDE);
                     System.out.println("Voce acertou!!");
+                    esperar(1000);
                     mudarCor(-1);
                     perguntasFeitas[2] = true;
                     i++;
                 }else{
                     mudarCor(VERMELHO);
                     System.out.println("Voce errou :( !!");
+                    esperar(1000);
                     mudarCor(-1);
                     continue;
                 }
@@ -859,12 +865,14 @@ public class TCA {
                 if(numSelecionado == 2){
                     mudarCor(VERDE);
                     System.out.println("Voce acertou!!");
+                    esperar(1000);
                     mudarCor(-1);
                     perguntasFeitas[3] = true;
                     i++;
                 }else{
                     mudarCor(VERMELHO);
                     System.out.println("Voce errou :( !!");
+                    esperar(1000);
                     mudarCor(-1);
                     continue;
                 }
@@ -873,12 +881,14 @@ public class TCA {
                 if(numSelecionado == 2){
                     mudarCor(VERDE);
                     System.out.println("Voce acertou!!");
+                    esperar(1000);
                     mudarCor(-1);
                     perguntasFeitas[4] = true;
                     i++;
                 }else{
                     mudarCor(VERMELHO);
                     System.out.println("Voce errou :( !!");
+                    esperar(1000);
                     mudarCor(-1);
                     continue;
                 }
