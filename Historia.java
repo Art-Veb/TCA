@@ -13,6 +13,9 @@ public class Historia {
     public static final int COR_PADRAO = -1;
     public static final int LARANJA = 208;
 
+    public static void historia1(String nome){
+        
+    }
     public static void part1(String nome){
         TCA.limparTela();
         System.out.println("Aperte esc para pular o dialogo e enter para prosseguir");
