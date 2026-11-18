@@ -685,6 +685,7 @@ public class TCA {
         segundosPassados();
         desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
         while (segundosPassados() <= 45) {
+            limparTela();
             escreverEm(1, 0, String.format("%.1f s", segundosPassados()));
             esperar(100);
             // Lógica para detectar o movimento
@@ -810,13 +811,11 @@ public class TCA {
         return palavraFormatada;
     }
 
-    public static void puzzle3(String[] perguntas) {
+    public static void puzzle3(String[] perguntas,String[] respostas) {
 
         int j = 0;
         BibliotecaTCA.esconderCursor();
-        while (j < perguntas.length) {
-
-        }
+        
     }
 
     public static int defesa(int dano) {
@@ -884,6 +883,7 @@ public class TCA {
 
     public static boolean sistemaDBatalha(int vidaInimiga, int ataqueInimigo, int vidaTotal, int atqLeve, int atqPesado,
             int eficienciaDeDefesa) {
+                limparTela();
         boolean lutaVencida = false;
         int cargaEspecialPersonagem = 0;
         int cargaEspecialInimigo = 0;
