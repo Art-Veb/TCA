@@ -80,6 +80,7 @@ public class BibliotecaTCA {
     // Exemplo:
     //   irPara(5, 10);             // linha 5, coluna 10
     //   System.out.print("Oi!");   // escreve "Oi!" nessa posição
+    // funcao inteiro de string Integer.parseInt("123")
     //
     // ATENÇÃO:
     //   - Primeiro vem a LINHA (para baixo), depois a COLUNA (para o lado).

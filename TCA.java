@@ -357,12 +357,11 @@ public class TCA {
         BibliotecaTCA.esconderCursor();
         for (int i = 0; i < texto.length(); i++) {
             System.out.print(texto.charAt(i));
-            esperar(80);
+            esperar(70);
         }
         System.out.println();
     }
 
-    // Método que imprime o menu letra por letra
 
     public static int sortearNumero(int limite) {
         int valor;
@@ -430,7 +429,7 @@ public class TCA {
             System.out.println();
         }
         BibliotecaTCA.mudarCor(-1);
-        System.out.println("Use A, D, W, S para mover o personagem. Pressione ESC para sair.");
+        System.out.println("Use A, D, W, S para mover o personagem.");
 
     }
 
@@ -794,13 +793,6 @@ public class TCA {
         return false;
     }
 
-    public static boolean[] preencherVet(boolean[] vet) {
-        for (int i = 0; i < vet.length; i++) {
-            vet[i] = true;
-        }
-        return vet;
-    }
-
     public static String formatarPalavra(String palavra, int letras) {
         char[] letrasFormatadas = new char[letras];
         for (int i = 0; i < letras; i++) {
@@ -1133,6 +1125,7 @@ public class TCA {
 
     public final static int ATRIBUICAOBASE = 5;
     public final static int TENTATIVASNECESSARIAS = 5;
+
 
     public static void main(String[] args) {
         mudarCor(VERMELHO);
