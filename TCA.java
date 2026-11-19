@@ -20,7 +20,8 @@ public class TCA {
     }
 
     public static void limparTela() {
-        System.out.print("\033[2J"); // apaga a tela
+        System.out.print("\033[2J"); 
+        System.out.print("\033[3J"); // apaga a tela
         System.out.print("\033[H"); // volta o cursor para o canto (1, 1)
         System.out.flush(); // garante que os comandos acima sejam enviados agora
     }
@@ -384,7 +385,7 @@ public class TCA {
 
     public static String lerTexto() {
         String valor;
-        valor = TECLADO.next();
+        valor = TECLADO.nextLine();
         return valor;
     }
 
@@ -1222,41 +1223,41 @@ public class TCA {
         String[][] matPuzzle1;
         boolean[][] matcopPuzzle1;
         MatrizesPuzzle_1 matrizesPuzzle1 = new MatrizesPuzzle_1();
-        int numero = sortearNumero(4);
         String[][] mat2 = {
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", "# ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+            { ". ", ". ", ". ", "# ", ". ", ". ", ". " },
+            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " }
-        };
-
-        int areasExploradas = 0;
-        int pontosDeUpgrade = 0;
-        int tentativas = 0;
-        Atributos atributosPadrao = new Atributos();
+            };
+            
+            int areasExploradas = 0;
+            boolean nVaiJogar = false;
+            int pontosDeUpgrade = 0;
+            int tentativas = 0;
+            Atributos atributosPadrao = new Atributos();
         int ataquePesado = atributosPadrao.ataquePesado;
         int ataqueLeve = atributosPadrao.ataqueLeve;
         int vida = atributosPadrao.vida;
         int eficienciaDeDefesa = atributosPadrao.eficienciaDeDefesa;
-
+        
         String[] areas = { "Aldeia dos Goblins", "Ilha do Pirata", "Tumba do Rei Perdido" };
         String[] menuInicial = { "Explorar areas", "Status do personagem" };
-        String[] senhas = { "maca", "banana", "uva" };
         boolean[] areasCompletas = { false, false, false };
         int[] statusInimigo = new int[2];
-
+        
         while (areasExploradas != 3) {
-            if (numero == 1) {
+            int numero = sortearNumero(3);
+            if (numero == 0) {
                 matPuzzle1 = matrizesPuzzle1.mat1;
                 matcopPuzzle1 = matrizesPuzzle1.matcop1;
-            } else if (numero == 2) {
+            } else if (numero == 1) {
                 matPuzzle1 = matrizesPuzzle1.mat2;
                 matcopPuzzle1 = matrizesPuzzle1.matcop2;
             } else {
@@ -1290,10 +1291,11 @@ public class TCA {
                         tentativas++;
                         if (tentativas == TENTATIVASNECESSARIAS) {
                             restart = true;
+                            tentativas = 0;
                             break;
                         }
                     }
-                    if (restart == true) {
+                    if (restart) {
                         continue;
                     }
                     do {
@@ -1301,6 +1303,7 @@ public class TCA {
                         mudarCor(VERMELHO);
                         System.out.println("E entao voce acha o boss");
                         System.out.println("Deseja sair da batalha?(ao ser iniciada ela nao podera ser interrompida)");
+                        mudarCor(COR_PADRAO);
                         int temp = obtemTeclaPressionada();
                         esperar(2000);
                         if (temp == 13) {
@@ -1313,9 +1316,13 @@ public class TCA {
                                         ataquePesado, eficienciaDeDefesa);
                             } while (areasCompletas[0] == false);
                         } else if (temp == 27) {
+                            nVaiJogar = true;
                             break;
                         }
                     } while (areasCompletas[0] == false);
+                    if (nVaiJogar) {
+                        continue;
+                    }
                     areasExploradas++;
                     pontosDeUpgrade += ATRIBUICAOBASE;
                     Historia.interacaoGoblinAnciaoFinal();
@@ -1330,7 +1337,6 @@ public class TCA {
                         continue;
                     }
                     do {
-                        limparTela();
                         areasCompletas[1] = puzzle2(mat2);
                     } while (areasCompletas[1] == false);
                     do {
@@ -1338,6 +1344,7 @@ public class TCA {
                         mudarCor(VERMELHO);
                         System.out.println("E entao voce acha o boss");
                         System.out.println("Deseja sair da batalha?(ao ser iniciada ela nao podera ser interrompida)");
+                        mudarCor(COR_PADRAO);
                         int temp = obtemTeclaPressionada();
                         esperar(2000);
                         if (temp == 13) {
@@ -1350,8 +1357,12 @@ public class TCA {
                                         ataquePesado, eficienciaDeDefesa);
                             } while (areasCompletas[0] == false);
                         } else if (temp == 27) {
+                            nVaiJogar = true;
                             break;
                         }
+                        if (nVaiJogar) {
+                        continue;
+                    }
                         mudarCor(-1);
                         BibliotecaTCA.esperar(2000);
                         statusInimigo = pirata();
@@ -1377,6 +1388,7 @@ public class TCA {
                         mudarCor(VERMELHO);
                         System.out.println("E entao voce acha o boss");
                         System.out.println("Deseja sair da batalha?(ao ser iniciada ela nao podera ser interrompida)");
+                        mudarCor(COR_PADRAO);
                         int temp = obtemTeclaPressionada();
                         esperar(2000);
                         if (temp == 13) {
@@ -1389,8 +1401,12 @@ public class TCA {
                                         ataquePesado, eficienciaDeDefesa);
                             } while (areasCompletas[0] == false);
                         } else if (temp == 27) {
+                            nVaiJogar = true;
                             break;
                         }
+                        if (nVaiJogar) {
+                        continue;
+                    }
                         mudarCor(-1);
                         BibliotecaTCA.esperar(2000);
                         statusInimigo = reiPerdido();

@@ -106,6 +106,7 @@ public class Historia {
         BibliotecaTCA.esperar(2000);
         TCA.mudarCor(VERDE);
         TCA.imprimirDevagar("Entendo entao nao existem racas superiores as outras. . .");
+        TCA.mudarCor(COR_PADRAO);
 
     }
 
