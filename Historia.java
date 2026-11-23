@@ -18,7 +18,7 @@ public class Historia {
     }
     public static void part1(String nome){
         TCA.limparTela();
-        System.out.println("Aperte esc para pular o dialogo e enter para prosseguir");
+        System.out.println("Aperte ESC para pular o diálogo e ENTER para prosseguir");
         int entrada = TCA.obtemTeclaPressionada();
         if (entrada == 27) {
             System.out.println();
@@ -33,7 +33,7 @@ public class Historia {
 
     public static void interacaoGoblinAnciaoInicio() {
         TCA.limparTela();
-        System.out.println("Aperte esc para pular o dialogo e enter para prosseguir");
+        System.out.println("Aperte ESC para pular o diálogo e ENTER para prosseguir");
         int entrada = TCA.obtemTeclaPressionada();
         if (entrada == 27) {
             System.out.println();
@@ -43,9 +43,9 @@ public class Historia {
         if (entrada != 27) {
             System.out.println();
             TCA.mudarCor(VERDE);
-            TCA.imprimirDevagar("Voce realmente acha que vai escapar daqui com vida???");
+            TCA.imprimirDevagar("Você realmente acha que vai escapar daqui com vida???");
             BibliotecaTCA.esperar(500);
-            TCA.imprimirDevagar("Nos goblins temos odio a raca humana");
+            TCA.imprimirDevagar("Nós goblins temos ódio à raça humana");
             BibliotecaTCA.esperar(500);
             System.out.println("                                  @@@@@@@@@@@@@@@@@                             \r\n" + //
                     "                             @@@@@@@%************#%@@@@@@                       \r\n" + //
@@ -97,7 +97,7 @@ public class Historia {
 
     public static void interacaoGoblinAnciaoFinal(){
         TCA.limparTela();
-        System.out.println("Aperte esc para pular o dialogo e enter para prosseguir (parte essencial para o puzzle 3)");
+        System.out.println("Aperte ESC para pular o diálogo e ENTER para prosseguir (parte essencial para o puzzle 3)");
         int entrada = TCA.obtemTeclaPressionada();
         if (entrada == 27) {
             System.out.println();
@@ -105,14 +105,14 @@ public class Historia {
         }
         BibliotecaTCA.esperar(2000);
         TCA.mudarCor(VERDE);
-        TCA.imprimirDevagar("Entendo entao nao existem racas superiores as outras. . .");
+        TCA.imprimirDevagar("Entendo então não existem raças superiores às outras. . .");
         TCA.mudarCor(COR_PADRAO);
 
     }
 
     public static void interacaoPirataInicio() {
         TCA.limparTela();
-        System.out.println("Aperte esc para pular o dialogo e enter para prosseguir");
+        System.out.println("Aperte ESC para pular o diálogo e ENTER para prosseguir");
         int entrada = TCA.obtemTeclaPressionada();
 
         if (entrada == 27) {
@@ -124,9 +124,9 @@ public class Historia {
             TCA.mudarCor(AMARELO);
             TCA.imprimirDevagar("Hmm...");
             BibliotecaTCA.esperar(500);
-            TCA.imprimirDevagar("Nao faco ideia de quem voce e");
+            TCA.imprimirDevagar("Não faço ideia de quem você é");
             BibliotecaTCA.esperar(500);
-            TCA.imprimirDevagar("Mas nao vou deixar voce levar esse tesouro tao facil");
+            TCA.imprimirDevagar("Mas não vou deixar você levar esse tesouro tão fácil");
             BibliotecaTCA.esperar(500);
             System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
                                 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
@@ -189,7 +189,7 @@ public class Historia {
 
     public static void interacaoPirataFinal(){
         TCA.limparTela();
-        System.out.println("Aperte esc para pular o dialogo e enter para prosseguir (parte essencial para o puzzle 3)");
+        System.out.println("Aperte ESC para pular o diálogo e ENTER para prosseguir (parte essencial para o puzzle 3)");
         int entrada = TCA.obtemTeclaPressionada();
         if (entrada == 27) {
             System.out.println();
@@ -197,13 +197,13 @@ public class Historia {
         }
         BibliotecaTCA.esperar(2000);
         TCA.mudarCor(AMARELO);
-        TCA.imprimirDevagar("Nem so de riquezas vive um homem hehehe");
+        TCA.imprimirDevagar("Nem só de riquezas vive um homem hehehe");
         TCA.mudarCor(COR_PADRAO);
     }
 
     public static void interacaoReiPerdidoInicio() {
         TCA.limparTela();
-        System.out.println("Aperte esc para pular o dialogo e enter para prosseguir");
+        System.out.println("Aperte ESC para pular o diálogo e ENTER para prosseguir");
         int entrada = TCA.obtemTeclaPressionada();
         if (entrada == 27) {
             System.out.println();
@@ -217,10 +217,10 @@ public class Historia {
             TCA.imprimirDevagar("QUEM OUSA ME ACORDAR DE UM SONO DE MAIS DE 1000 ANOS");
             BibliotecaTCA.esperar(500);
             TCA.mudarCor(VERMELHO);
-            TCA.imprimirDevagar("(A estatua começa a brilhar e rachar)");
+            TCA.imprimirDevagar("(A estátua começa a brilhar e rachar)");
             BibliotecaTCA.esperar(500);
             TCA.mudarCor(LARANJA);
-            TCA.imprimirDevagar("Sinta a minha furia");
+            TCA.imprimirDevagar("Sinta a minha fúria");
             BibliotecaTCA.esperar(500);
             System.out.println(
                     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%*%@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\r\n" + //
@@ -269,7 +269,7 @@ public class Historia {
 
     public static void interacaoReiPerdidoFinal() {
         TCA.limparTela();
-        System.out.println("Aperte esc para pular o dialogo e enter para prosseguir (parte essencial para o puzzle 3)");
+        System.out.println("Aperte ESC para pular o diálogo e ENTER para prosseguir (parte essencial para o puzzle 3)");
         int entrada = TCA.obtemTeclaPressionada();
         if (entrada == 27) {
             System.out.println();
@@ -281,9 +281,9 @@ public class Historia {
         TCA.mudarCor(COR_PADRAO);
     }
 
-    public static void instrucoesCacaAoTesouro(){
+    public static void instrucoesPuzzle2(){
         TCA.limparTela();
-        System.out.println("Aperte esc para pular as instrucoes e enter para prosseguir");
+        System.out.println("Aperte ESC para pular as instruções e ENTER para prosseguir");
         int entrada = TCA.obtemTeclaPressionada();
         if (entrada == 27) {
             System.out.println();
@@ -292,6 +292,19 @@ public class Historia {
          TCA.mudarCor(AMARELO);
          TCA.imprimirDevagar("Caça Ao Tesouro:\nVocê terá 45 segundos para achar o Tesouro\nPressionar ENTER revelará se você está Quente, Frio ou Morno do Tesouro\nMas cuidado!!! Por todo o mapa estarão espalhadas areias movediças, pisar nelas resetará o mapa\nPressionar V irá revelar areias num raio de 1 quadrado"); 
          TCA.mudarCor(COR_PADRAO);
+        }
+    }
+    public static void instrucoesPuzzle1(){
+        TCA.limparTela();
+        System.out.println("Aperte ESC para pular as instruções e ENTER para prosseguir");
+        int entrada = TCA.obtemTeclaPressionada();
+        if (entrada == 27) {
+            System.out.println();
+            return;
+        }else if (entrada == 13) {
+            TCA.mudarCor(VERMELHO);
+            TCA.imprimirDevagar("Labirinto de Barreiras Invisíveis\nChegue ao final do Labirinto para escapar!!!\nVocê tem um total de 4 vidas por tentativa\nE 5 tentativas\nBater em uma Barreira consumirá 1 vida\nSe a vida chegar a 0 você terá uma tentativa consumida\nConsumir todas as suas tentativas fará o mapa resetar");
+            TCA.mudarCor(COR_PADRAO);
         }
     }
 }
