@@ -4,6 +4,7 @@ import java.util.Scanner;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 
+
 //teste
 public class TCA {
     public final static Scanner TECLADO = new Scanner(System.in);
@@ -20,8 +21,8 @@ public class TCA {
     }
 
     public static void limparTela() {
-        System.out.print("\033[2J"); 
-        System.out.print("\033[3J"); // apaga a tela
+        System.out.print("\033[3J");// apaga o historico do terminal
+        System.out.print("\033[2J"); // apaga a tela
         System.out.print("\033[H"); // volta o cursor para o canto (1, 1)
         System.out.flush(); // garante que os comandos acima sejam enviados agora
     }
@@ -227,7 +228,9 @@ public class TCA {
     // System.out.println("GAME OVER");
     // esperarTecla();
     public static void esperarTecla() {
-        System.out.println("Pressione uma tecla para continuar...");
+        mudarCor(VERMELHO);
+        System.out.println("Pressione qualquer tecla para iniciar");
+        mudarCor(COR_PADRAO);
         obtemTeclaPressionada(); // fica esperando a tecla
     }
 
@@ -364,7 +367,6 @@ public class TCA {
         System.out.println();
     }
 
-
     public static int sortearNumero(int limite) {
         int valor;
         valor = SORTEIO.nextInt(limite);
@@ -386,6 +388,7 @@ public class TCA {
     public static String lerTexto() {
         String valor;
         valor = TECLADO.nextLine();
+        TECLADO.close();
         return valor;
     }
 
@@ -634,13 +637,12 @@ public class TCA {
     }
 
     public static void exibirQuenteOuFrio(int[] distTesouro) {
-
         if (distTesouro[0] <= 1 && distTesouro[1] <= 1) {
-            System.out.println(" Quente!");
+            System.out.println("\tQuente!");
         } else if (distTesouro[0] < 3 || distTesouro[1] < 3) {
-            System.out.println(" Morno!");
+            System.out.println("\tMorno!");
         } else {
-            System.out.println(" Frio!");
+            System.out.println("\tFrio!");
         }
     }
 
@@ -681,21 +683,21 @@ public class TCA {
         matcop2[i][j] = ". ";
         boolean primeiraVez = true;
         double segundos = 0;
-
+        
+        esperarTecla();
         iniciarCronometro();
         segundosPassados();
-        desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
         while (segundosPassados() <= 45) {
-            limparTela();
             escreverEm(1, 0, String.format("%.1f s", segundosPassados()));
             esperar(100);
             // Lógica para detectar o movimento
-
+            
             if (BibliotecaTCA.pressionouTecla()) {
                 tecla = BibliotecaTCA.obtemTeclaPressionada();
                 switch (tecla) {
                     case 'a':
                     case 'A':
+                        limparTela();
                         j--;
                         if (j < 0) {
                             j = 0;
@@ -713,11 +715,12 @@ public class TCA {
                         ;
                         break;
                     case 'd':
-                    case 'D':
-                        j++;
-                        if (j > colunas - 1) {
-                            j = colunas - 1;
-                        } else if (matcop2[i][j] == "areia") {
+                        case 'D':
+                            limparTela();
+                            j++;
+                            if (j > colunas - 1) {
+                                j = colunas - 1;
+                            } else if (matcop2[i][j] == "areia") {
                             System.out.println(" Voce caiu em uma areia movediça! Game over!");
                             esperar(800);
                             return false;
@@ -725,14 +728,15 @@ public class TCA {
                             matPadrao[i][j] = "# ";
                             matPadrao[i][j - 1] = ". ";
                         }
-
+                        
                         BibliotecaTCA.limparTela();
                         desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
                         break;
                     case 'w':
-                    case 'W':
-                        i--;
-
+                        case 'W':
+                            limparTela();
+                            i--;
+                            
                         if (i < 0) {
                             i = 0;
                         } else if (matcop2[i][j] == "areia") {
@@ -743,12 +747,13 @@ public class TCA {
                             matPadrao[i][j] = "# ";
                             matPadrao[i + 1][j] = ". ";
                         }
-
+                        
                         BibliotecaTCA.limparTela();
                         desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
                         break;
                     case 's':
                     case 'S':
+                        limparTela();
                         i++;
                         if (i > linhas - 1) {
                             i = linhas - 1;
@@ -765,13 +770,18 @@ public class TCA {
                         desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
                         break;
                     case 13:
+                        limparTela();
                         if (i == pos[0] && j == pos[1]) {
+                            mudarCor(AMARELO);
                             System.out.println(" Parabéns! Você encontrou o tesouro!");
+                            esperar(800);
+                            mudarCor(COR_PADRAO);
                             System.out.println();
                             return true;
                         } else {
                             distTesouro = calcularDistTesouro(pos, i, j);
                             exibirQuenteOuFrio(distTesouro);
+                            desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
                             continue;
                         }
                     case 'v':
@@ -787,12 +797,12 @@ public class TCA {
                             segundos = segundosPassados();
                             primeiraVez = false;
                         }
-
-                    default:
-
+                        break;
+                        
                 }
             }
         }
+    
         return false;
     }
 
@@ -815,14 +825,14 @@ public class TCA {
             int numSelecionado;
             if (num == 0 && perguntasFeitas[0] == false) {
                 numSelecionado = escolherNoMenuBasico(perguntas[num], respostas);
-                if(numSelecionado == 3){
+                if (numSelecionado == 3) {
                     mudarCor(VERDE);
                     System.out.println("Voce acertou!!");
                     esperar(1000);
                     mudarCor(-1);
                     perguntasFeitas[0] = true;
                     i++;
-                }else{
+                } else {
                     mudarCor(VERMELHO);
                     System.out.println("Voce errou :( !!");
                     esperar(1000);
@@ -831,30 +841,31 @@ public class TCA {
                 }
             } else if (num == 1 && perguntasFeitas[1] == false) {
                 numSelecionado = escolherNoMenuBasico(perguntas[num], respostas1);
-                if(numSelecionado == 1){
+                if (numSelecionado == 1) {
                     mudarCor(VERDE);
                     System.out.println("Voce acertou!!");
                     esperar(1000);
                     mudarCor(-1);
                     perguntasFeitas[1] = true;
                     i++;
-                }else{
+                } else {
                     mudarCor(VERMELHO);
                     System.out.println("Voce errou :( !!");
                     esperar(1000);
                     mudarCor(-1);
                     continue;
-                };
+                }
+                ;
             } else if (num == 2 && perguntasFeitas[2] == false) {
                 numSelecionado = escolherNoMenuBasico(perguntas[num], respostas2);
-                if(numSelecionado == 1){
+                if (numSelecionado == 1) {
                     mudarCor(VERDE);
                     System.out.println("Voce acertou!!");
                     esperar(1000);
                     mudarCor(-1);
                     perguntasFeitas[2] = true;
                     i++;
-                }else{
+                } else {
                     mudarCor(VERMELHO);
                     System.out.println("Voce errou :( !!");
                     esperar(1000);
@@ -863,14 +874,14 @@ public class TCA {
                 }
             } else if (num == 3 && perguntasFeitas[3] == false) {
                 numSelecionado = escolherNoMenuBasico(perguntas[num], respostas3);
-                if(numSelecionado == 2){
+                if (numSelecionado == 2) {
                     mudarCor(VERDE);
                     System.out.println("Voce acertou!!");
                     esperar(1000);
                     mudarCor(-1);
                     perguntasFeitas[3] = true;
                     i++;
-                }else{
+                } else {
                     mudarCor(VERMELHO);
                     System.out.println("Voce errou :( !!");
                     esperar(1000);
@@ -879,14 +890,14 @@ public class TCA {
                 }
             } else if (num == 4 && perguntasFeitas[4] == false) {
                 numSelecionado = escolherNoMenuBasico(perguntas[num], respostas4);
-                if(numSelecionado == 2){
+                if (numSelecionado == 2) {
                     mudarCor(VERDE);
                     System.out.println("Voce acertou!!");
                     esperar(1000);
                     mudarCor(-1);
                     perguntasFeitas[4] = true;
                     i++;
-                }else{
+                } else {
                     mudarCor(VERMELHO);
                     System.out.println("Voce errou :( !!");
                     esperar(1000);
@@ -1212,46 +1223,40 @@ public class TCA {
     public final static int ATRIBUICAOBASE = 5;
     public final static int TENTATIVASNECESSARIAS = 5;
 
-
     public static void main(String[] args) {
-        mudarCor(VERMELHO);
-        System.out.println("Digite o seu nome (Aviso: ele nao podera ser trocado depois de escolhido)");
-        mudarCor(COR_PADRAO);
-        String nome = lerTexto();
-        Historia.part1(nome);
         esconderCursor();
         String[][] matPuzzle1;
         boolean[][] matcopPuzzle1;
         MatrizesPuzzle_1 matrizesPuzzle1 = new MatrizesPuzzle_1();
         String[][] mat2 = {
-            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-            { ". ", ". ", ". ", "# ", ". ", ". ", ". " },
-            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
-            { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+                { ". ", ". ", ". ", "# ", ". ", ". ", ". " },
+                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
+                { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " },
                 { ". ", ". ", ". ", ". ", ". ", ". ", ". " }
-            };
-            
-            int areasExploradas = 0;
-            boolean nVaiJogar = false;
-            int pontosDeUpgrade = 0;
-            int tentativas = 0;
-            Atributos atributosPadrao = new Atributos();
+        };
+
+        int areasExploradas = 0;
+        boolean nVaiJogar = false;
+        int pontosDeUpgrade = 0;
+        int tentativas = 0;
+        Atributos atributosPadrao = new Atributos();
         int ataquePesado = atributosPadrao.ataquePesado;
         int ataqueLeve = atributosPadrao.ataqueLeve;
         int vida = atributosPadrao.vida;
         int eficienciaDeDefesa = atributosPadrao.eficienciaDeDefesa;
-        
+
         String[] areas = { "Aldeia dos Goblins", "Ilha do Pirata", "Tumba do Rei Perdido" };
         String[] menuInicial = { "Explorar areas", "Status do personagem" };
         boolean[] areasCompletas = { false, false, false };
         int[] statusInimigo = new int[2];
-        
+
         while (areasExploradas != 3) {
             int numero = sortearNumero(3);
             if (numero == 0) {
@@ -1335,10 +1340,16 @@ public class TCA {
                         System.out.println("Voce ja explorou " + areas[1]);
                         mudarCor(-1);
                         continue;
+                    }else if (!areasCompletas[0]){
+                        mudarCor(VERMELHO);
+                        System.out.println("Você deveria ir para a Aldeia de Goblins antes");
+                        mudarCor(COR_PADRAO);
+                        esperar(1000);
+                        continue;
                     }
-                    do {
+                     while (areasCompletas[1] != true){
                         areasCompletas[1] = puzzle2(mat2);
-                    } while (areasCompletas[1] == false);
+                    }
                     do {
                         Historia.interacaoPirataInicio();
                         mudarCor(VERMELHO);
@@ -1361,8 +1372,8 @@ public class TCA {
                             break;
                         }
                         if (nVaiJogar) {
-                        continue;
-                    }
+                            continue;
+                        }
                         mudarCor(-1);
                         BibliotecaTCA.esperar(2000);
                         statusInimigo = pirata();
@@ -1381,8 +1392,15 @@ public class TCA {
                         System.out.println("Voce ja explorou " + areas[2]);
                         mudarCor(-1);
                         continue;
+                    }else if (!areasCompletas[1]) {
+                        mudarCor(VERMELHO);
+                        System.out.println("Você deveria ir para a Ilha do Pirata antes");
+                        mudarCor(COR_PADRAO);
+                        esperar(1000);
+                        continue;
                     }
-                     puzzle3(Puzzle3.perguntas,Puzzle3.repostas0,Puzzle3.repostas1,Puzzle3.respostas2,Puzzle3.respostas3,Puzzle3.respostas4);
+                    puzzle3(Puzzle3.perguntas, Puzzle3.repostas0, Puzzle3.repostas1, Puzzle3.respostas2,
+                            Puzzle3.respostas3, Puzzle3.respostas4);
                     do {
                         Historia.interacaoReiPerdidoInicio();
                         mudarCor(VERMELHO);
@@ -1405,8 +1423,8 @@ public class TCA {
                             break;
                         }
                         if (nVaiJogar) {
-                        continue;
-                    }
+                            continue;
+                        }
                         mudarCor(-1);
                         BibliotecaTCA.esperar(2000);
                         statusInimigo = reiPerdido();
@@ -1436,95 +1454,128 @@ public class TCA {
                             break;
                         }
 
+                        System.out.println("Ataque pesado: " + ataquePesado);
+                        System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade e "
+                                + pontosGastos[0] + " Investidos nesse status");
+                        mudarCor(VERMELHO);
+                        System.out.println(
+                                "Deseja aumentar o ataque pesado em quantos pontos? (1 ponto = 10 de ataque pesado)(pressione ESC para voltar e ENTER para prosseguir)");
+                        mudarCor(COR_PADRAO);
+                        int letra = obtemTeclaPressionada();
+                        if (letra == 27) {
+                            continue;
+                        } else if (letra == 13) {
                         while (true) {
-                            System.out.println("Ataque pesado: " + ataquePesado);
-                            System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade e "
-                                    + pontosGastos[0] + " Investidos nesse status");
-                            System.out.println(
-                                    "Deseja aumentar o ataque pesado em quantos pontos? (1 ponto = 10 de ataque pesado)(pressione ESC para voltar)");
-                            esperar(2000);
-                            escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
-                            if (escolhaDePontos == 0) {
+
+                                escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
                                 if (pontosDeUpgrade == 0) {
+                                    mudarCor(VERMELHO);
                                     System.out.println("Voce esta sem pontos de upgrade");
-                                } else {
-                                    ataquePesado = ataquePesado + 10;
-                                    pontosDeUpgrade--;
-                                    pontosGastos[0]++;
+                                    esperar(1000);
+                                    mudarCor(COR_PADRAO);
+                                    break;
                                 }
-                            } else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
-                                voltar = true;
-                                break;
-                            } else if (escolhaDePontos == 1) {
-                                ataquePesado = ataquePesado + (pontosDeUpgrade * 10);
-                                pontosGastos[0] += pontosDeUpgrade;
-                                pontosDeUpgrade = 0;
-                            } else if (escolhaDePontos == 2) {
-                                ataquePesado = atributosPadrao.ataquePesado;
-                                pontosDeUpgrade = pontosGastos[0];
+                                if (escolhaDePontos == 0) {
+                                        ataquePesado = ataquePesado + 10;
+                                        pontosDeUpgrade--;
+                                        pontosGastos[0]++;
+                                    
+                                } else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
+                                    voltar = true;
+                                    break;
+                                } else if (escolhaDePontos == 1) {
+                                    ataquePesado = ataquePesado + (pontosDeUpgrade * 10);
+                                    pontosGastos[0] += pontosDeUpgrade;
+                                    pontosDeUpgrade = 0;
+                                } else if (escolhaDePontos == 2) {
+                                    ataquePesado = atributosPadrao.ataquePesado;
+                                    pontosDeUpgrade = pontosGastos[0];
+                                }
                             }
                         }
                     } else if (subescolha == 1) {
                         if (voltar) {
                             break;
                         }
+                        System.out.println("Ataque leve: " + ataqueLeve);
+                        System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade e "
+                                + pontosGastos[1] + " Investidos nesse status");
+                        mudarCor(VERMELHO);
+                        System.out.println(
+                                "Deseja aumentar o ataque leve em quantos pontos? (1 ponto = 5 de ataque leve) (pressione ESC para voltar e ENTER para prosseguir)");
+                        mudarCor(COR_PADRAO);
+                        int letra = obtemTeclaPressionada();
+                        if (letra == 27) {
+                            continue;
+                        } else if (letra == 13) {
                         while (true) {
-                            System.out.println("Ataque leve: " + ataqueLeve);
-                            System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade e "
-                                    + pontosGastos[1] + " Investidos nesse status");
-                            System.out.println(
-                                    "Deseja aumentar o ataque leve em quantos pontos? (1 ponto = 5 de ataque leve) (pressione ESC para voltar)");
-                            esperar(2000);
-                            escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
-                            if (escolhaDePontos == 0) {
+
+                                escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
                                 if (pontosDeUpgrade == 0) {
+                                    mudarCor(VERMELHO);
                                     System.out.println("Voce esta sem pontos de upgrade");
-                                } else {
-                                    ataqueLeve = ataqueLeve + 5;
-                                    pontosDeUpgrade--;
+                                    esperar(1000);
+                                    mudarCor(COR_PADRAO);
+                                    break;
                                 }
-                            } else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
-                                voltar = true;
-                                break;
-                            } else if (escolhaDePontos == 1) {
-                                ataqueLeve = ataqueLeve + (pontosDeUpgrade * 5);
-                                pontosGastos[1] += pontosDeUpgrade;
-                                pontosDeUpgrade = 0;
-                            } else if (escolhaDePontos == 2) {
-                                ataquePesado = atributosPadrao.ataquePesado;
-                                pontosDeUpgrade = pontosGastos[1];
+                                if (escolhaDePontos == 0) {
+                                        ataqueLeve = ataqueLeve + 5;
+                                        pontosDeUpgrade--;
+                                    
+                                } else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
+                                    voltar = true;
+                                    break;
+                                } else if (escolhaDePontos == 1) {
+                                    ataqueLeve = ataqueLeve + (pontosDeUpgrade * 5);
+                                    pontosGastos[1] += pontosDeUpgrade;
+                                    pontosDeUpgrade = 0;
+                                } else if (escolhaDePontos == 2) {
+                                    ataquePesado = atributosPadrao.ataquePesado;
+                                    pontosDeUpgrade = pontosGastos[1];
+                                }
                             }
                         }
                     } else if (subescolha == 2) {
                         if (voltar) {
                             break;
                         }
+                        System.out.println("Vida: " + vida);
+                        System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade e "
+                                + pontosGastos[2] + " Investidos nesse status");
+                        mudarCor(VERMELHO);
+                        System.out.println(
+                                "Deseja aumentar a vida em quantos pontos? (1 ponto = 10 de vida) (pressione ESC para voltar e ENTER para prosseguir)");
+                        mudarCor(COR_PADRAO);
+                        int letra = obtemTeclaPressionada();
+                        if (letra == 27) {
+                            continue;
+                        } else if (letra == 13) {
                         while (true) {
-                            System.out.println("Vida: " + vida);
-                            System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade e "
-                                    + pontosGastos[2] + " Investidos nesse status");
-                            System.out.println(
-                                    "Deseja aumentar a vida em quantos pontos? (1 ponto = 10 de vida) (pressione ESC para voltar)");
-                            esperar(2000);
-                            escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
-                            if (escolhaDePontos == 0) {
+
+                                escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
                                 if (pontosDeUpgrade == 0) {
+                                    mudarCor(VERMELHO);
                                     System.out.println("Voce esta sem pontos de upgrade");
-                                } else {
-                                    vida = vida + 10;
-                                    pontosDeUpgrade--;
-                                    pontosGastos[2]++;
+                                    esperar(1000);
+                                    mudarCor(COR_PADRAO);
+                                    break;
                                 }
-                            } else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
-                                voltar = true;
-                                break;
-                            } else if (escolhaDePontos == 1) {
-                                vida = vida + (pontosDeUpgrade * 10);
-                                pontosGastos[2] += pontosDeUpgrade;
-                                pontosDeUpgrade = 0;
-                            } else if (escolhaDePontos == 2) {
-                                vida = atributosPadrao.vida;
-                                pontosDeUpgrade = pontosGastos[2];
+                                if (escolhaDePontos == 0) {
+                                        vida = vida + 10;
+                                        pontosDeUpgrade--;
+                                        pontosGastos[2]++;
+                                    
+                                } else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
+                                    voltar = true;
+                                    break;
+                                } else if (escolhaDePontos == 1) {
+                                    vida = vida + (pontosDeUpgrade * 10);
+                                    pontosGastos[2] += pontosDeUpgrade;
+                                    pontosDeUpgrade = 0;
+                                } else if (escolhaDePontos == 2) {
+                                    vida = atributosPadrao.vida;
+                                    pontosDeUpgrade = pontosGastos[2];
+                                }
                             }
                         }
                     } else if (subescolha == 3) {
@@ -1534,30 +1585,40 @@ public class TCA {
                         System.out.println("Eficiencia de defesa: " + eficienciaDeDefesa);
                         System.out.println("Voce possui atualmente " + pontosDeUpgrade + " pontos de upgrade e "
                                 + pontosGastos[3] + " Investidos nesse status");
+                        mudarCor(VERMELHO);
                         System.out.println(
-                                "Deseja aumentar a eficiencia de defesa em quantos pontos? (1 ponto = 2 de eficiencia de defesa)(pressione ESC para voltar)");
-                        esperar(2000);
+                                "Deseja aumentar a eficiencia de defesa em quantos pontos? (1 ponto = 2 de eficiencia de defesa)(pressione ESC para voltar e ENTER para prosseguir)");
+                        mudarCor(COR_PADRAO);
+                        int letra = obtemTeclaPressionada();
+                        if (letra == 27) {
+                            continue;
+                        } else if (letra == 13) {
 
-                        while (true) {
-                            escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
-                            if (escolhaDePontos == 0) {
+                            while (true) {
+                                escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
                                 if (pontosDeUpgrade == 0) {
+                                    mudarCor(VERMELHO);
                                     System.out.println("Voce esta sem pontos de upgrade");
-                                } else {
-                                    eficienciaDeDefesa = eficienciaDeDefesa + 5;
-                                    pontosDeUpgrade--;
-                                    pontosGastos[3]++;
+                                    esperar(1000);
+                                    mudarCor(COR_PADRAO);
+                                    break;
                                 }
-                            } else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
-                                voltar = true;
-                                break;
-                            } else if (escolhaDePontos == 1) {
-                                eficienciaDeDefesa = eficienciaDeDefesa + (pontosDeUpgrade * 5);
-                                pontosGastos[3] += pontosDeUpgrade;
-                                pontosDeUpgrade = 0;
-                            } else if (escolhaDePontos == 2) {
-                                eficienciaDeDefesa = atributosPadrao.eficienciaDeDefesa;
-                                pontosDeUpgrade = pontosGastos[3];
+                                if (escolhaDePontos == 0) {
+                                        eficienciaDeDefesa = eficienciaDeDefesa + 5;
+                                        pontosDeUpgrade--;
+                                        pontosGastos[3]++;
+                                    
+                                } else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
+                                    voltar = true;
+                                    break;
+                                } else if (escolhaDePontos == 1) {
+                                    eficienciaDeDefesa = eficienciaDeDefesa + (pontosDeUpgrade * 5);
+                                    pontosGastos[3] += pontosDeUpgrade;
+                                    pontosDeUpgrade = 0;
+                                } else if (escolhaDePontos == 2) {
+                                    eficienciaDeDefesa = atributosPadrao.eficienciaDeDefesa;
+                                    pontosDeUpgrade = pontosGastos[3];
+                                }
                             }
                         }
                     } else if (subescolha == 27 || subescolha == -1) {

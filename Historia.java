@@ -280,4 +280,18 @@ public class Historia {
         TCA.imprimirDevagar("Que sono . . . Acho que vou voltar a dormir");
         TCA.mudarCor(COR_PADRAO);
     }
+
+    public static void instrucoesCacaAoTesouro(){
+        TCA.limparTela();
+        System.out.println("Aperte esc para pular as instrucoes e enter para prosseguir");
+        int entrada = TCA.obtemTeclaPressionada();
+        if (entrada == 27) {
+            System.out.println();
+            return;
+        }else if (entrada == 13) {
+         TCA.mudarCor(AMARELO);
+         TCA.imprimirDevagar("Caça Ao Tesouro:\nVocê terá 45 segundos para achar o Tesouro\nPressionar ENTER revelará se você está Quente, Frio ou Morno do Tesouro\nMas cuidado!!! Por todo o mapa estarão espalhadas areias movediças, pisar nelas resetará o mapa\nPressionar V irá revelar areias num raio de 1 quadrado"); 
+         TCA.mudarCor(COR_PADRAO);
+        }
+    }
 }
