@@ -13,23 +13,7 @@ public class Historia {
     public static final int COR_PADRAO = -1;
     public static final int LARANJA = 208;
 
-    public static void historia1(String nome){
-        
-    }
-    public static void part1(String nome){
-        TCA.limparTela();
-        System.out.println("Aperte ESC para pular o diálogo e ENTER para prosseguir");
-        int entrada = TCA.obtemTeclaPressionada();
-        if (entrada == 27) {
-            System.out.println();
-            return;
-        }
-        BibliotecaTCA.esperar(2000);
-        TCA.mudarCor(VERMELHO);
-        TCA.imprimirDevagar("NARRADOR: ");
-        TCA.mudarCor(COR_PADRAO);
-        TCA.imprimirDevagar("Um aventureiro surge em uma cidade que estava sendo influenciada por monstros, seu nome é " + nome);
-    }
+    
 
     public static void interacaoGoblinAnciaoInicio() {
         TCA.limparTela();
@@ -105,7 +89,7 @@ public class Historia {
         }
         BibliotecaTCA.esperar(2000);
         TCA.mudarCor(VERDE);
-        TCA.imprimirDevagar("Entendo então não existem raças superiores às outras. . .");
+        TCA.imprimirDevagar("Entendo entao nao existem raças superiores às outras. . .");
         TCA.mudarCor(COR_PADRAO);
 
     }
@@ -124,9 +108,9 @@ public class Historia {
             TCA.mudarCor(AMARELO);
             TCA.imprimirDevagar("Hmm...");
             BibliotecaTCA.esperar(500);
-            TCA.imprimirDevagar("Não faço ideia de quem você é");
+            TCA.imprimirDevagar("Nao faço ideia de quem você é");
             BibliotecaTCA.esperar(500);
-            TCA.imprimirDevagar("Mas não vou deixar você levar esse tesouro tão fácil");
+            TCA.imprimirDevagar("Mas nao vou deixar você levar esse tesouro tao fácil");
             BibliotecaTCA.esperar(500);
             System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
                                 "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\r\n" + //
@@ -269,7 +253,7 @@ public class Historia {
 
     public static void interacaoReiPerdidoFinal() {
         TCA.limparTela();
-        System.out.println("Aperte ESC para pular o diálogo e ENTER para prosseguir (parte essencial para o puzzle 3)");
+        System.out.println("Aperte ESC para pular o diálogo e ENTER para prosseguir");
         int entrada = TCA.obtemTeclaPressionada();
         if (entrada == 27) {
             System.out.println();
@@ -283,27 +267,60 @@ public class Historia {
 
     public static void instrucoesPuzzle2(){
         TCA.limparTela();
-        System.out.println("Aperte ESC para pular as instruções e ENTER para prosseguir");
+        System.out.println("Aperte ESC para pular as instruçoes e ENTER para prosseguir");
         int entrada = TCA.obtemTeclaPressionada();
         if (entrada == 27) {
             System.out.println();
             return;
         }else if (entrada == 13) {
          TCA.mudarCor(AMARELO);
-         TCA.imprimirDevagar("Caça Ao Tesouro:\nVocê terá 45 segundos para achar o Tesouro\nPressionar ENTER revelará se você está Quente, Frio ou Morno do Tesouro\nMas cuidado!!! Por todo o mapa estarão espalhadas areias movediças, pisar nelas resetará o mapa\nPressionar V irá revelar areias num raio de 1 quadrado"); 
+         TCA.imprimirDevagar("Caça Ao Tesouro:\nVocê terá 45 segundos para achar o Tesouro\nPressionar ENTER revelará se você está Quente, Frio ou Morno do Tesouro\nMas cuidado!!! Por todo o mapa estarao espalhadas areias movediças, pisar nelas resetará o mapa\nPressionar V irá revelar areias num raio de 1 quadrado"); 
+        
+            TCA.esperarTecla();
          TCA.mudarCor(COR_PADRAO);
         }
     }
     public static void instrucoesPuzzle1(){
         TCA.limparTela();
-        System.out.println("Aperte ESC para pular as instruções e ENTER para prosseguir");
+        System.out.println("Aperte ESC para pular as instruçoes e ENTER para prosseguir");
         int entrada = TCA.obtemTeclaPressionada();
         if (entrada == 27) {
             System.out.println();
             return;
         }else if (entrada == 13) {
             TCA.mudarCor(VERMELHO);
-            TCA.imprimirDevagar("Labirinto de Barreiras Invisíveis\nChegue ao final do Labirinto para escapar!!!\nVocê tem um total de 4 vidas por tentativa\nE 5 tentativas\nBater em uma Barreira consumirá 1 vida\nSe a vida chegar a 0 você terá uma tentativa consumida\nConsumir todas as suas tentativas fará o mapa resetar");
+            TCA.imprimirDevagar("Labirinto de Barreiras Invisíveis:\nChegue ao final do Labirinto para escapar!!!\nVocê tem um total de 4 vidas por tentativa\nE 5 tentativas\nBater em uma Barreira consumirá 1 vida\nSe a vida chegar a 0 você terá uma tentativa consumida\nConsumir todas as suas tentativas fará o mapa resetar");
+            TCA.esperarTecla();
+            TCA.mudarCor(COR_PADRAO);
+
+        }
+    }
+    public static void instrucoesSistemaDeBatalha(){
+        TCA.limparTela();
+        System.out.println("Aperte ESC para pular as instruçoes e ENTER para prosseguir");
+        int entrada = TCA.obtemTeclaPressionada();
+        if (entrada == 27) {
+            System.out.println();
+            return;
+        }else if (entrada == 13) {
+            TCA.mudarCor(VERMELHO);
+            TCA.imprimirDevagar("Sistema de Batalha:\nRPG com pontos de açao\nTabela Ataques:\nAtaque Pesado = 2 pontos (Causa 30 de dano base, porém tem 25% de chance de errar)\nAtaque Leve = 1 ponto (Causa 10 de dano base,porém tem 100% de chance de acertar)\nAtaque Especial (5 cargas) = 1 ponton\nTabela Defesas:\nDefesa Imparcial = 1 ponto (Defende 50%)\nDefesa Completa: 3 pontos (Defende Totalmente)\nCura = 0 pontos (Cura 30)");
+            
+            TCA.esperarTecla();
+            TCA.mudarCor(COR_PADRAO);
+        }
+    }
+    public static void instrucoesPuzzle3(){
+        TCA.limparTela();
+        System.out.println("Aperte ESC para pular as instruçoes e ENTER para prosseguir");
+        int entrada = TCA.obtemTeclaPressionada();
+        if (entrada == 27) {
+            System.out.println();
+            return;
+        }else if (entrada == 13) {
+            TCA.mudarCor(VERMELHO);
+            TCA.imprimirDevagar("Questionario:\nUm quizz que você deve responder corretamente para ir para o ultimo boss\nSerá reduzido 10 pontos na sua vida por erro(Nao é permanente, apenas para o Boss)\n(Ele irá medir o quanto você prestou a atençao no jogo)");
+            TCA.esperarTecla();
             TCA.mudarCor(COR_PADRAO);
         }
     }

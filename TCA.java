@@ -10,7 +10,7 @@ public class TCA {
 
     // =============================FUNCOES MENU
     // INICIO====================================
-    // Liga o Java às funções _kbhit e _getch do Windows (só usada no Windows)
+    // Liga o Java às funçoes _kbhit e _getch do Windows (só usada no Windows)
     public interface Crt extends Library {
         Crt INSTANCE = Native.load("msvcrt", Crt.class);
 
@@ -72,7 +72,7 @@ public class TCA {
                 System.out.print("║> ");
                 mudarCor(VERDE);
                 System.out.print(completar(opcoes[i], maior));
-                mudarCor(COR_PADRAO); // volta para a cor padrão
+                mudarCor(COR_PADRAO); // volta para a cor padrao
                 System.out.println("  ║");
             } else {
                 System.out.println("║  " + completar(opcoes[i], maior) + "  ║");
@@ -156,7 +156,7 @@ public class TCA {
                 System.out.print("║> ");
                 mudarCor(VERDE);
                 System.out.print(completar(opcoes[i], maior));
-                mudarCor(COR_PADRAO); // volta para a cor padrão
+                mudarCor(COR_PADRAO); // volta para a cor padrao
                 System.out.println("  ║");
             } else {
                 System.out.println("║  " + completar(opcoes[i], maior) + "  ║");
@@ -224,7 +224,7 @@ public class TCA {
         try {
             new ProcessBuilder("sh", "-c", "stty " + opcoes + " < /dev/tty").start().waitFor();
         } catch (Exception e) {
-            // se não conseguir, o teclado só vai funcionar com ENTER
+            // se nao conseguir, o teclado só vai funcionar com ENTER
         }
     }
 
@@ -282,7 +282,7 @@ public class TCA {
         if (cor >= 0 && cor <= 255) {
             System.out.print("\033[38;5;" + cor + "m");
         } else {
-            System.out.print("\033[39m"); // cor padrão do terminal
+            System.out.print("\033[39m"); // cor padrao do terminal
         }
     }
 
@@ -290,7 +290,7 @@ public class TCA {
         if (cor >= 0 && cor <= 255) {
             System.out.print("\033[48;5;" + cor + "m");
         } else {
-            System.out.print("\033[49m"); // cor padrão do terminal
+            System.out.print("\033[49m"); // cor padrao do terminal
         }
     }
 
@@ -424,7 +424,7 @@ public class TCA {
         }
         BibliotecaTCA.mudarCor(-1);
         System.out.println(
-                "Aperte V para verificar areias movediças e ENTER para verificar tesouro; A,W,S,D para movimentação");
+                "Aperte V para verificar areias movediças e ENTER para verificar tesouro; A,W,S,D para movimentaçao");
 
     }
 
@@ -602,7 +602,7 @@ public class TCA {
         try {
             Thread.sleep(milissegundos);
         } catch (InterruptedException e) {
-            // não faz nada: se a espera for interrompida, o programa só continua
+            // nao faz nada: se a espera for interrompida, o programa só continua
         }
     }
 
@@ -627,6 +627,7 @@ public class TCA {
         esperarTecla();
         iniciarCronometro();
         segundosPassados();
+        limparTela();
         while (segundosPassados() <= 45) {
             escreverEm(1, 0, String.format("%.1f s", segundosPassados()));
             esperar(100);
@@ -729,7 +730,7 @@ public class TCA {
                         limparTela();
                         if (segundosPassados() - segundos < COOLDOWN) {
                             int segundosQFaltam = COOLDOWN - (int) (segundosPassados() - segundos);
-                            System.out.println(" Você ainda não pode usar a habilidade espere " + segundosQFaltam);
+                            System.out.println(" Você ainda nao pode usar a habilidade espere " + segundosQFaltam);
                             esperar(300);
                             desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
                         } else if (System.currentTimeMillis() - segundos >= COOLDOWN || primeiraVez) {
@@ -755,15 +756,21 @@ public class TCA {
         return palavraFormatada;
     }
 
-    public static void puzzle3(String[] perguntas, String[] respostas, String[] respostas1, String[] respostas2,
-            String[] respostas3, String[] respostas4) {
-        boolean[] perguntasFeitas = { false, false, false, false, false };
+    public static int puzzle3(String[] perguntas, String[] respostas, String[] respostas1, String[] respostas2,
+            String[] respostas3, String[] respostas4, String[] respostas5) {
+        boolean[] perguntasFeitas = { false, false, false, false, false ,false};
         int i = 0;
+        int erros = 0;
         while (i < perguntas.length) {
             limparTela();
-            int num = sortearNumero(5);
+            int num = sortearNumero(6);
             int numSelecionado;
+            
             if (num == 0 && perguntasFeitas[0] == false) {
+                
+                mudarCor(VERMELHO);
+            imprimirDevagar("Erros: " + erros);
+            mudarCor(COR_PADRAO);
                 numSelecionado = escolherNoMenuBasico(perguntas[num], respostas);
                 if (numSelecionado == 3) {
                     mudarCor(VERDE);
@@ -775,11 +782,15 @@ public class TCA {
                 } else {
                     mudarCor(VERMELHO);
                     System.out.println("Você errou :( !!");
+                    erros++;
                     esperar(1000);
                     mudarCor(-1);
                     continue;
                 }
             } else if (num == 1 && perguntasFeitas[1] == false) {
+                mudarCor(VERMELHO);
+            imprimirDevagar("Erros: " + erros);
+            mudarCor(COR_PADRAO);
                 numSelecionado = escolherNoMenuBasico(perguntas[num], respostas1);
                 if (numSelecionado == 1) {
                     mudarCor(VERDE);
@@ -791,14 +802,18 @@ public class TCA {
                 } else {
                     mudarCor(VERMELHO);
                     System.out.println("Você errou :( !!");
+                    erros++;
                     esperar(1000);
                     mudarCor(-1);
                     continue;
                 }
                 ;
             } else if (num == 2 && perguntasFeitas[2] == false) {
+                mudarCor(VERMELHO);
+            imprimirDevagar("Erros: " + erros);
+            mudarCor(COR_PADRAO);
                 numSelecionado = escolherNoMenuBasico(perguntas[num], respostas2);
-                if (numSelecionado == 1) {
+                if (numSelecionado == 0) {
                     mudarCor(VERDE);
                     System.out.println("Você acertou!!");
                     esperar(1000);
@@ -808,11 +823,15 @@ public class TCA {
                 } else {
                     mudarCor(VERMELHO);
                     System.out.println("Você errou :( !!");
+                    erros++;
                     esperar(1000);
                     mudarCor(-1);
                     continue;
                 }
             } else if (num == 3 && perguntasFeitas[3] == false) {
+                mudarCor(VERMELHO);
+            imprimirDevagar("Erros: " + erros);
+            mudarCor(COR_PADRAO);
                 numSelecionado = escolherNoMenuBasico(perguntas[num], respostas3);
                 if (numSelecionado == 2) {
                     mudarCor(VERDE);
@@ -824,11 +843,15 @@ public class TCA {
                 } else {
                     mudarCor(VERMELHO);
                     System.out.println("Você errou :( !!");
+                    erros++;
                     esperar(1000);
                     mudarCor(-1);
                     continue;
                 }
             } else if (num == 4 && perguntasFeitas[4] == false) {
+                mudarCor(VERMELHO);
+            imprimirDevagar("Erros: " + erros);
+            mudarCor(COR_PADRAO);
                 numSelecionado = escolherNoMenuBasico(perguntas[num], respostas4);
                 if (numSelecionado == 2) {
                     mudarCor(VERDE);
@@ -840,12 +863,34 @@ public class TCA {
                 } else {
                     mudarCor(VERMELHO);
                     System.out.println("Você errou :( !!");
+                    erros++;
+                    esperar(1000);
+                    mudarCor(-1);
+                    continue;
+                }
+            }else if (num == 5 && perguntasFeitas[5] == false) {
+                mudarCor(VERMELHO);
+            imprimirDevagar("Erros: " + erros);
+            mudarCor(COR_PADRAO);
+                numSelecionado = escolherNoMenuBasico(perguntas[num], respostas5);
+                if (numSelecionado == 1) {
+                    mudarCor(VERDE);
+                    System.out.println("Você acertou!!");
+                    esperar(1000);
+                    mudarCor(-1);
+                    perguntasFeitas[5] = true;
+                    i++;
+                } else {
+                    mudarCor(VERMELHO);
+                    System.out.println("Você errou :( !!");
+                    erros++;
                     esperar(1000);
                     mudarCor(-1);
                     continue;
                 }
             }
         }
+        return erros;
     }
 
     public static int defesa(int dano) {
@@ -880,9 +925,9 @@ public class TCA {
             System.out.print("|");
         }
         mudarCor(AZUL);
-        System.out.println("\nPoções de cura: " + pocoesDcura);
+        System.out.println("\nPoçoes de cura: " + pocoesDcura);
         mudarCor(AMARELO);
-        System.out.println("Pontos de ação: " + pontosDeAcao + "\n");
+        System.out.println("Pontos de açao: " + pontosDeAcao + "\n");
         mudarCor(-1);
         System.out.println("O Inimigo está atualmente com: ");
         mudarCor(VERMELHO);
@@ -926,10 +971,12 @@ public class TCA {
         String[] opcoes = { "Ataque", "Defesa", "Cura" };
         String[] ataques = { "Ataque pesado", "Ataque leve", "Ataque especial" };
         String[] defesas = { "Defesa imparcial", "Defesa completa" };
-        String[] espaco = { "   " };
+       
         while (true) {
             if (vida <= 0) {
-                BibliotecaTCA.escolherNoMenu("Você morreu", espaco);
+                mudarCor(VERMELHO);
+               imprimirDevagar("Você morreu");
+               mudarCor(COR_PADRAO);
                 BibliotecaTCA.esperar(1000);
                 return lutaVencida;
             }
@@ -968,7 +1015,7 @@ public class TCA {
 
                         } else {
                             mudarCor(VERMELHO);
-                           System.out.println("Você não tem PA (pontos de ação) suficiente");
+                           System.out.println("Você nao tem PA (pontos de açao) suficiente");
                             mudarCor(-1);
                             BibliotecaTCA.esperar(1500);
                             continue;
@@ -1006,7 +1053,7 @@ public class TCA {
                                     }
                                 } else {
                                     mudarCor(VERMELHO);
-                                    System.out.println("Você não tem carga especial suficiente");
+                                    System.out.println("Você nao tem carga especial suficiente");
                                     mudarCor(-1);
                                     BibliotecaTCA.esperar(1500);
                                     continue;
@@ -1014,7 +1061,7 @@ public class TCA {
                             }
                         } else {
                             mudarCor(VERMELHO);
-                            System.out.println("Você não tem PA (pontos de ação) suficiente");
+                            System.out.println("Você nao tem PA (pontos de açao) suficiente");
                             mudarCor(-1);
                             BibliotecaTCA.esperar(1500);
                             continue;
@@ -1051,7 +1098,7 @@ public class TCA {
                             pontosDeAcao--;
                         } else {
                             mudarCor(VERMELHO);
-                            System.out.println("Você não tem PA (pontos de ação) suficiente");
+                            System.out.println("Você nao tem PA (pontos de açao) suficiente");
                             mudarCor(-1);
                             BibliotecaTCA.esperar(1500);
                             continue;
@@ -1062,7 +1109,7 @@ public class TCA {
                             pontosDeAcao -= 3;
                         } else {
                             mudarCor(VERMELHO);
-                            System.out.println("Você não tem PA (pontos de ação) suficiente");
+                            System.out.println("Você nao tem PA (pontos de açao) suficiente");
                             mudarCor(-1);
                             BibliotecaTCA.esperar(1500);
                             continue;
@@ -1074,20 +1121,26 @@ public class TCA {
 
                     if (vida > vidaTotal * 0.7) {
                         mudarCor(VERMELHO);
-                        System.out.println("Você não está machucado o suficiente para usar a poção");
+                        System.out.println("Você nao está machucado o suficiente para usar a poçao");
                         mudarCor(-1);
                         BibliotecaTCA.esperar(1500);
                         continue;
                     } else if (pocoesDCura != 0) {
-                        mudarCor(VERMELHO);
+                        System.out.println("Deseja curar 30 de vida?");
+                        int temp = obtemTeclaPressionada();
+                        if (temp == 13) {
+                        mudarCor(VERDE);
                         imprimirDevagar("Você consegue curar " + cura + " de vida");
                         mudarCor(COR_PADRAO);
                         vida += cura;
                         pocoesDCura--;
                         continue;
+                    }else if (temp == 27){
+                        continue;
+                    }
                     } else {
                         mudarCor(VERMELHO);
-                        System.out.println("Você não tem poções de cura suficiente");
+                        System.out.println("Você nao tem poçoes de cura suficiente");
                         mudarCor(-1);
                         BibliotecaTCA.esperar(1500);
                         continue;
@@ -1147,7 +1200,7 @@ public class TCA {
     public static int[] reiPerdido() {
         int[] status = new int[2];
         int dano = 75;
-        int vida = 400;
+        int vida = 320;
         status[0] = vida;
         status[1] = dano;
         return status;
@@ -1188,6 +1241,7 @@ public class TCA {
         };
 
         int areasExploradas = 0;
+        int[] pontosGastos = { 0, 0, 0, 0 };
         boolean nVaiJogar = false;
         int pontosDeUpgrade = 0;
         int tentativas = 0;
@@ -1222,7 +1276,7 @@ public class TCA {
             if (escolha == 0) {
                 System.out.println("Escolha a área que deseja explorar");
                 BibliotecaTCA.esperar(2000);
-                int area = escolherNoMenuBasico("   Áreas   ", areas);
+                int area = escolherNoMenuBasico("   Areas   ", areas);
                 if (area == 0) {
                     if (areasCompletas[0] == true) {
                         mudarCor(VERMELHO);
@@ -1234,20 +1288,22 @@ public class TCA {
                     boolean passou = false;
                     boolean restart = false;
                     while (passou == false) {
+                        Historia.instrucoesPuzzle1();
                         System.out.println("Você tem " + (TENTATIVASNECESSARIAS - tentativas)
                                 + " tentativas para concluir este labirinto\n(Ele será resetado após "
                                 + TENTATIVASNECESSARIAS + " tentativas)");
                         esperar(1500);
                         matBasePuzzle1 = atualizarMatriz(matPuzzle1, matBasePuzzle1);
                         passou = puzzle1(matBasePuzzle1, matcopPuzzle1);
-                        tentativas++;
-                        if (tentativas == TENTATIVASNECESSARIAS) {
+                        if (tentativas == TENTATIVASNECESSARIAS && passou != true) {
                             restart = true;
                             tentativas = 0;
                             break;
                         }
+                        tentativas++;
                     }
                     if (restart) {
+                        restart = false;
                         continue;
                     }
                     do {
@@ -1255,9 +1311,9 @@ public class TCA {
                         do {
                             Historia.interacaoGoblinAnciaoInicio();
                             mudarCor(VERMELHO);
-                            System.out.println("E então você acha o boss");
+                            System.out.println("E entao você acha o boss");
                             System.out.println(
-                                    "Deseja sair da batalha?(ao ser iniciada ela não poderá ser interrompida)");
+                                    "Deseja sair da batalha?(ao ser iniciada ela nao poderá ser interrompida, ESC para sair ENTER para continuar)");
                             mudarCor(COR_PADRAO);
                             temp = obtemTeclaPressionada();
                             if (temp == 27) {
@@ -1280,7 +1336,7 @@ public class TCA {
                         areasExploradas++;
                         pontosDeUpgrade += ATRIBUICAOBASE;
                         Historia.interacaoGoblinAnciaoFinal();
-                        imprimirDevagar("Você recebeu: " + ATRIBUICAOBASE + "Pontos de Upgrade");
+                        imprimirDevagar("Você recebeu: " + ATRIBUICAOBASE + " Pontos de Upgrade");
                         esperar(700);
                         continue;
                     }
@@ -1302,6 +1358,7 @@ public class TCA {
                         continue;
                     }
                     while (areasCompletas[1] != true) {
+                        Historia.instrucoesPuzzle2();
                         areasCompletas[1] = puzzle2(mat2);
                     }
                     do {
@@ -1309,9 +1366,10 @@ public class TCA {
                         do {
                             Historia.interacaoPirataInicio();
                             mudarCor(VERMELHO);
-                            System.out.println("E então você acha o boss");
+                            System.out.println("E entao você acha o boss");
                             System.out.println(
-                                    "Deseja sair da batalha?(ao ser iniciada ela não poderá ser interrompida)");
+                                    "Deseja sair da batalha?(ao ser iniciada ela nao poderá ser interrompida, ESC para sair ENTER para continuar)");
+                                    mudarCor(COR_PADRAO);
                             temp = obtemTeclaPressionada();
                             if (temp == 27) {
                                 break;
@@ -1356,18 +1414,27 @@ public class TCA {
                         esperar(1000);
                         continue;
                     }
-                    puzzle3(Puzzle3.perguntas, Puzzle3.repostas0, Puzzle3.repostas1, Puzzle3.respostas2,
-                            Puzzle3.respostas3, Puzzle3.respostas4);
+                    Historia.instrucoesPuzzle3();
+                    int erros = puzzle3(Puzzle3.perguntas, Puzzle3.repostas0, Puzzle3.repostas1, Puzzle3.respostas2,
+                            Puzzle3.respostas3, Puzzle3.respostas4, Puzzle3.respostas5);
+                            erros*=10;
+                            vida-=erros;
+                            if (vida <= 0) {
+                                continue;
+                            }
                     do {
                         int temp;
 
                         do {
                             Historia.interacaoReiPerdidoInicio();
                             mudarCor(VERMELHO);
-                            System.out.println("E então você acha o boss");
+                            System.out.println("E entao você acha o boss");
                             System.out.println(
-                                    "Deseja sair da batalha?(ao ser iniciada ela não poderá ser interrompida)");
+                                    "Deseja sair da batalha?(ao ser iniciada ela nao poderá ser interrompida, ESC para sair ENTER para continuar)");
                             temp = obtemTeclaPressionada();
+                            if (temp == 27) {
+                                break;
+                            }
                             mudarCor(COR_PADRAO);
                             esperar(2000);
                             mudarCor(-1);
@@ -1389,7 +1456,7 @@ public class TCA {
                         areasExploradas++;
                         pontosDeUpgrade += ATRIBUICAOBASE;
                         Historia.interacaoReiPerdidoFinal();
-                        imprimirDevagar("Você recebeu: " + ATRIBUICAOBASE);
+                        imprimirDevagar("Você recebeu: " + ATRIBUICAOBASE + " Pontos de Upgrade");
                         esperar(700);
                         continue;
                     }
@@ -1400,7 +1467,6 @@ public class TCA {
                 }
             } else if (escolha == 1) {
                 String[] atributos = { "Ataque pesado", "Ataque leve", "Vida", "Eficiência de defesa" };
-                int[] pontosGastos = { 0, 0, 0, 0 };
                 String[] pontos = { "1 ponto", "Todos os pontos", "Reset de status" };
                 int escolhaDePontos;
                 boolean voltar = false;
@@ -1427,32 +1493,36 @@ public class TCA {
                             while (true) {
 
                                 escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
-                                if (pontosDeUpgrade == 0 && escolhaDePontos != 2) {
-                                    mudarCor(VERMELHO);
-                                    System.out.println("Você está sem pontos de upgrade");
-                                    esperar(1000);
-                                    mudarCor(COR_PADRAO);
-                                    break;
-                                }
                                 if (escolhaDePontos == 0) {
                                     ataquePesado = ataquePesado + 10;
                                     pontosDeUpgrade--;
                                     pontosGastos[0]++;
 
-                                } else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
-                                    voltar = true;
-                                    break;
-                                } else if (escolhaDePontos == 1) {
+                                } 
+                                else if (escolhaDePontos == 1) {
                                     ataquePesado = ataquePesado + (pontosDeUpgrade * 10);
                                     pontosGastos[0] += pontosDeUpgrade;
                                     pontosDeUpgrade = 0;
                                 } else if (escolhaDePontos == 2) {
                                     ataquePesado = atributosPadrao.ataquePesado;
                                     pontosDeUpgrade = pontosGastos[0];
+                                    pontosGastos[0] = 0;
                                 }
+                                else if (pontosDeUpgrade == 0 && escolhaDePontos != 2 && escolhaDePontos != 27 || escolhaDePontos != -1) {
+                                    mudarCor(VERMELHO);
+                                    System.out.println("Você está sem pontos de upgrade");
+                                    esperar(1000);
+                                    mudarCor(COR_PADRAO);
+                                    break;
+                                }
+                                else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
+                                    voltar = true;
+                                    break;
+                                } 
                             }
                         }
                     } else if (subescolha == 1) {
+                       
                         if (voltar) {
                             break;
                         }
@@ -1470,27 +1540,30 @@ public class TCA {
                             while (true) {
 
                                 escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
-                                if (pontosDeUpgrade == 0 && escolhaDePontos != 2) {
-                                    mudarCor(VERMELHO);
-                                    System.out.println("Você está sem pontos de upgrade");
-                                    esperar(1000);
-                                    mudarCor(COR_PADRAO);
-                                    break;
-                                }
                                 if (escolhaDePontos == 0) {
                                     ataqueLeve = ataqueLeve + 5;
                                     pontosDeUpgrade--;
 
-                                } else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
-                                    voltar = true;
-                                    break;
-                                } else if (escolhaDePontos == 1) {
+                                } 
+                                else if (escolhaDePontos == 1) {
                                     ataqueLeve = ataqueLeve + (pontosDeUpgrade * 5);
                                     pontosGastos[1] += pontosDeUpgrade;
                                     pontosDeUpgrade = 0;
                                 } else if (escolhaDePontos == 2) {
                                     ataquePesado = atributosPadrao.ataquePesado;
                                     pontosDeUpgrade = pontosGastos[1];
+                                    pontosGastos[1] = 0;
+                                }
+                                else if (pontosDeUpgrade == 0 && escolhaDePontos != 2 && escolhaDePontos != 27 || escolhaDePontos != -1) {
+                                    mudarCor(VERMELHO);
+                                    System.out.println("Você está sem pontos de upgrade");
+                                    esperar(1000);
+                                    mudarCor(COR_PADRAO);
+                                    break;
+                                }
+                                else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
+                                    voltar = true;
+                                    break;
                                 }
                             }
                         }
@@ -1512,29 +1585,32 @@ public class TCA {
                             while (true) {
 
                                 escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
-                                if (pontosDeUpgrade == 0 && escolhaDePontos != 2) {
-                                    mudarCor(VERMELHO);
-                                    System.out.println("Você está sem pontos de upgrade");
-                                    esperar(1000);
-                                    mudarCor(COR_PADRAO);
-                                    break;
-                                }
                                 if (escolhaDePontos == 0) {
                                     vida = vida + 10;
                                     pontosDeUpgrade--;
                                     pontosGastos[2]++;
-
-                                } else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
-                                    voltar = true;
-                                    break;
-                                } else if (escolhaDePontos == 1) {
+                                    
+                                } 
+                                else if (escolhaDePontos == 1) {
                                     vida = vida + (pontosDeUpgrade * 10);
                                     pontosGastos[2] += pontosDeUpgrade;
                                     pontosDeUpgrade = 0;
                                 } else if (escolhaDePontos == 2) {
                                     vida = atributosPadrao.vida;
                                     pontosDeUpgrade = pontosGastos[2];
+                                    pontosGastos[2] = 0;
                                 }
+                                else if (pontosDeUpgrade == 0 && escolhaDePontos != 2 && escolhaDePontos != 27 || escolhaDePontos != -1) {
+                                    mudarCor(VERMELHO);
+                                    System.out.println("Você está sem pontos de upgrade");
+                                    esperar(1000);
+                                    mudarCor(COR_PADRAO);
+                                    break;
+                                }
+                                else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
+                                    voltar = true;
+                                    break;
+                                } 
                             }
                         }
                     } else if (subescolha == 3) {
@@ -1555,29 +1631,32 @@ public class TCA {
 
                             while (true) {
                                 escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
-                                if (pontosDeUpgrade == 0 && escolhaDePontos != 2) {
-                                    mudarCor(VERMELHO);
-                                    System.out.println("Você está sem pontos de upgrade");
-                                    esperar(1000);
-                                    mudarCor(COR_PADRAO);
-                                    break;
-                                }
                                 if (escolhaDePontos == 0) {
                                     eficienciaDeDefesa = eficienciaDeDefesa + 5;
                                     pontosDeUpgrade--;
                                     pontosGastos[3]++;
-
-                                } else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
-                                    voltar = true;
-                                    break;
-                                } else if (escolhaDePontos == 1) {
+                                    
+                                } 
+                                else if (escolhaDePontos == 1) {
                                     eficienciaDeDefesa = eficienciaDeDefesa + (pontosDeUpgrade * 5);
                                     pontosGastos[3] += pontosDeUpgrade;
                                     pontosDeUpgrade = 0;
                                 } else if (escolhaDePontos == 2) {
                                     eficienciaDeDefesa = atributosPadrao.eficienciaDeDefesa;
                                     pontosDeUpgrade = pontosGastos[3];
+                                    pontosGastos[3] = 0;
                                 }
+                                else if (pontosDeUpgrade == 0 && escolhaDePontos != 2 && escolhaDePontos != 27 || escolhaDePontos != -1) {
+                                    mudarCor(VERMELHO);
+                                    System.out.println("Você está sem pontos de upgrade");
+                                    esperar(1000);
+                                    mudarCor(COR_PADRAO);
+                                    break;
+                                }
+                                else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
+                                    voltar = true;
+                                    break;
+                                } 
                             }
                         }
                     } else if (subescolha == 27 || subescolha == -1) {
