@@ -626,14 +626,15 @@ public class TCA {
         esperarTecla();
         iniciarCronometro();
         segundosPassados();
-        limparTela();
+        desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
+        
         while (segundosPassados() <= 45) {
             escreverEm(1, 0, String.format("%.1f s", segundosPassados()));
             esperar(100);
             // Lógica para detectar o movimento
 
-            if (BibliotecaTCA.pressionouTecla()) {
-                tecla = BibliotecaTCA.obtemTeclaPressionada();
+            if (pressionouTecla()) {
+                tecla = obtemTeclaPressionada();
                 switch (tecla) {
                     case 'a':
                     case 'A':
@@ -650,9 +651,9 @@ public class TCA {
                             matPadrao[i][j + 1] = ". ";
                         }
 
-                        BibliotecaTCA.limparTela();
+                        limparTela();
                         desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
-                        ;
+                        
                         break;
                     case 'd':
                     case 'D':
@@ -669,7 +670,7 @@ public class TCA {
                             matPadrao[i][j - 1] = ". ";
                         }
 
-                        BibliotecaTCA.limparTela();
+                        limparTela();
                         desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
                         break;
                     case 'w':
@@ -688,7 +689,7 @@ public class TCA {
                             matPadrao[i + 1][j] = ". ";
                         }
 
-                        BibliotecaTCA.limparTela();
+                        limparTela();
                         desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
                         break;
                     case 's':
@@ -706,7 +707,7 @@ public class TCA {
                             matPadrao[i - 1][j] = ". ";
                         }
 
-                        BibliotecaTCA.limparTela();
+                        limparTela();
                         desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
                         break;
                     case 13:
@@ -727,23 +728,23 @@ public class TCA {
                     case 'v':
                     case 'V':
                         limparTela();
-                        if (segundosPassados() - segundos < COOLDOWN) {
-                            int segundosQFaltam = COOLDOWN - (int) (segundosPassados() - segundos);
-                            System.out.println(" Você ainda nao pode usar a habilidade espere " + segundosQFaltam);
-                            esperar(300);
-                            desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
-                        } else if (System.currentTimeMillis() - segundos >= COOLDOWN || primeiraVez) {
+                         if (segundosPassados() - segundos >= COOLDOWN || primeiraVez) {
                             desenharTela_AreiaMovedica(j, i, colunas, linhas, matPadrao, matcop2, pos);
                             segundos = segundosPassados();
                             primeiraVez = false;
                         }
+                        else if (segundosPassados() - segundos < COOLDOWN) {
+                            int segundosQFaltam = COOLDOWN - (int) (segundosPassados() - segundos);
+                            System.out.println("\tVocê ainda nao pode usar a habilidade espere " + segundosQFaltam);
+                            esperar(300);
+                            desenharTelaTesouro(j, i, colunas, linhas, matPadrao);
+                        } 
                         break;
 
                 }
             }
         }
-
-        return false;
+        return  false;
     }
 
     public static String formatarPalavra(String palavra, int letras) {
@@ -957,6 +958,7 @@ public class TCA {
 
     public static boolean sistemaDBatalha(int vidaInimiga, int ataqueInimigo, int vidaTotal, int atqLeve, int atqPesado,
             int eficienciaDeDefesa) {
+                Historia.instrucoesSistemaDeBatalha();
         limparTela();
         boolean lutaVencida = false;
         int cargaEspecialPersonagem = 0;
@@ -1020,10 +1022,7 @@ public class TCA {
                             continue;
                         }
                     } else if (subescolha == 1) {
-<<<<<<< HEAD
-=======
                         limparTela();
->>>>>>> trabalho-ArthurVebber
                         if (pontosDeAcao >= 1) {
                             vidaInimiga -= atqLeve;
                             mudarCor(VERDE);
@@ -1096,7 +1095,7 @@ public class TCA {
                             vidaInimiga, ataqueInimigo, cargaEspecialPersonagem, cargaEspecialInimigo);
                     if (subescolha == 0) {
                         if (pontosDeAcao >= 1) {
-                            ataqueInimigo /= 2;
+                            ataqueInimigo = (ataqueBaseInimigo/2) - eficienciaDeDefesa;
                             pontosDeAcao--;
                         } else {
                             mudarCor(VERMELHO);
@@ -1201,8 +1200,8 @@ public class TCA {
 
     public static int[] reiPerdido() {
         int[] status = new int[2];
-        int dano = 75;
-        int vida = 320;
+        int dano = 100;
+        int vida = 350;
         status[0] = vida;
         status[1] = dano;
         return status;
@@ -1225,6 +1224,7 @@ public class TCA {
 
     public static void main(String[] args) {
         esconderCursor();
+        Historia.part1();
         String[][] matPuzzle1;
         boolean[][] matcopPuzzle1;
         MatrizesPuzzle_1 matrizesPuzzle1 = new MatrizesPuzzle_1();
@@ -1251,7 +1251,9 @@ public class TCA {
         int ataquePesado = atributosPadrao.ataquePesado;
         int ataqueLeve = atributosPadrao.ataqueLeve;
         int vida = atributosPadrao.vida;
+        int vidaAntiga;
         int eficienciaDeDefesa = atributosPadrao.eficienciaDeDefesa;
+        int erros = 0;
 
         String[] areas = { "Aldeia dos Goblins", "Ilha do Pirata", "Tumba do Rei Perdido" };
         String[] menuInicial = { "Explorar áreas", "Status do personagem" };
@@ -1289,8 +1291,8 @@ public class TCA {
                     }
                     boolean passou = false;
                     boolean restart = false;
+                    Historia.instrucoesPuzzle1();
                     while (passou == false) {
-                        Historia.instrucoesPuzzle1();
                         System.out.println("Você tem " + (TENTATIVASNECESSARIAS - tentativas)
                                 + " tentativas para concluir este labirinto\n(Ele será resetado após "
                                 + TENTATIVASNECESSARIAS + " tentativas)");
@@ -1403,6 +1405,7 @@ public class TCA {
                         continue;
                     }
                 } else if (area == 2) {
+                    vidaAntiga = vida;
                     if (areasCompletas[2] == true) {
                         mudarCor(VERMELHO);
                         System.out.println("Você já explorou " + areas[2]);
@@ -1416,14 +1419,20 @@ public class TCA {
                         esperar(1000);
                         continue;
                     }
+                    if (erros == 0) {
+                        
+                    
                     Historia.instrucoesPuzzle3();
-                    int erros = puzzle3(Puzzle3.perguntas, Puzzle3.repostas0, Puzzle3.repostas1, Puzzle3.respostas2,
+                    erros = puzzle3(Puzzle3.perguntas, Puzzle3.repostas0, Puzzle3.repostas1, Puzzle3.respostas2,
                             Puzzle3.respostas3, Puzzle3.respostas4, Puzzle3.respostas5);
                             erros*=10;
                             vida-=erros;
                             if (vida <= 0) {
                                 continue;
                             }
+                        }else{
+                            vida-=erros;
+                        }
                     do {
                         int temp;
 
@@ -1434,10 +1443,12 @@ public class TCA {
                             System.out.println(
                                     "Deseja sair da batalha?(ao ser iniciada ela nao poderá ser interrompida, ESC para sair ENTER para continuar)");
                             temp = obtemTeclaPressionada();
+
+                            mudarCor(COR_PADRAO);
                             if (temp == 27) {
+                                vida = vidaAntiga;
                                 break;
                             }
-                            mudarCor(COR_PADRAO);
                             esperar(2000);
                             mudarCor(-1);
                             BibliotecaTCA.esperar(2000);
@@ -1493,8 +1504,19 @@ public class TCA {
                             continue;
                         } else if (letra == 13) {
                             while (true) {
-
+                                
                                 escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
+                                if (escolhaDePontos == 27 || escolhaDePontos == -1) {
+                                   voltar = true;
+                                   break;
+                               } 
+                                if (pontosDeUpgrade == 0 && escolhaDePontos != 2 && (escolhaDePontos != 27 || escolhaDePontos != -1)) {
+                                   mudarCor(VERMELHO);
+                                   System.out.println("Você está sem pontos de upgrade");
+                                   esperar(1000);
+                                   mudarCor(COR_PADRAO);
+                                   break;
+                               }
                                 if (escolhaDePontos == 0) {
                                     ataquePesado = ataquePesado + 10;
                                     pontosDeUpgrade--;
@@ -1510,17 +1532,6 @@ public class TCA {
                                     pontosDeUpgrade = pontosGastos[0];
                                     pontosGastos[0] = 0;
                                 }
-                                else if (pontosDeUpgrade == 0 && escolhaDePontos != 2 && escolhaDePontos != 27 || escolhaDePontos != -1) {
-                                    mudarCor(VERMELHO);
-                                    System.out.println("Você está sem pontos de upgrade");
-                                    esperar(1000);
-                                    mudarCor(COR_PADRAO);
-                                    break;
-                                }
-                                else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
-                                    voltar = true;
-                                    break;
-                                } 
                             }
                         }
                     } else if (subescolha == 1) {
@@ -1533,19 +1544,30 @@ public class TCA {
                                 + pontosGastos[1] + " Investidos nesse status");
                         mudarCor(VERMELHO);
                         System.out.println(
-                                "Deseja aumentar o ataque leve em quantos pontos? (1 ponto = 5 de ataque leve) (pressione ESC para voltar e ENTER para prosseguir)");
-                        mudarCor(COR_PADRAO);
-                        int letra = obtemTeclaPressionada();
-                        if (letra == 27) {
-                            continue;
-                        } else if (letra == 13) {
-                            while (true) {
-
-                                escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
+                            "Deseja aumentar o ataque leve em quantos pontos? (1 ponto = 5 de ataque leve) (pressione ESC para voltar e ENTER para prosseguir)");
+                            mudarCor(COR_PADRAO);
+                            int letra = obtemTeclaPressionada();
+                            if (letra == 27) {
+                                continue;
+                            } else if (letra == 13) {
+                                while (true) {
+                                    
+                                    escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
+                                    if (escolhaDePontos == 27 || escolhaDePontos == -1) {
+                                       voltar = true;
+                                       break;
+                                   }
+                                    if (pontosDeUpgrade == 0 && escolhaDePontos != 2 && (escolhaDePontos != 27 || escolhaDePontos != -1)) {
+                                       mudarCor(VERMELHO);
+                                       System.out.println("Você está sem pontos de upgrade");
+                                       esperar(1000);
+                                       mudarCor(COR_PADRAO);
+                                       break;
+                                   }
                                 if (escolhaDePontos == 0) {
                                     ataqueLeve = ataqueLeve + 5;
                                     pontosDeUpgrade--;
-
+                                    pontosGastos[1]++;
                                 } 
                                 else if (escolhaDePontos == 1) {
                                     ataqueLeve = ataqueLeve + (pontosDeUpgrade * 5);
@@ -1555,17 +1577,6 @@ public class TCA {
                                     ataquePesado = atributosPadrao.ataquePesado;
                                     pontosDeUpgrade = pontosGastos[1];
                                     pontosGastos[1] = 0;
-                                }
-                                else if (pontosDeUpgrade == 0 && escolhaDePontos != 2 && escolhaDePontos != 27 || escolhaDePontos != -1) {
-                                    mudarCor(VERMELHO);
-                                    System.out.println("Você está sem pontos de upgrade");
-                                    esperar(1000);
-                                    mudarCor(COR_PADRAO);
-                                    break;
-                                }
-                                else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
-                                    voltar = true;
-                                    break;
                                 }
                             }
                         }
@@ -1587,6 +1598,17 @@ public class TCA {
                             while (true) {
 
                                 escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
+                                if (escolhaDePontos == 27 || escolhaDePontos == -1) {
+                                   voltar = true;
+                                   break;
+                               } 
+                                if (pontosDeUpgrade == 0 && escolhaDePontos != 2 && (escolhaDePontos != 27 || escolhaDePontos != -1)) {
+                                   mudarCor(VERMELHO);
+                                   System.out.println("Você está sem pontos de upgrade");
+                                   esperar(1000);
+                                   mudarCor(COR_PADRAO);
+                                   break;
+                               }
                                 if (escolhaDePontos == 0) {
                                     vida = vida + 10;
                                     pontosDeUpgrade--;
@@ -1602,17 +1624,6 @@ public class TCA {
                                     pontosDeUpgrade = pontosGastos[2];
                                     pontosGastos[2] = 0;
                                 }
-                                else if (pontosDeUpgrade == 0 && escolhaDePontos != 2 && escolhaDePontos != 27 || escolhaDePontos != -1) {
-                                    mudarCor(VERMELHO);
-                                    System.out.println("Você está sem pontos de upgrade");
-                                    esperar(1000);
-                                    mudarCor(COR_PADRAO);
-                                    break;
-                                }
-                                else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
-                                    voltar = true;
-                                    break;
-                                } 
                             }
                         }
                     } else if (subescolha == 3) {
@@ -1633,6 +1644,17 @@ public class TCA {
 
                             while (true) {
                                 escolhaDePontos = escolherNoMenuBasico("Ajuste seus atributos", pontos);
+                                if (escolhaDePontos == 27 || escolhaDePontos == -1) {
+                                   voltar = true;
+                                   break;
+                               } 
+                                if (pontosDeUpgrade == 0 && escolhaDePontos != 2 && (escolhaDePontos != 27 || escolhaDePontos != -1)) {
+                                       mudarCor(VERMELHO);
+                                       System.out.println("Você está sem pontos de upgrade");
+                                       esperar(1000);
+                                       mudarCor(COR_PADRAO);
+                                       break;
+                                   }
                                 if (escolhaDePontos == 0) {
                                     eficienciaDeDefesa = eficienciaDeDefesa + 5;
                                     pontosDeUpgrade--;
@@ -1648,17 +1670,6 @@ public class TCA {
                                     pontosDeUpgrade = pontosGastos[3];
                                     pontosGastos[3] = 0;
                                 }
-                                else if (pontosDeUpgrade == 0 && escolhaDePontos != 2 && escolhaDePontos != 27 || escolhaDePontos != -1) {
-                                    mudarCor(VERMELHO);
-                                    System.out.println("Você está sem pontos de upgrade");
-                                    esperar(1000);
-                                    mudarCor(COR_PADRAO);
-                                    break;
-                                }
-                                else if (escolhaDePontos == 27 || escolhaDePontos == -1) {
-                                    voltar = true;
-                                    break;
-                                } 
                             }
                         }
                     } else if (subescolha == 27 || subescolha == -1) {
@@ -1668,6 +1679,7 @@ public class TCA {
                 }
             }
         }
+        Historia.partFinal();
 
     }
 }

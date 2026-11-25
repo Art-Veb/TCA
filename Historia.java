@@ -13,7 +13,29 @@ public class Historia {
     public static final int COR_PADRAO = -1;
     public static final int LARANJA = 208;
 
-    
+    public static void part1(){
+        TCA.limparTela();
+        TCA.mudarCor(VERMELHO);
+        System.out.println("Aperte esc para pular o dialogo e enter para prosseguir");
+        TCA.mudarCor(COR_PADRAO);
+        TCA.limparTela();
+        int entrada = TCA.obtemTeclaPressionada();
+        if (entrada == 27) {
+            System.out.println();
+            return;
+        }
+        BibliotecaTCA.esperar(2000);
+        TCA.mudarCor(VERMELHO);
+        TCA.imprimirDevagar("NARRADOR: ");
+        TCA.mudarCor(COR_PADRAO);
+        TCA.imprimirDevagar("Um aventureiro surge em uma cidade que estava sendo influenciada por monstros");
+    }
+
+    public static void partFinal(){
+        TCA.mudarCor(LARANJA);
+        TCA.imprimirDevagar("Parabéns jovem Aventureiro, você conseguiu superar os obstáculos e inimigos bravamente e também mostrou alta inteligência ao administar seus pontos de upgrade\nÉ uma vitória mais que merecida, obrigado por jogar meu jogo");
+        TCA.mudarCor(COR_PADRAO);
+    }
 
     public static void interacaoGoblinAnciaoInicio() {
         TCA.limparTela();
@@ -274,9 +296,9 @@ public class Historia {
             return;
         }else if (entrada == 13) {
          TCA.mudarCor(AMARELO);
-         TCA.imprimirDevagar("Caça Ao Tesouro:\nVocê terá 45 segundos para achar o Tesouro\nPressionar ENTER revelará se você está Quente, Frio ou Morno do Tesouro\nMas cuidado!!! Por todo o mapa estarao espalhadas areias movediças, pisar nelas resetará o mapa\nPressionar V irá revelar areias num raio de 1 quadrado"); 
+         TCA.imprimirDevagar("Caça Ao Tesouro:\nVocê terá 45 segundos para achar o Tesouro\nPressionar ENTER revelará se você está Quente, Frio ou Morno do Tesouro\nMas cuidado!!! Por todo o mapa estarao espalhadas areias movediças, pisar nelas resetará o mapa\nPressionar V irá revelar areias num raio de 1 quadrado\nPorém você só pode usar a habilidade Revelar a cada 5 segundos"); 
         
-            TCA.esperarTecla();
+            
          TCA.mudarCor(COR_PADRAO);
         }
     }
@@ -304,7 +326,7 @@ public class Historia {
             return;
         }else if (entrada == 13) {
             TCA.mudarCor(VERMELHO);
-            TCA.imprimirDevagar("Sistema de Batalha:\nRPG com pontos de açao\nTabela Ataques:\nAtaque Pesado = 2 pontos (Causa 30 de dano base, porém tem 25% de chance de errar)\nAtaque Leve = 1 ponto (Causa 10 de dano base,porém tem 100% de chance de acertar)\nAtaque Especial (5 cargas) = 1 ponton\nTabela Defesas:\nDefesa Imparcial = 1 ponto (Defende 50%)\nDefesa Completa: 3 pontos (Defende Totalmente)\nCura = 0 pontos (Cura 30)");
+            TCA.imprimirDevagar("Sistema de Batalha:\nRPG com pontos de açao\nA cada rodada você ganhara 3 pontos de açao, a rodada só prosseguirá se você gastar todos os pontos\nTabela Ataques:\nAtaque Pesado = 2 pontos (Causa 30 de dano base e carrega o Ataque Especial, porém tem 25% de chance de errar; errar nao carregara o Ataque Especial)\nAtaque Leve = 1 ponto (Causa 10 de dano base,porém tem 100% de chance de acertar)\nAtaque Especial (5 cargas/Ataques Pesados) = 1 ponto\nOBS: O Ataque Especial causa o dobro do dano do Ataque Pesado e tem 100% de chance de acerto\nTabela Defesas:\nDefesa Imparcial = 1 ponto (Defende 50% + pontos de Eficiência de Defesa)\nDefesa Completa: 3 pontos (Defende Totalmente)\nCura = 0 pontos, pode ser usada 3 vezes (Cura 30 por uso)");
             
             TCA.esperarTecla();
             TCA.mudarCor(COR_PADRAO);
@@ -319,7 +341,7 @@ public class Historia {
             return;
         }else if (entrada == 13) {
             TCA.mudarCor(VERMELHO);
-            TCA.imprimirDevagar("Questionario:\nUm quizz que você deve responder corretamente para ir para o ultimo boss\nSerá reduzido 10 pontos na sua vida por erro(Nao é permanente, apenas para o Boss)\n(Ele irá medir o quanto você prestou a atençao no jogo)");
+            TCA.imprimirDevagar("Questionario:\nUm quizz que você deve responder corretamente para ir para o ultimo boss\nSerá reduzido 10 pontos na sua vida por erro(Nao é permanente, apenas para o Boss, porém toda vez que voce entrar em batalha com o Boss será descontado de seus erros)\n(Ele irá medir o quanto você prestou a atençao no jogo)");
             TCA.esperarTecla();
             TCA.mudarCor(COR_PADRAO);
         }
